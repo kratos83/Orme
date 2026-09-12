@@ -17,6 +17,9 @@ depends=('qt6-base' 'qt6-declarative' 'qt6-multimedia')
 makedepends=('cmake')
 source=()
 sha256sums=()
+# Niente pacchetto -debug separato: non serve agli utenti finali e
+# altrimenti finisce anche lui tra gli allegati della release.
+options=('!debug')
 
 _upstream_src=/home/builder/orme-source
 

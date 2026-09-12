@@ -1,4 +1,9 @@
 #!/usr/bin/make -f
 
+# Niente pacchetto -dbgsym automatico (debhelper-compat 13 lo genera di
+# default): non serve agli utenti finali e altrimenti finisce anche lui tra
+# gli allegati della release.
+export DEB_BUILD_OPTIONS = noddebs
+
 %:
 	dh $@ --buildsystem=cmake

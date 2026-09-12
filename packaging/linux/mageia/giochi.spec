@@ -3,6 +3,10 @@ Version:        0.1
 Release:        1%{?dist}
 Summary:        Orme - raccolta di mini-giochi educativi per bambini (Qt6/QML)
 
+# Niente sottopacchetti -debuginfo/-debugsource: non servono agli utenti
+# finali e altrimenti finiscono anche loro tra gli allegati della release.
+%global debug_package %{nil}
+
 License:        GPL-3.0-or-later
 URL:            https://example.invalid/giochi-coding
 Source0:        %{name}-%{version}.tar.gz
