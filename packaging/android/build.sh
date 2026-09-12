@@ -25,6 +25,10 @@ ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT:-/home/angelo/Android/SDK}"
 ANDROID_NDK_ROOT="${ANDROID_NDK_ROOT:-$ANDROID_SDK_ROOT/ndk/$NDK_VERSION}"
 QT_DIR="$HERE/Qt"
 QT_ANDROID_DIR="$QT_DIR/$QT_VERSION/android_arm64_v8a"
+# ABI 32-bit: alcuni tablet con CPU 64-bit (es. Huawei MediaPad T5, Kirin
+# 659) montano comunque un firmware Android userspace a 32-bit, che rifiuta
+# un APK solo arm64-v8a con un generico "errore nell'analisi del pacchetto".
+QT_ANDROID_ARMV7_DIR="$QT_DIR/$QT_VERSION/android_armv7"
 # Qt6 desktop "host", stessa versione del kit Android, scaricato con aqt (il
 # Qt6 di sistema/Debian non va bene come QT_HOST_PATH: il suo layout cmake
 # multiarch non fornisce il pacchetto Qt6HostInfo richiesto dal toolchain Qt
@@ -60,6 +64,12 @@ fi
 if [ ! -d "$QT_ANDROID_DIR" ]; then
     echo "== Scarico Qt $QT_VERSION per Android arm64-v8a (una volta sola) =="
     "$AQT" install-qt all_os android "$QT_VERSION" android_arm64_v8a \
+        -O "$QT_DIR" -m qtshadertools qtmultimedia
+fi
+
+if [ ! -d "$QT_ANDROID_ARMV7_DIR" ]; then
+    echo "== Scarico Qt $QT_VERSION per Android armeabi-v7a (una volta sola) =="
+    "$AQT" install-qt all_os android "$QT_VERSION" android_armv7 \
         -O "$QT_DIR" -m qtshadertools qtmultimedia
 fi
 
@@ -105,9 +115,8 @@ cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
     -DQT_HOST_PATH_CMAKE_DIR="$QT_HOST_CMAKE_DIR" \
     -DANDROID_SDK_ROOT="$ANDROID_SDK_ROOT" \
     -DANDROID_NDK_ROOT="$ANDROID_NDK_ROOT" \
-    -DQT_ANDROID_BUILD_ALL_ABIS=OFF \
+    -DQT_ANDROID_BUILD_ALL_ABIS=ON \
     -DANDROID_ABI=arm64-v8a \
-    -DQT_ANDROID_ABIS=arm64-v8a \
     -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID_DIR" \
     -DCMAKE_PROJECT_INCLUDE="$HERE/cmake_hooks/android_install_fix.cmake"
 

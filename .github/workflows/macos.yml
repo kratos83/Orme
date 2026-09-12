@@ -36,11 +36,29 @@ jobs:
       - name: Compila
         run: cmake --build build --config Release -j
 
-      - name: Crea il .dmg (macdeployqt)
+      - name: Prepara il bundle (macdeployqt)
+        run: macdeployqt build/Orme.app -qmldir=qml
+
+      - name: Crea il .dmg (con collegamento ad Applications e vista a icone)
         run: |
           set -euo pipefail
-          macdeployqt build/Orme.app -qmldir=qml -dmg
-          mv build/Orme.dmg Orme-macos-universal.dmg
+          staging=dmg-staging
+          rm -rf "$staging"
+          mkdir -p "$staging"
+          cp -R build/Orme.app "$staging/"
+          ln -s /Applications "$staging/Applications"
+
+          rm -f Orme-rw.dmg
+          hdiutil create -volname Orme -srcfolder "$staging" -ov -format UDRW -fs HFS+ Orme-rw.dmg
+          mount_dir="/Volumes/Orme"
+          hdiutil attach Orme-rw.dmg -mountpoint "$mount_dir"
+
+          osascript packaging/macos/dmg-layout.applescript
+
+          sync
+          hdiutil detach "$mount_dir"
+          hdiutil convert Orme-rw.dmg -format UDZO -ov -o Orme-macos-universal.dmg
+          rm -f Orme-rw.dmg
 
       - uses: actions/upload-artifact@v4
         with:
