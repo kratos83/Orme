@@ -69,7 +69,7 @@ if [ "${1:-}" = "--all" ]; then
 
     # immagini Docker create per compilare i pacchetti rpm/pkg/apk
     if command -v docker >/dev/null 2>&1; then
-        images="giochi-fedora-builder giochi-opensuse-builder giochi-mageia-builder orme-arch-builder orme-alpine-builder"
+        images="giochi-fedora-builder giochi-opensuse-builder giochi-mageia-builder orme-arch-builder orme-alpine-builder orme-debian-builder"
         present=""
         for img in $images; do
             docker image inspect "$img" >/dev/null 2>&1 && present="$present $img"

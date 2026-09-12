@@ -74,7 +74,8 @@ if [ ! -d "$ANDROID_NDK_ROOT" ]; then
     "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$NDK_VERSION"
 fi
 
-JDK_HOME=$(find "$JDK_DIR" -maxdepth 1 -iname 'jdk-*' -type d 2>/dev/null | head -n1)
+mkdir -p "$JDK_DIR"
+JDK_HOME=$(find "$JDK_DIR" -maxdepth 1 -iname 'jdk-*' -type d | head -n1)
 if [ -z "$JDK_HOME" ] || [ ! -x "$JDK_HOME/bin/java" ]; then
     echo "== Scarico un JDK 17 portable (Eclipse Temurin) =="
     mkdir -p "$JDK_DIR"
