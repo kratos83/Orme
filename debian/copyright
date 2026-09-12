@@ -6,6 +6,10 @@ Files: *
 Copyright: 2026 Angelo Scarnà
 License: GPL-3.0-or-later
 
+Files: assets/fonts/NotoColorEmoji.ttf
+Copyright: 2013 Google LLC
+License: OFL-1.1
+
 License: GPL-3.0-or-later
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -19,3 +23,9 @@ License: GPL-3.0-or-later
  .
  On Debian systems, the complete text of the GNU General Public
  License version 3 can be found in "/usr/share/common-licenses/GPL-3".
+
+License: OFL-1.1
+ This Font Software is licensed under the SIL Open Font License, Version
+ 1.1. The full license text is distributed with this package in
+ assets/fonts/OFL.txt, and is also available at
+ https://scripts.sil.org/OFL

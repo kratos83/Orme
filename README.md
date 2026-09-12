@@ -37,8 +37,12 @@ macOS: vedi [packaging/README.md](packaging/README.md).
 **22 giochi**, tutti nel menu iniziale: griglia che si adatta alla larghezza
 (3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a capo.
 L'età consigliata è scritta su ogni riquadro e nell'intestazione del gioco
-(proprietà `age`). Alcune emoji del menu sono scelte "vecchie" (📦 🐸 👣 🔵 ⭐
-😴 ❓) per renderle anche su font senza le emoji più recenti.
+(proprietà `age`). Le icone (menu e giochi) sono emoji; per non dipendere dal
+font emoji di sistema - assente su molti tablet Android reali, specie senza
+servizi Google, con il risultato di icone invisibili o "quadratini vuoti" -
+l'app include Noto Color Emoji (`assets/fonts/NotoColorEmoji.ttf`, licenza
+OFL) e lo imposta come fallback del font di default all'avvio
+(`src/main.cpp`), cosi' le emoji si vedono uguali su ogni dispositivo.
 
 | # | Riquadro | Età | Cartella | Idea |
 |---|---|---|---|---|

@@ -16,3 +16,7 @@ per maggiori dettagli.
 Gli effetti sonori in assets/sounds/ sono generati dallo script
 scripts/make_sounds.py e sono parte di quest'opera, sotto la stessa
 licenza.
+
+Il font assets/fonts/NotoColorEmoji.ttf è "Noto Color Emoji", Copyright
+2013 Google LLC, distribuito sotto SIL Open Font License 1.1 (testo
+completo in assets/fonts/OFL.txt). Non è opera derivata di quest'opera.

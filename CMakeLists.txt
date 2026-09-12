@@ -71,6 +71,7 @@ qt_add_qml_module(Orme
         assets/sounds/step.wav
         assets/sounds/win.wav
         assets/sounds/bump.wav
+        assets/fonts/NotoColorEmoji.ttf
 )
 
 target_include_directories(Orme PRIVATE src)

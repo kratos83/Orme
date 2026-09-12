@@ -7,8 +7,7 @@ Linguagio utilizzato: Qt 6 + C++ + QML.
 **22 giochi**, tutti nel menu iniziale: griglia che si adatta alla larghezza
 (3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a capo.
 L'età consigliata è scritta su ogni riquadro e nell'intestazione del gioco
-(proprietà `age`). Alcune emoji del menu sono scelte "vecchie" (📦 🐸 👣 🔵 ⭐
-😴 ❓) per renderle anche su font senza le emoji più recenti.
+(proprietà `age`).
 
 Aggiunti due nuovi giochi:
 - **Le emozioni** - tocca la faccia con la stessa emozione di quella mostrata.
@@ -23,3 +22,7 @@ Aggiunti due nuovi giochi:
 - Risolto bug android per la firma del pacchetto
 - Risolto bug bundle macos
 - Risolto bug icon non caricate su Android
+- Risolte le icone (emoji) del menu e dei giochi non visibili su telefoni e
+  tablet Android reali privi di font emoji a colori di sistema: l'app ora
+  include un proprio font emoji (Noto Color Emoji) usato automaticamente
+  come fallback
