@@ -53,16 +53,11 @@ jobs:
       # Firma di release: solo sui tag (i secret comunque non sono
       # disponibili nelle run di pull_request da fork). Senza, l'APK resta
       # non firmata come prima - installabile solo in debug/sideload manuale.
-      - name: Prepara la firma per la release
-        id: signing
+      - name: Prepara la keystore di firma
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
-        run: |
-          set -euo pipefail
-          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/orme-release.keystore"
-          echo "cmake_args=-DQT_ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/orme-release.keystore -DQT_ANDROID_KEYSTORE_ALIAS=$KEYSTORE_ALIAS" >> "$GITHUB_OUTPUT"
+        run: echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/orme-release.keystore"
 
       # Stessa ricetta validata localmente in packaging/android/build.sh:
       # serve un Qt "host" (gcc_64) distinto dal kit Android per il
@@ -84,22 +79,44 @@ jobs:
           -DCMAKE_FIND_ROOT_PATH="${{ github.workspace }}/qt-android/Qt/${{ env.QT_VERSION }}/android_arm64_v8a"
           -DCMAKE_PROJECT_INCLUDE="${{ github.workspace }}/packaging/android/cmake_hooks/android_install_fix.cmake"
           -DCMAKE_BUILD_TYPE=Release
-          ${{ steps.signing.outputs.cmake_args }}
 
       - name: Compila (C++)
         run: cmake --build build-android -j
 
       - name: Genera l'APK (androiddeployqt)
-        env:
-          QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_STORE_PASS }}
-          QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.ANDROID_KEYSTORE_KEY_PASS }}
         run: cmake --build build-android --target Orme_make_apk
+
+      # androiddeployqt/Gradle non hanno un signing config di release
+      # collegato, quindi producono sempre un *-unsigned.apk: lo allineiamo
+      # e firmiamo qui a mano con gli strumenti dei build-tools dell'SDK,
+      # indipendentemente da come Qt/Gradle genera il pacchetto.
+      - name: Firma l'APK di release (zipalign + apksigner)
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
+          KEYSTORE_STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_STORE_PASS }}
+        run: |
+          set -euo pipefail
+          BUILD_TOOLS="$(dirname "$(find "$ANDROID_SDK_ROOT/build-tools" -maxdepth 2 -name zipalign | sort -V | tail -n1)")"
+          UNSIGNED_APK="$(find build-android -iname '*-unsigned.apk' | head -n1)"
+          ALIGNED_APK="${UNSIGNED_APK%-unsigned.apk}-aligned.apk"
+          SIGNED_APK="${UNSIGNED_APK%-unsigned.apk}-signed.apk"
+          "$BUILD_TOOLS/zipalign" -f -p 4 "$UNSIGNED_APK" "$ALIGNED_APK"
+          "$BUILD_TOOLS/apksigner" sign \
+            --ks "$RUNNER_TEMP/orme-release.keystore" \
+            --ks-key-alias "$KEYSTORE_ALIAS" \
+            --ks-pass "pass:$KEYSTORE_STORE_PASS" \
+            --out "$SIGNED_APK" \
+            "$ALIGNED_APK"
 
       - name: Trova l'APK generato
         id: find_apk
         run: |
           set -euo pipefail
-          apk=$(find build-android -iname "*.apk" -path "*apk/debug*" | head -n1)
+          apk=$(find build-android -iname "*-signed.apk" | head -n1)
+          if [ -z "$apk" ]; then
+            apk=$(find build-android -iname "*.apk" -path "*apk/debug*" | head -n1)
+          fi
           if [ -z "$apk" ]; then
             apk=$(find build-android -iname "*.apk" | head -n1)
           fi
