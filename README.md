@@ -19,7 +19,7 @@ Linguagio utilizzato: Qt 6 + C++ + QML.
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
-./build/giochi
+./build/Orme
 ```
 
 Per ripulire i file di compilazione: `scripts/clean.sh` elimina `build/` e

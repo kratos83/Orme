@@ -82,6 +82,9 @@ jobs:
       # per l'install() dei target Android (vedi CMakeLists.txt) vive nel
       # CMakeLists.txt root, non nell'hook, perche' le sotto-build
       # automatiche per le ABI extra non ereditano CMAKE_PROJECT_INCLUDE.
+      # minSdkVersion (compatibilita' con tablet come il MediaPad T5,
+      # Android 8 Oreo) e' impostata come target property nell'hook CMake,
+      # non qui: non e' una variabile CMake, -D non avrebbe alcun effetto.
       - name: Configura
         run: >
           cmake -S . -B build-android

@@ -106,7 +106,10 @@ export QT_HOST_PATH="$QT_HOST_DIR"
 
 QT_TOOLCHAIN="$QT_ANDROID_DIR/lib/cmake/Qt6/qt.toolchain.cmake"
 
-echo "== Configurazione CMake (Android arm64-v8a, Qt $QT_VERSION) =="
+# minSdkVersion (compatibilita' con tablet come il MediaPad T5, Android 8
+# Oreo) e' impostata come target property in cmake_hooks/android_install_fix.cmake,
+# non qui: non e' una variabile CMake, quindi -D non avrebbe alcun effetto.
+echo "== Configurazione CMake (arm64-v8a + armeabi-v7a, Qt $QT_VERSION) =="
 cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
     -G Ninja \
     -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
