@@ -1,6 +1,6 @@
 Name:           orme-opensuse
-Version:        0.1
-Release:        1
+Version:        0.2
+Release:        2
 Summary:        Orme - raccolta di mini-giochi educativi per bambini (Qt6/QML)
 
 # Niente sottopacchetti -debuginfo/-debugsource: non servono agli utenti
