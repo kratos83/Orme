@@ -26,6 +26,7 @@ jobs:
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_PREFIX_PATH="${{ env.Qt6_DIR }}"
           -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+          -DCMAKE_MACOSX_BUNDLE=ON
 
       - name: Compila
         run: cmake --build build --config Release -j
