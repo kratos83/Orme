@@ -92,6 +92,28 @@ if(APPLE)
     endif()
 endif()
 
+if(ANDROID)
+    # Su desktop "Orme" e' un vero eseguibile (RUNTIME/BUNDLE sotto), ma su
+    # Android qt_add_executable() crea in realta' una libreria MODULE (il
+    # .so caricato dalla Activity Java), per cui install(TARGETS) pretende
+    # anche una LIBRARY DESTINATION, altrimenti fallisce con:
+    #   "install TARGETS given no LIBRARY DESTINATION for module target"
+    # Intercettiamo install() per aggiungerla quando manca. Deve stare qui
+    # (non in un hook esterno via CMAKE_PROJECT_INCLUDE) perche' le
+    # sotto-build automatiche innescate da QT_ANDROID_BUILD_ALL_ABIS=ON
+    # (una per ogni ABI extra, es. armeabi-v7a) non ereditano
+    # CMAKE_PROJECT_INCLUDE e altrimenti fallirebbero allo stesso modo.
+    function(install)
+        set(_args ${ARGN})
+        list(FIND _args "TARGETS" _targets_idx)
+        list(FIND _args "LIBRARY" _library_idx)
+        if(_targets_idx GREATER -1 AND _library_idx EQUAL -1)
+            list(APPEND _args LIBRARY DESTINATION lib)
+        endif()
+        _install(${_args})
+    endfunction()
+endif()
+
 install(TARGETS Orme
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION bin

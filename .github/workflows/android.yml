@@ -50,6 +50,21 @@ jobs:
           dir: ${{ github.workspace }}/qt-android
           cache: true
 
+      # ABI 32-bit: alcuni tablet con CPU 64-bit (es. Huawei MediaPad T5,
+      # Kirin 659) montano comunque un firmware Android userspace a 32-bit,
+      # che rifiuta un APK solo arm64-v8a con un generico "errore
+      # nell'analisi del pacchetto". Stessa "dir" del kit arm64-v8a sopra:
+      # QT_ANDROID_BUILD_ALL_ABIS le trova come sottocartelle sorelle.
+      - name: Installa Qt per Android (armeabi-v7a)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          target: android
+          arch: android_armv7
+          modules: qtmultimedia
+          dir: ${{ github.workspace }}/qt-android
+          cache: true
+
       # Firma di release: solo sui tag (i secret comunque non sono
       # disponibili nelle run di pull_request da fork). Senza, l'APK resta
       # non firmata come prima - installabile solo in debug/sideload manuale.
@@ -61,10 +76,12 @@ jobs:
 
       # Stessa ricetta validata localmente in packaging/android/build.sh:
       # serve un Qt "host" (gcc_64) distinto dal kit Android per il
-      # toolchain di cross-compilazione, un ABI esplicito e l'hook CMake
-      # che corregge l'install() del CMakeLists.txt root (pensato per
-      # desktop) quando il target Android e' in realta' una libreria
-      # MODULE, non un eseguibile.
+      # toolchain di cross-compilazione e QT_ANDROID_BUILD_ALL_ABIS=ON per
+      # impacchettare tutte le ABI Qt trovate come sorelle sotto qt-android/
+      # (qui: arm64-v8a + armeabi-v7a) in un unico APK multi-arch. Il fix
+      # per l'install() dei target Android (vedi CMakeLists.txt) vive nel
+      # CMakeLists.txt root, non nell'hook, perche' le sotto-build
+      # automatiche per le ABI extra non ereditano CMAKE_PROJECT_INCLUDE.
       - name: Configura
         run: >
           cmake -S . -B build-android
@@ -73,9 +90,8 @@ jobs:
           -DQT_HOST_PATH_CMAKE_DIR="${{ github.workspace }}/qt-desktop/Qt/${{ env.QT_VERSION }}/gcc_64/lib/cmake/Qt6"
           -DANDROID_SDK_ROOT="${{ env.ANDROID_SDK_ROOT }}"
           -DANDROID_NDK_ROOT="${{ env.ANDROID_SDK_ROOT }}/ndk/${{ env.NDK_VERSION }}"
-          -DQT_ANDROID_BUILD_ALL_ABIS=OFF
+          -DQT_ANDROID_BUILD_ALL_ABIS=ON
           -DANDROID_ABI=arm64-v8a
-          -DQT_ANDROID_ABIS=arm64-v8a
           -DCMAKE_FIND_ROOT_PATH="${{ github.workspace }}/qt-android/Qt/${{ env.QT_VERSION }}/android_arm64_v8a"
           -DCMAKE_PROJECT_INCLUDE="${{ github.workspace }}/packaging/android/cmake_hooks/android_install_fix.cmake"
           -DCMAKE_BUILD_TYPE=Release

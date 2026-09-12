@@ -1,35 +1,11 @@
 # Hook incluso via CMAKE_PROJECT_INCLUDE (vedi packaging/android/build.sh).
 #
-# Il CMakeLists.txt della root del repo (che non va toccato) contiene:
-#
-#   install(TARGETS giochi
-#       BUNDLE  DESTINATION .
-#       RUNTIME DESTINATION bin
-#   )
-#
-# Su desktop "giochi" e' un vero eseguibile (RUNTIME/BUNDLE), ma su Android
-# qt_add_executable() crea in realta' una libreria MODULE (il .so caricato
-# dalla Activity Java), per cui CMake pretende anche una LIBRARY DESTINATION,
-# altrimenti l'install() fallisce con:
-#   "install TARGETS given no LIBRARY DESTINATION for module target"
-#
-# Non serve comunque eseguire "cmake --install" per generare l'APK
-# (androiddeployqt lavora direttamente sugli artefatti di build), quindi qui
-# ci limitiamo a intercettare install() e ad aggiungere una LIBRARY
-# DESTINATION di comodo quando manca, cosi' la configurazione non fallisce.
-if(ANDROID AND NOT COMMAND _android_install_fix_applied)
-    function(install)
-        set(_args ${ARGN})
-        list(FIND _args "TARGETS" _targets_idx)
-        list(FIND _args "LIBRARY" _library_idx)
-        if(_targets_idx GREATER -1 AND _library_idx EQUAL -1)
-            list(APPEND _args LIBRARY DESTINATION lib)
-        endif()
-        _install(${_args})
-    endfunction()
-    function(_android_install_fix_applied)
-    endfunction()
-endif()
+# Il fix per "install TARGETS given no LIBRARY DESTINATION for module
+# target" vive direttamente in CMakeLists.txt (blocco if(ANDROID) prima di
+# install(TARGETS Orme ...)), non qui: le sotto-build automatiche innescate
+# da QT_ANDROID_BUILD_ALL_ABIS=ON (una per ogni ABI extra, es. armeabi-v7a)
+# non ereditano CMAKE_PROJECT_INCLUDE, quindi un hook esterno non basta a
+# coprirle - deve stare nel CMakeLists.txt stesso.
 
 # Applica QT_ANDROID_PACKAGE_SOURCE_DIR (per il nostro AndroidManifest.xml
 # personalizzato, es. android:label="Orme") senza toccare il CMakeLists.txt
