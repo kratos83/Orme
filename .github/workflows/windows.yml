@@ -1,0 +1,49 @@
+name: Windows
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installa Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.8.*"
+          arch: win64_msvc2022_64
+          modules: qtmultimedia
+          cache: true
+
+      - name: Configura
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="${{ env.Qt6_DIR }}"
+
+      - name: Compila
+        run: cmake --build build --config Release -j
+
+      - name: Prepara il pacchetto portable (windeployqt)
+        shell: bash
+        run: |
+          set -eu
+          mkdir -p dist/Orme
+          cp build/Release/giochi.exe dist/Orme/Orme.exe
+          windeployqt.exe --qmldir qml --release dist/Orme/Orme.exe
+          cp COPYRIGHT dist/Orme/COPYRIGHT.txt
+
+      - name: Comprimi
+        shell: bash
+        run: |
+          cd dist
+          7z a -tzip Orme-windows-x64.zip Orme
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: orme-windows-x64
+          path: dist/Orme-windows-x64.zip

@@ -1,0 +1,91 @@
+name: Android
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  QT_VERSION: "6.8.2"
+  NDK_VERSION: "26.3.11579264"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Imposta Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Imposta Android SDK/NDK
+        uses: android-actions/setup-android@v3
+
+      - name: Installa l'NDK richiesto
+        run: sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
+
+      - name: Installa Qt desktop (richiesto dal toolchain Android come "host")
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: qtmultimedia qtshadertools
+          dir: ${{ github.workspace }}/qt-desktop
+          cache: true
+
+      - name: Installa Qt per Android (arm64-v8a)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          target: android
+          arch: android_arm64_v8a
+          modules: qtmultimedia
+          dir: ${{ github.workspace }}/qt-android
+          cache: true
+
+      # Stessa ricetta validata localmente in packaging/android/build.sh:
+      # serve un Qt "host" (gcc_64) distinto dal kit Android per il
+      # toolchain di cross-compilazione, un ABI esplicito e l'hook CMake
+      # che corregge l'install() del CMakeLists.txt root (pensato per
+      # desktop) quando il target Android e' in realta' una libreria
+      # MODULE, non un eseguibile.
+      - name: Configura
+        run: >
+          cmake -S . -B build-android
+          -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/qt-android/${{ env.QT_VERSION }}/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake"
+          -DQT_HOST_PATH="${{ github.workspace }}/qt-desktop/${{ env.QT_VERSION }}/gcc_64"
+          -DQT_HOST_PATH_CMAKE_DIR="${{ github.workspace }}/qt-desktop/${{ env.QT_VERSION }}/gcc_64/lib/cmake/Qt6"
+          -DANDROID_SDK_ROOT="${{ env.ANDROID_SDK_ROOT }}"
+          -DANDROID_NDK_ROOT="${{ env.ANDROID_SDK_ROOT }}/ndk/${{ env.NDK_VERSION }}"
+          -DQT_ANDROID_BUILD_ALL_ABIS=OFF
+          -DANDROID_ABI=arm64-v8a
+          -DQT_ANDROID_ABIS=arm64-v8a
+          -DCMAKE_FIND_ROOT_PATH="${{ github.workspace }}/qt-android/${{ env.QT_VERSION }}/android_arm64_v8a"
+          -DCMAKE_PROJECT_INCLUDE="${{ github.workspace }}/packaging/android/cmake_hooks/android_install_fix.cmake"
+          -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compila (C++)
+        run: cmake --build build-android -j
+
+      - name: Genera l'APK (androiddeployqt)
+        run: cmake --build build-android --target giochi_make_apk
+
+      - name: Trova l'APK generato
+        id: find_apk
+        run: |
+          set -euo pipefail
+          apk=$(find build-android -iname "*.apk" -path "*apk/debug*" | head -n1)
+          if [ -z "$apk" ]; then
+            apk=$(find build-android -iname "*.apk" | head -n1)
+          fi
+          echo "path=$apk" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: orme-android-arm64
+          path: ${{ steps.find_apk.outputs.path }}

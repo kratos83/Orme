@@ -1,0 +1,19 @@
+Source: orme
+Section: games
+Priority: optional
+Maintainer: Angelo Scarnà <angelo.scarna@primanotanet.it>
+Build-Depends: debhelper-compat (= 13), cmake, qt6-base-dev (>= 6.5), qt6-declarative-dev (>= 6.5)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: orme
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         qml6-module-qtquick-shapes,
+         qml6-module-qtmultimedia
+Description: raccolta di giochi touch per bambini di 3-5 anni
+ Orme è una raccolta di 20 mini-giochi per bambini di 3-5 anni, ispirati
+ ai concetti base della programmazione: sequenze, cicli, condizioni,
+ debug, tramite tocco su schermo. Pensato per tablet e schermi touch,
+ ma funziona anche con mouse.

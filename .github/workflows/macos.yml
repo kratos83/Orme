@@ -1,0 +1,42 @@
+name: macOS
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installa Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.8.*"
+          modules: qtmultimedia
+          cache: true
+
+      - name: Configura (binario universale x86_64 + arm64)
+        run: >
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH="${{ env.Qt6_DIR }}"
+          -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+
+      - name: Compila
+        run: cmake --build build --config Release -j
+
+      - name: Crea il .dmg (macdeployqt)
+        run: |
+          set -euo pipefail
+          macdeployqt build/giochi.app -qmldir=qml -dmg
+          mv build/giochi.dmg Orme-macos.dmg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: orme-macos
+          path: Orme-macos.dmg

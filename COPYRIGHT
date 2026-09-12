@@ -1,0 +1,18 @@
+Orme
+
+Copyright (c) 2026 Angelo Scarnà
+
+Questo programma è software libero: puoi ridistribuirlo e/o modificarlo
+secondo i termini della GNU General Public License, versione 3, come
+pubblicata dalla Free Software Foundation (o, a tua scelta, una versione
+successiva). Il testo completo della licenza è nel file LICENSE nella
+radice di questo repository.
+
+Questo programma è distribuito nella speranza che sia utile, ma SENZA
+ALCUNA GARANZIA, nemmeno la garanzia implicita di COMMERCIABILITÀ o
+IDONEITÀ PER UNO SCOPO PARTICOLARE. Vedi la GNU General Public License
+per maggiori dettagli.
+
+Gli effetti sonori in assets/sounds/ sono generati dallo script
+scripts/make_sounds.py e sono parte di quest'opera, sotto la stessa
+licenza.

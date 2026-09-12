@@ -1,0 +1,39 @@
+# Maintainer: Angelo Scarnà <angelo.scarna@primanotanet.it>
+#
+# Pacchetto per "Orme" (nome interno/CMake/eseguibile: giochi), raccolta di
+# giochi educativi Qt6/QML per bambini 3-5 anni.
+#
+# I sorgenti non vengono scaricati da rete: il Dockerfile che prepara questo
+# ambiente di build copia l'albero del repo in /home/builder/orme-source
+# PRIMA di invocare abuild, quindi source="" e unpack() copia da lì invece
+# di scaricare/estrarre un tarball.
+pkgname=giochi
+pkgver=0.1
+pkgrel=0
+pkgdesc="Orme - raccolta di giochi educativi Qt6/QML per bambini 3-5 anni"
+url="https://example.invalid/orme"
+arch="x86_64"
+license="GPL-3.0-or-later"
+depends="qt6-qtbase qt6-qtdeclarative qt6-qtmultimedia"
+makedepends="cmake samurai build-base qt6-qtbase-dev qt6-qtdeclarative-dev qt6-qtmultimedia-dev"
+source=""
+options="!check"
+builddir="$srcdir/orme-source"
+
+unpack() {
+	mkdir -p "$builddir"
+	cp -a /home/builder/orme-source/. "$builddir"/
+}
+
+build() {
+	cmake -B "$srcdir/build" -S "$builddir" \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr
+	cmake --build "$srcdir/build"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install "$srcdir/build"
+	install -Dm644 "$builddir"/LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+	install -Dm644 "$builddir"/COPYRIGHT "$pkgdir"/usr/share/licenses/$pkgname/COPYRIGHT
+}
