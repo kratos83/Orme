@@ -46,7 +46,7 @@ effetti sonori riprodotti tramite il modulo QML QtMultimedia.
 %files
 %license LICENSE
 %doc COPYRIGHT
-%{_bindir}/giochi
+%{_bindir}/Orme
 
 %changelog
 * Fri Sep 11 2026 Angelo Scarna <angelo.scarna@primanotanet.it> - 0.1-1

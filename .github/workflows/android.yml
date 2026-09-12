@@ -57,15 +57,15 @@ jobs:
       - name: Configura
         run: >
           cmake -S . -B build-android
-          -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/qt-android/${{ env.QT_VERSION }}/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake"
-          -DQT_HOST_PATH="${{ github.workspace }}/qt-desktop/${{ env.QT_VERSION }}/gcc_64"
-          -DQT_HOST_PATH_CMAKE_DIR="${{ github.workspace }}/qt-desktop/${{ env.QT_VERSION }}/gcc_64/lib/cmake/Qt6"
+          -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/qt-android/Qt/${{ env.QT_VERSION }}/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake"
+          -DQT_HOST_PATH="${{ github.workspace }}/qt-desktop/Qt/${{ env.QT_VERSION }}/gcc_64"
+          -DQT_HOST_PATH_CMAKE_DIR="${{ github.workspace }}/qt-desktop/Qt/${{ env.QT_VERSION }}/gcc_64/lib/cmake/Qt6"
           -DANDROID_SDK_ROOT="${{ env.ANDROID_SDK_ROOT }}"
           -DANDROID_NDK_ROOT="${{ env.ANDROID_SDK_ROOT }}/ndk/${{ env.NDK_VERSION }}"
           -DQT_ANDROID_BUILD_ALL_ABIS=OFF
           -DANDROID_ABI=arm64-v8a
           -DQT_ANDROID_ABIS=arm64-v8a
-          -DCMAKE_FIND_ROOT_PATH="${{ github.workspace }}/qt-android/${{ env.QT_VERSION }}/android_arm64_v8a"
+          -DCMAKE_FIND_ROOT_PATH="${{ github.workspace }}/qt-android/Qt/${{ env.QT_VERSION }}/android_arm64_v8a"
           -DCMAKE_PROJECT_INCLUDE="${{ github.workspace }}/packaging/android/cmake_hooks/android_install_fix.cmake"
           -DCMAKE_BUILD_TYPE=Release
 
@@ -73,7 +73,7 @@ jobs:
         run: cmake --build build-android -j
 
       - name: Genera l'APK (androiddeployqt)
-        run: cmake --build build-android --target giochi_make_apk
+        run: cmake --build build-android --target Orme_make_apk
 
       - name: Trova l'APK generato
         id: find_apk

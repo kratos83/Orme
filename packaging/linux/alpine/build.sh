@@ -9,6 +9,11 @@ OUT_DIR="$REPO_ROOT/packaging/out/alpine"
 IMAGE_TAG="orme-alpine-builder"
 
 mkdir -p "$OUT_DIR"
+# Scrivibile da qualsiasi UID: il container builda come utente non-root
+# "builder", il cui UID non corrisponde a quello che possiede OUT_DIR
+# sull'host (es. il runner CI), altrimenti il cp finale fallisce con
+# "Permission denied".
+chmod 777 "$OUT_DIR"
 
 echo "== docker build (Alpine) =="
 docker build -t "$IMAGE_TAG" -f "$SCRIPT_DIR/Dockerfile" "$REPO_ROOT"
@@ -25,6 +30,10 @@ docker run --rm \
     # (vedi /usr/share/abuild/default.conf).
     find "$HOME/packages" "${XDG_DATA_HOME:-$HOME/.local/share}/abuild" \
       -name "*.apk" -exec cp -v {} /out/ \; 2>/dev/null || true
+    # A differenza di "|| true" sopra (che tollera solo l'assenza di uno dei
+    # due percorsi candidati), qui verifichiamo che almeno un pacchetto sia
+    # stato davvero copiato, per non mascherare un cp fallito (es. permessi).
+    ls /out/*.apk >/dev/null
   '
 
 echo "== Pacchetto/i prodotti =="

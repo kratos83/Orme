@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Build script per la APK Android di "Orme" (giochi-coding).
 #
-# Compila l'app QML/Qt6 esistente (target CMake "giochi", modulo QML "Giochi")
+# Compila l'app QML/Qt6 esistente (target CMake "Orme", modulo QML "Giochi")
 # per Android arm64-v8a usando un kit Qt per Android scaricato con aqtinstall
 # e produce un APK (release, non firmato) in packaging/android/out/.
 # Per un APK debug-signed basta aggiungere -DCMAKE_BUILD_TYPE=Debug e usare il
-# target "giochi_make_apk" con il flavor debug (androiddeployqt firma
+# target "Orme_make_apk" con il flavor debug (androiddeployqt firma
 # automaticamente le build debug con il keystore di debug di default).
 #
 # Tutto cio' che manca (venv+aqtinstall, kit Qt Android/host, JDK portable,
@@ -110,11 +110,11 @@ cmake -S "$REPO_ROOT" -B "$BUILD_DIR" \
     -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID_DIR" \
     -DCMAKE_PROJECT_INCLUDE="$HERE/cmake_hooks/android_install_fix.cmake"
 
-echo "== Build C++ (target giochi) =="
+echo "== Build C++ (target Orme) =="
 cmake --build "$BUILD_DIR" -j
 
 echo "== Generazione APK (androiddeployqt) =="
-cmake --build "$BUILD_DIR" --target giochi_make_apk
+cmake --build "$BUILD_DIR" --target Orme_make_apk
 
 mkdir -p "$OUT_DIR"
 APK_SRC=$(find "$BUILD_DIR" -iname "*.apk" -path "*apk/debug*" | head -n1)

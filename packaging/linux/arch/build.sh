@@ -9,6 +9,11 @@ OUT_DIR="$REPO_ROOT/packaging/out/arch"
 IMAGE_TAG="orme-arch-builder"
 
 mkdir -p "$OUT_DIR"
+# Scrivibile da qualsiasi UID: il container builda come utente non-root
+# "builder", il cui UID non corrisponde a quello che possiede OUT_DIR
+# sull'host (es. il runner CI), altrimenti il cp finale fallisce con
+# "Permission denied".
+chmod 777 "$OUT_DIR"
 
 echo "== docker build (Arch) =="
 docker build -t "$IMAGE_TAG" -f "$SCRIPT_DIR/Dockerfile" "$REPO_ROOT"

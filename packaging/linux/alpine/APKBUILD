@@ -1,6 +1,6 @@
 # Maintainer: Angelo Scarnà <angelo.scarna@primanotanet.it>
 #
-# Pacchetto per "Orme" (nome interno/CMake/eseguibile: giochi), raccolta di
+# Pacchetto per "Orme" (nome interno/CMake/eseguibile: Orme), raccolta di
 # giochi educativi Qt6/QML per bambini 3-5 anni.
 #
 # I sorgenti non vengono scaricati da rete: il Dockerfile che prepara questo
