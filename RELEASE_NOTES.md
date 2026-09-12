@@ -15,3 +15,4 @@ L'età consigliata è scritta su ogni riquadro e nell'intestazione del gioco
 
 - Correzione trattini non visibili sul gioco **Unisci i punti**
 - Correzione griglia non visibile sul gioco **Disegna il percorso**
+- Risolto bug android 
