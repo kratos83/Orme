@@ -1,9 +1,9 @@
-# Pacchetto Alpine Linux — Orme (giochi)
+# Pacchetto Alpine Linux — Orme (orme)
 
 ## Nome del pacchetto
 
-`pkgname=giochi`, per coerenza con il pacchetto Arch e con il nome del
-binario installato (`/usr/bin/giochi`); "Orme" resta solo il nome
+`pkgname=orme`, per coerenza con il pacchetto Arch e con il nome del
+binario installato (`/usr/bin/orme`); "Orme" resta solo il nome
 visualizzato dall'app (vedi `pkgdesc`).
 
 ## Repository/versione Alpine e pacchetti Qt6 verificati
@@ -68,20 +68,20 @@ dentro un container, e copia il risultato (.apk) in `../../out/alpine/`.
 Eseguita realmente il 2026-09-11 dentro Docker (alpine:edge, Qt 6.11.1):
 
 ```
->>> giochi*: Create giochi-0.1-r0.apk
->>> giochi: Build complete at Fri, 11 Sep 2026 05:21:02 +0000 elapsed time 0h 0m 28s
+>>> orme*: Create orme-0.1-r0.apk
+>>> orme: Build complete at Fri, 11 Sep 2026 05:21:02 +0000 elapsed time 0h 0m 28s
 ```
 
-Pacchetto prodotto: `giochi-0.1-r0.apk` (~544 KiB).
+Pacchetto prodotto: `orme-0.1-r0.apk` (~544 KiB).
 
 Verifica del contenuto (un `.apk` Alpine è un tar.gz):
 
 ```
-$ tar -tzf giochi-0.1-r0.apk
+$ tar -tzf orme-0.1-r0.apk
 .PKGINFO
 .SIGN.RSA.-6aa38ed7.rsa.pub
-usr/bin/giochi
-usr/share/licenses/giochi/COPYRIGHT
+usr/bin/orme
+usr/share/licenses/orme/COPYRIGHT
 ```
 
 Installazione reale in un secondo container `alpine:edge` pulito
@@ -89,18 +89,18 @@ Installazione reale in un secondo container `alpine:edge` pulito
 volo e non è nell'immagine "pulita" di verifica):
 
 ```
-$ apk add --no-cache --allow-untrusted giochi-0.1-r0.apk
+$ apk add --no-cache --allow-untrusted orme-0.1-r0.apk
 ...
-(112/112) Installing giochi (0.1-r0)
+(112/112) Installing orme (0.1-r0)
 OK: 404.1 MiB in 128 packages
 
-$ apk info -e giochi
-giochi
+$ apk info -e orme
+orme
 
-$ file /usr/bin/giochi
-/usr/bin/giochi: ELF 64-bit LSB pie executable, x86-64, ... interpreter /lib/ld-musl-x86_64.so.1, stripped
+$ file /usr/bin/orme
+/usr/bin/orme: ELF 64-bit LSB pie executable, x86-64, ... interpreter /lib/ld-musl-x86_64.so.1, stripped
 
-$ ldd /usr/bin/giochi | grep 'not found'
+$ ldd /usr/bin/orme | grep 'not found'
 (nessun output -> nessuna libreria mancante)
 ```
 

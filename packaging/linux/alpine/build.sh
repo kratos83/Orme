@@ -30,11 +30,11 @@ docker run --rm \
     # (vedi /usr/share/abuild/default.conf).
     find "$HOME/packages" "${XDG_DATA_HOME:-$HOME/.local/share}/abuild" \
       -name "*.apk" -exec cp -v {} /out/ \; 2>/dev/null || true
-    # A differenza di "|| true" sopra (che tollera solo l'assenza di uno dei
-    # due percorsi candidati), qui verifichiamo che almeno un pacchetto sia
-    # stato davvero copiato, per non mascherare un cp fallito (es. permessi).
-    ls /out/*.apk >/dev/null
   '
 
 echo "== Pacchetto/i prodotti =="
-ls -lh "$OUT_DIR"
+# Verifica (lato host, dopo che il container e' terminato) che almeno un
+# pacchetto sia stato davvero copiato: "|| true" sopra tollera solo
+# l'assenza di uno dei due percorsi candidati per i pacchetti abuild, non un
+# cp fallito (es. permessi), che altrimenti passerebbe inosservato.
+ls -lh "$OUT_DIR"/*.apk
