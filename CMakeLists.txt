@@ -75,7 +75,34 @@ target_include_directories(Orme PRIVATE src)
 
 target_link_libraries(Orme PRIVATE Qt6::Quick Qt6::Qml)
 
+if(WIN32)
+    target_sources(Orme PRIVATE packaging/windows/app.rc)
+endif()
+
+if(APPLE)
+    # Generato a build-time (iconutil, disponibile solo su macOS) dal sorgente
+    # in packaging/macos/AppIcon.iconset/ - vedi .github/workflows/macos.yml.
+    # Se manca (build locale senza quello step) l'app resta senza icona
+    # invece di rompere la configurazione.
+    set(MACOS_ICON_FILE "${CMAKE_SOURCE_DIR}/packaging/macos/AppIcon.icns")
+    if(EXISTS "${MACOS_ICON_FILE}")
+        target_sources(Orme PRIVATE "${MACOS_ICON_FILE}")
+        set_source_files_properties("${MACOS_ICON_FILE}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+        set_target_properties(Orme PROPERTIES MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
+    endif()
+endif()
+
 install(TARGETS Orme
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION bin
+)
+
+# Voce menu (.desktop) e icona per i desktop Linux (letta da tutti i
+# pacchetti: debian, arch, alpine e le tre RPM installano tramite
+# "cmake --install", quindi la ereditano automaticamente).
+install(FILES packaging/linux/debian/orme.desktop
+    DESTINATION share/applications
+)
+install(FILES assets/icon/orme.svg
+    DESTINATION share/icons/hicolor/scalable/apps
 )

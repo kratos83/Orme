@@ -7,7 +7,7 @@
 # ambiente di build copia l'albero del repo in /home/builder/orme-source
 # PRIMA di invocare abuild, quindi source="" e unpack() copia da lì invece
 # di scaricare/estrarre un tarball.
-pkgname=orme
+pkgname=orme-alpine
 pkgver=0.1
 pkgrel=0
 pkgdesc="Orme - raccolta di giochi educativi Qt6/QML per bambini 3-5 anni"

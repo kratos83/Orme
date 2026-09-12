@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1024" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5B8DF6"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <g id="footprint">
+      <ellipse cx="0" cy="-40" rx="98" ry="122"/>
+      <ellipse cx="0" cy="146" rx="66" ry="92"/>
+      <circle cx="-100" cy="-168" r="34"/>
+      <circle cx="-34" cy="-206" r="38"/>
+      <circle cx="38" cy="-206" r="36"/>
+      <circle cx="104" cy="-180" r="30"/>
+      <circle cx="152" cy="-138" r="24"/>
+    </g>
+  </defs>
+
+  <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224" fill="url(#sheen)"/>
+
+  <g fill="#FFD166">
+    <use href="#footprint" transform="translate(360,660) rotate(-14) scale(0.94)"/>
+    <use href="#footprint" transform="translate(616,392) rotate(10) scale(1.06) scale(-1,1)"/>
+  </g>
+</svg>

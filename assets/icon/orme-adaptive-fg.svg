@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <g id="footprint">
+      <ellipse cx="0" cy="-40" rx="98" ry="122"/>
+      <ellipse cx="0" cy="146" rx="66" ry="92"/>
+      <circle cx="-100" cy="-168" r="34"/>
+      <circle cx="-34" cy="-206" r="38"/>
+      <circle cx="38" cy="-206" r="36"/>
+      <circle cx="104" cy="-180" r="30"/>
+      <circle cx="152" cy="-138" r="24"/>
+    </g>
+  </defs>
+  <!-- Contenuto ristretto alla safe-zone (~66% centrale) delle icone adattive Android -->
+  <g transform="translate(512,512) scale(0.72) translate(-512,-512)">
+    <g fill="#FFD166">
+      <use href="#footprint" transform="translate(360,660) rotate(-14) scale(0.94)"/>
+      <use href="#footprint" transform="translate(616,392) rotate(10) scale(1.06) scale(-1,1)"/>
+    </g>
+  </g>
+</svg>

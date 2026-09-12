@@ -7,7 +7,7 @@
 # ambiente di build copia l'albero del repo in /home/builder/orme-source
 # PRIMA di invocare makepkg, quindi source=() e build()/package() puntano
 # direttamente lì.
-pkgname=orme
+pkgname=orme-archlinux
 pkgver=0.1
 pkgrel=1
 pkgdesc="Orme - raccolta di giochi educativi Qt6/QML per bambini 3-5 anni"

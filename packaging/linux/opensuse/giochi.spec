@@ -1,4 +1,4 @@
-Name:           orme
+Name:           orme-opensuse
 Version:        0.1
 Release:        1
 Summary:        Orme - raccolta di mini-giochi educativi per bambini (Qt6/QML)
@@ -51,6 +51,8 @@ effetti sonori riprodotti tramite il modulo QML QtMultimedia.
 %license LICENSE
 %doc COPYRIGHT
 %{_bindir}/Orme
+%{_datadir}/applications/orme.desktop
+%{_datadir}/icons/hicolor/scalable/apps/orme.svg
 
 %changelog
 * Fri Sep 11 2026 Angelo Scarna <angelo.scarna@primanotanet.it> - 0.1-1

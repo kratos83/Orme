@@ -10,6 +10,8 @@ Package: orme
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
+         qml6-module-qtquick,
+         qml6-module-qtquick-window,
          qml6-module-qtquick-shapes,
          qml6-module-qtmultimedia
 Description: raccolta di giochi touch per bambini di 3-5 anni

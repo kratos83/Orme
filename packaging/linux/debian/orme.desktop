@@ -4,6 +4,6 @@ Name=Orme
 GenericName=Giochi educativi
 Comment=Raccolta di giochi touch per bambini di 3-5 anni
 Exec=Orme
-Icon=applications-games
+Icon=orme
 Terminal=false
 Categories=Game;KidsGame;Education;
