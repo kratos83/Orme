@@ -18,8 +18,8 @@ committato le modifiche** — non impacchettano file non ancora committati.
 | Arch Linux            | `.pkg.tar.zst` | ✅ Verificata  | `packaging/linux/arch/` |
 | Alpine Linux          | `.apk`         | ✅ Verificata  | `packaging/linux/alpine/` |
 | Android (arm64-v8a)   | `.apk`         | ✅ Verificata  | `packaging/android/` |
-| Windows (MSVC)        | `.zip` portable| ⏳ Pronta, da eseguire su CI | `.github/workflows/windows.yml` |
-| macOS (universale)    | `.dmg`         | ⏳ Pronta, da eseguire su CI | `.github/workflows/macos.yml` |
+| Windows (MSVC)        | `.zip` portable| ✅ Verificata | `.github/workflows/windows.yml` |
+| macOS (universale)    | `.dmg`         | ✅ Verificata | `.github/workflows/macos.yml` |
 
 Windows e macOS non sono compilabili in modo affidabile da questa macchina
 Linux (nessuna vera macchina Windows/macOS disponibile): i workflow sono
@@ -28,13 +28,6 @@ pronti e usano ricette standard (Qt via `jurplel/install-qt-action`,
 quando il repository sarà pubblicato su GitHub e la Action gireà sulle
 macchine cloud reali di GitHub Actions.
 
-## Perché nomi diversi (`orme` vs `giochi`)
-
-Il pacchetto Debian si chiama `orme` (nome pubblico dell'app), mentre i
-pacchetti Fedora/openSUSE/Mageia/Arch/Alpine usano `giochi` (nome del
-binario/target CMake). Sono equivalenti in sostanza; in una pubblicazione
-definitiva conviene scegliere un nome unico per tutte le distro — ma questo
-richiede una decisione del progetto, non tecnica.
 
 ## Una scoperta comune a tutte le distro Linux
 

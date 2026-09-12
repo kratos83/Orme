@@ -1,12 +1,12 @@
-# Pacchetto Arch Linux — Orme (giochi)
+# Pacchetto Arch Linux — Orme (orme)
 
 ## Nome del pacchetto
 
-`pkgname=giochi` (uguale al nome del binario/target CMake), non `orme`:
+`pkgname=orme` (uguale al nome del binario/target CMake), non `orme`:
 "Orme" è solo il nome visualizzato (titolo finestra, `setApplicationName`),
 mentre il progetto CMake, il modulo QML e l'eseguibile si chiamano tutti
-`giochi`/`Giochi`. Usare lo stesso nome per il pacchetto evita ambiguità fra
-`pacman -S giochi` e il comando/binario installato (`/usr/bin/giochi`).
+`orme`/`orme`. Usare lo stesso nome per il pacchetto evita ambiguità fra
+`pacman -S orme` e il comando/binario installato (`/usr/bin/orme`).
 
 ## Pacchetti Qt6 verificati
 
@@ -53,35 +53,35 @@ Eseguita realmente il 2026-09-11 dentro Docker (Arch Linux aggiornato al
 momento del test, Qt 6.11.2):
 
 ```
-==> Finished making: giochi 0.1-1 (Fri Sep 11 05:09:51 2026)
+==> Finished making: orme 0.1-1 (Fri Sep 11 05:09:51 2026)
 ```
 
 Pacchetti prodotti:
-- `giochi-0.1-1-x86_64.pkg.tar.zst` (~517 KiB)
-- `giochi-debug-0.1-1-x86_64.pkg.tar.zst` (~6.9 MiB, simboli di debug —
+- `orme-0.1-1-x86_64.pkg.tar.zst` (~517 KiB)
+- `orme-debug-0.1-1-x86_64.pkg.tar.zst` (~6.9 MiB, simboli di debug —
   generato automaticamente da makepkg/base-devel, non è un errore)
 
 Verifica del pacchetto (in un secondo container Arch pulito):
 
 ```
-$ pacman -Qip giochi-0.1-1-x86_64.pkg.tar.zst
-Name            : giochi
+$ pacman -Qip orme-0.1-1-x86_64.pkg.tar.zst
+Name            : orme
 Version         : 0.1-1
 Depends On      : qt6-base  qt6-declarative  qt6-multimedia
 ...
 
-$ pacman -Qlp giochi-0.1-1-x86_64.pkg.tar.zst
-giochi /usr/bin/giochi
-giochi /usr/share/licenses/giochi/COPYRIGHT
+$ pacman -Qlp orme-0.1-1-x86_64.pkg.tar.zst
+orme /usr/bin/orme
+orme /usr/share/licenses/orme/COPYRIGHT
 ```
 
 Installazione reale (`pacman -U`) in un container pulito, poi:
 
 ```
-$ file /usr/bin/giochi
-/usr/bin/giochi: ELF 64-bit LSB pie executable, x86-64, ... dynamically linked, ... stripped
+$ file /usr/bin/orme
+/usr/bin/orme: ELF 64-bit LSB pie executable, x86-64, ... dynamically linked, ... stripped
 
-$ ldd /usr/bin/giochi | grep 'not found'
+$ ldd /usr/bin/orme | grep 'not found'
 (nessun output -> nessuna libreria mancante)
 ```
 
