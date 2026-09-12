@@ -26,3 +26,10 @@ Aggiunti due nuovi giochi:
   tablet Android reali privi di font emoji a colori di sistema: l'app ora
   include un proprio font emoji (Noto Color Emoji) usato automaticamente
   come fallback
+
+## I pacchetti sono disponibili:
+
+- Android
+- Linux (**Fedora - Mageia - Arch linux - Alpine - Debian - Opensuse**)
+- Windows (**Portabile - Installazione fissa**)
+- MacOS (**Versione universale -Intel-Processore serie M**)
