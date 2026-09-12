@@ -10,7 +10,10 @@
 #define MyAppPublisher "Angelo Scarna"
 #define MyAppExeName "Orme.exe"
 ; GUID fisso: identifica l'app tra le versioni per aggiornamenti/disinstallazione pulita.
-#define MyAppId "{C3A2E7F0-6B1D-4E3A-9C2F-7D8E5A1B4F6C}"
+; Graffe raddoppiate: dopo la sostituzione di {#MyAppId}, il compilatore
+; rilegge il risultato e tratterebbe "{...}" come riferimento a una propria
+; costante anziche' come testo letterale del GUID.
+#define MyAppId "{{C3A2E7F0-6B1D-4E3A-9C2F-7D8E5A1B4F6C}}"
 
 [Setup]
 AppId={#MyAppId}

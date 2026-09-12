@@ -21,7 +21,7 @@ echo "== dpkg-buildpackage dentro il container =="
 docker run --rm \
   -v "$OUT_DIR:/out" \
   "$IMAGE_TAG" \
-  bash -c 'dpkg-buildpackage -us -uc -b && cp -v ../orme*.deb ../orme*.buildinfo ../orme*.changes /out/'
+  bash -c 'dpkg-buildpackage -us -uc -b && cp -v ../orme*.deb /out/'
 
 echo "== Pacchetto/i prodotti =="
 ls -lh "$OUT_DIR"

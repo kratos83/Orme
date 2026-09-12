@@ -42,8 +42,8 @@ docker run --rm \
         set -euo pipefail
         cp /rpmbuild-in/giochi.spec ~/rpmbuild/SPECS/
         cp "/rpmbuild-in/'"${TARBALL}"'" ~/rpmbuild/SOURCES/
-        rpmbuild -ba ~/rpmbuild/SPECS/giochi.spec
-        find ~/rpmbuild/RPMS ~/rpmbuild/SRPMS -name "*.rpm" -exec cp {} /rpmbuild-out/ \;
+        rpmbuild -bb ~/rpmbuild/SPECS/giochi.spec
+        find ~/rpmbuild/RPMS -name "*.rpm" -exec cp {} /rpmbuild-out/ \;
     '
 
 echo "==> Fixing output file ownership..."
