@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Vero schermo intero: nasconde la barra di stato e disegna anche
+         sotto il notch/fotocamera a foro (es. Pixel 7), evitando le fasce
+         nere ai lati in orizzontale che Android riserva di default. -->
+    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+</resources>

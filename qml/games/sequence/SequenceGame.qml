@@ -139,7 +139,7 @@ GameScaffold {
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
             y: parent.height * 0.44
-            text: "⬇"
+            text: "▼"
             font.pixelSize: 40
             color: Theme.text
             opacity: 0.5

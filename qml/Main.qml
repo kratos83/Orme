@@ -6,8 +6,8 @@ import Giochi
 
 Window {
     id: root
-    width: 1280
-    height: 800
+    width: Screen.width
+    height: Screen.height
     visible: true
     visibility: Window.Maximized
     title: qsTr("Orme")

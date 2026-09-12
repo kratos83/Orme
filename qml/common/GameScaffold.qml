@@ -106,7 +106,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 20
-            glyph: "↻"
+            glyph: "🔄"
             visible: root.showRestart
             onClicked: root.restartRequested()
         }
@@ -141,7 +141,7 @@ Item {
             NumberAnimation { from: 1.08; to: 1.0;  duration: 600; easing.type: Easing.InOutSine }
         }
 
-        Text { anchors.centerIn: parent; text: "➔"; font.pixelSize: 56; color: "white" }
+        Text { anchors.centerIn: parent; text: "▶"; font.pixelSize: 56; color: "white" }
         MouseArea { anchors.fill: parent; onClicked: root.nextRequested() }
     }
 

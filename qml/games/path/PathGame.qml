@@ -141,7 +141,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 20
-            text: "↻"
+            text: "🔄"
             onClicked: { sndTap.play(); engine.loadLevel(engine.levelIndex) }
         }
     }
