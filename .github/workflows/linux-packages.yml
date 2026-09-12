@@ -23,6 +23,8 @@ jobs:
             format: pkg.tar.zst
           - distro: alpine
             format: apk
+          - distro: debian
+            format: deb
 
     runs-on: ubuntu-latest
     name: ${{ matrix.distro }}
@@ -37,27 +39,3 @@ jobs:
         with:
           name: orme-${{ matrix.distro }}
           path: packaging/out/${{ matrix.distro }}/
-
-  debian:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Installa le dipendenze di build
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            build-essential debhelper cmake qt6-base-dev qt6-declarative-dev
-
-      - name: Costruisci il pacchetto .deb
-        run: dpkg-buildpackage -us -uc -b
-
-      - name: Sposta gli artefatti
-        run: |
-          mkdir -p packaging/out/debian
-          mv ../orme*.deb ../orme*.buildinfo ../orme*.changes packaging/out/debian/
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: orme-debian
-          path: packaging/out/debian/
