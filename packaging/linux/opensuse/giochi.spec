@@ -1,4 +1,4 @@
-Name:           giochi
+Name:           orme
 Version:        0.1
 Release:        1
 Summary:        Orme - raccolta di mini-giochi educativi per bambini (Qt6/QML)
