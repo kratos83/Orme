@@ -8,8 +8,8 @@
 # PRIMA di invocare makepkg, quindi source=() e build()/package() puntano
 # direttamente lì.
 pkgname=orme-archlinux
-pkgver=0.2
-pkgrel=2
+pkgver=0.3
+pkgrel=1
 pkgdesc="Orme - raccolta di giochi educativi Qt6/QML per bambini 3-5 anni"
 arch=('x86_64')
 license=('GPL-3.0-or-later')
