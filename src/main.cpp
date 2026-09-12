@@ -6,6 +6,7 @@
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickWindow>
 
 // Molti tablet Android reali (soprattutto ROM senza servizi Google) non
 // hanno alcun font emoji a colori di sistema: le emoji usate come icone in
@@ -41,6 +42,15 @@ int main(int argc, char *argv[])
     app.setApplicationVersion(QStringLiteral("0.2"));
 
     installEmojiFontFallback();
+
+    // Il renderer di testo di default di QtQuick (GPU, cache glyph a
+    // distance-field) non disegna in modo affidabile i glyph a colori
+    // (l'emoji font appena impostato come fallback) su tutti i backend
+    // grafici: su Windows (Direct3D/ANGLE) le emoji restano invisibili,
+    // anche se il glyph esiste ed e' quello giusto. NativeRendering usa
+    // invece QPainter/FreeType direttamente, che gestisce i glyph a colori
+    // in modo corretto e uniforme su ogni piattaforma.
+    QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
 
     QQmlApplicationEngine engine;
     QObject::connect(

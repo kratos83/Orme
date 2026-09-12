@@ -26,6 +26,9 @@ Aggiunti due nuovi giochi:
   tablet Android reali privi di font emoji a colori di sistema: l'app ora
   include un proprio font emoji (Noto Color Emoji) usato automaticamente
   come fallback
+- Risolte le stesse icone (emoji) non visibili anche su Windows: il
+  rendering del testo è forzato sul percorso "nativo", l'unico che
+  garantisce i glyph a colori su tutte le piattaforme
 
 ## I pacchetti sono disponibili:
 
