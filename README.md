@@ -1,6 +1,6 @@
 # Orme
 
-Raccolta di 20 giochi touch per bambini di 3-5 anni, ispirati ai concetti del
+Raccolta di 22 giochi touch per bambini di 3-5 anni, ispirati ai concetti del
 coding. 
 
 Linguagio utilizzato: Qt 6 + C++ + QML.
@@ -34,7 +34,7 @@ macOS: vedi [packaging/README.md](packaging/README.md).
 
 ## I giochi
 
-**20 giochi**, tutti nel menu iniziale: griglia che si adatta alla larghezza
+**22 giochi**, tutti nel menu iniziale: griglia che si adatta alla larghezza
 (3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a capo.
 L'età consigliata è scritta su ogni riquadro e nell'intestazione del gioco
 (proprietà `age`). Alcune emoji del menu sono scelte "vecchie" (📦 🐸 👣 🔵 ⭐
@@ -62,22 +62,24 @@ L'età consigliata è scritta su ogni riquadro e nell'intestazione del gioco
 | 18 | **Raccogli i frutti** | 3-5 | `games/harvest/` | tocca i frutti che cadono |
 | 19 | **Palloncini in fila** | 3-5 | `games/balloons/` | tocca i palloncini dal più piccolo al più grande |
 | 20 | **Scopri chi è** | 3-4 | `games/reveal/` | togli le mattonelle e scopri l'animale |
+| 21 | **Le emozioni** | 3-4 | `games/emotions/` | tocca la faccia con la stessa emozione |
+| 22 | **La raccolta differenziata** | 3-5 | `games/recycle/` | trascina l'oggetto nel bidone giusto (plastica/carta/vetro) |
 
 Regole comuni pensate per 3-5 anni: niente testo da leggere (icone + colore +
 suono), bersagli touch grandi, nessuna schermata di sconfitta, festa e "Ops!
 Riprova" sempre uguali.
 
-**Nome del bambino (in tutti i 20 giochi).** All'ingresso di ogni gioco compare
+**Nome del bambino (in tutti i 22 giochi).** All'ingresso di ogni gioco compare
 la schermata "Come ti chiami?" (`NamePrompt.qml`, dentro `GameScaffold` quindi
 ereditata anche da `MiniGame` e da tutti i giochi): campo di testo + "Gioca" o
 "Salta". Il nome resta scritto nell'intestazione e si può **cambiare in
-qualunque momento** col tasto **👤** (accanto a ↻). Uscendo con ← il gioco
+qualunque momento** col tasto **👤** (accanto a 🔄). Uscendo con ← il gioco
 viene distrutto e ricreato, quindi **nome e punteggio si azzerano** per il
 bambino successivo.
 
 **Menu Info.** In alto a destra nel menu c'è il tasto **i**: apre `InfoPage.qml`
 con la presentazione del programma (scopo, versione, © e email) e **l'elenco di
-tutti i 20 giochi** con concetto ed età; toccando una riga si apre quel gioco.
+tutti i 22 giochi** con concetto ed età; toccando una riga si apre quel gioco.
 L'elenco dei giochi (id, titolo, età, colore, emoji, descrizione) è il singleton
 `Catalog.qml`, usato sia dal menu sia dalla pagina Info.
 
@@ -102,7 +104,7 @@ src/
 qml/
   Main.qml            finestra + Loader; mappa id-gioco -> Component (+ InfoPage)
   Theme.qml           singleton: colori e misure condivise
-  Catalog.qml         singleton: elenco dei 20 giochi (id/titolo/età/colore/emoji/desc)
+  Catalog.qml         singleton: elenco dei 22 giochi (id/titolo/età/colore/emoji/desc)
   Launcher.qml        menu scorrevole (griglia 3-6 col.) + tasto "i" -> Info
   InfoPage.qml        presentazione del programma + elenco di tutti i giochi
   GameTile.qml        un riquadro del menu (title, age, emoji/icona)
@@ -122,7 +124,9 @@ qml/
                       Celebration, TryAgainBanner
   games/loop|rhythm|sort|sequence/   giochi 2-5 (radice GameScaffold)
   games/draw|catch|count|color|odd|pairs|size|bubbles|dots|wake|
-        cups|puzzle|harvest|balloons|reveal/   giochi 6-20 (radice MiniGame)
+        cups|puzzle|harvest|balloons|reveal|emotions|recycle/
+                                             giochi 6-22 (radice MiniGame,
+                                             tranne recycle che usa GameScaffold)
 assets/sounds/         effetti WAV (rigenerabili con scripts/make_sounds.py)
 scripts/               make_sounds.py, check_levels.py, clean.sh
 ```
@@ -130,7 +134,7 @@ scripts/               make_sounds.py, check_levels.py, clean.sh
 Tutti i file `.qml` del modulo sono referenziabili per nome (`GameScaffold`,
 `MiniGame`, `SoundBank`, `Arrow`, ...) grazie a `qt_add_qml_module`: i nomi
 devono essere **unici in tutto il progetto**. "Il percorso" ha un motore in
-C++ (`PathEngine`), gli altri 19 hanno la logica in QML/JS.
+C++ (`PathEngine`), gli altri 21 hanno la logica in QML/JS.
 
 ## Il gioco "Il percorso"
 
@@ -210,6 +214,15 @@ script allineata a quella C++).
   palloncini in ordine di grandezza.
 - **Scopri chi è** (`games/reveal/RevealGame.qml`) - una griglia di mattonelle
   colorate; toccarle tutte scopre l'animale dietro.
+- **Le emozioni** (`games/emotions/EmotionsGame.qml`) - stessa struttura di
+  "Tocca il colore" ma con facce invece di colori: in alto una faccia con
+  un'emozione (6 possibili), sotto quattro facce diverse, tocca quella con la
+  stessa emozione. Solo riconoscimento visivo, nessuna parola da leggere.
+- **La raccolta differenziata** (`games/recycle/RecycleGame.qml`) - drag come
+  "Metti a posto" ma con 3 bidoni fissi (plastica/giallo, carta/blu,
+  vetro/verde, i colori reali della differenziata) invece di regole che
+  cambiano a turno: si trascinano 9 oggetti (bottiglie, carta, vetro) nel
+  bidone giusto.
 
 ## Aggiungere un nuovo gioco
 

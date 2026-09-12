@@ -28,7 +28,8 @@ Window {
             "sequence": sequenceC, "draw": drawC, "catch": catchC, "count": countC,
             "color": colorC, "odd": oddC, "pairs": pairsC, "size": sizeC,
             "bubbles": bubblesC, "dots": dotsC, "wake": wakeC, "cups": cupsC,
-            "puzzle": puzzleC, "harvest": harvestC, "balloons": balloonsC, "reveal": revealC
+            "puzzle": puzzleC, "harvest": harvestC, "balloons": balloonsC, "reveal": revealC,
+            "emotions": emotionsC, "recycle": recycleC
         }
         if (map[id]) view.sourceComponent = map[id]
     }
@@ -69,4 +70,6 @@ Window {
     Component { id: harvestC;  HarvestGame  { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: balloonsC; BalloonsGame { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: revealC;   RevealGame   { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: emotionsC; EmotionsGame { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: recycleC;  RecycleGame  { onExitRequested: view.sourceComponent = launcherComponent } }
 }

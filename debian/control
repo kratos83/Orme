@@ -15,7 +15,7 @@ Depends: ${shlibs:Depends},
          qml6-module-qtquick-shapes,
          qml6-module-qtmultimedia
 Description: raccolta di giochi touch per bambini di 3-5 anni
- Orme è una raccolta di 20 mini-giochi per bambini di 3-5 anni, ispirati
+ Orme è una raccolta di 22 mini-giochi per bambini di 3-5 anni, ispirati
  ai concetti base della programmazione: sequenze, cicli, condizioni,
  debug, tramite tocco su schermo. Pensato per tablet e schermi touch,
  ma funziona anche con mouse.

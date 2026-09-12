@@ -64,6 +64,8 @@ qt_add_qml_module(Orme
         qml/games/harvest/HarvestGame.qml
         qml/games/balloons/BalloonsGame.qml
         qml/games/reveal/RevealGame.qml
+        qml/games/emotions/EmotionsGame.qml
+        qml/games/recycle/RecycleGame.qml
     RESOURCES
         assets/sounds/tap.wav
         assets/sounds/step.wav

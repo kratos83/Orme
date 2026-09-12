@@ -47,6 +47,10 @@ QtObject {
         { id: "balloons", title: qsTr("Palloncini in fila"), age: qsTr("3-5 anni"), c: Theme.dirLeft, e: "🎈",
           desc: qsTr("Tocca i palloncini dal più piccolo al più grande. Mettere in ordine per grandezza.") },
         { id: "reveal", title: qsTr("Scopri chi è"), age: qsTr("3-4 anni"), c: Theme.accent, e: "🐱",
-          desc: qsTr("Dietro le mattonelle colorate c'è un animale: toccale tutte per scoprirlo.") }
+          desc: qsTr("Dietro le mattonelle colorate c'è un animale: toccale tutte per scoprirlo.") },
+        { id: "emotions", title: qsTr("Le emozioni"), age: qsTr("3-4 anni"), c: Theme.dirDown, e: "😀",
+          desc: qsTr("In alto una faccia con un'emozione, sotto quattro facce diverse: tocca quella con la stessa emozione.") },
+        { id: "recycle", title: qsTr("La raccolta differenziata"), age: qsTr("3-5 anni"), c: Theme.dirRight, e: "♻️",
+          desc: qsTr("Trascina l'oggetto nel bidone giusto: plastica, carta o vetro.") }
     ]
 }
