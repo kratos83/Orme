@@ -12,21 +12,17 @@
 static void installEmojiFontFallback()
 {
 #if defined(Q_OS_WINDOWS)
-    // NotoColorEmoji.ttf (usato sulle altre piattaforme) e' in formato
-    // bitmap CBDT/CBLC (lo stesso di Android): DirectWrite, il motore di
-    // testo di Windows usato anche da Qt, non sa renderizzare questo
-    // formato affatto (a differenza di Skia su Android/Linux) - il glifo
-    // viene risolto correttamente (spazio riservato) ma non viene mai
-    // disegnato, restando invisibile. Serve quindi una build separata in
-    // formato COLR/CPAL (vettoriale, supportato da DirectWrite): questa e'
-    // "Noto-COLRv1.ttf" dal repo ufficiale googlefonts/noto-emoji.
-    const int id = QFontDatabase::addApplicationFont(
-        QStringLiteral(":/qt/qml/Orme/assets/fonts/NotoColorEmoji_Windows.ttf"));
+    // Niente di custom su Windows: Segoe UI Emoji e' gia' installato di
+    // serie su ogni Windows 10/11, e' un font a colori in formato COLR
+    // (supportato nativamente da DirectWrite) e Qt lo usa gia' in automatico
+    // come fallback per i codepoint emoji quando il font di default non li
+    // copre. NotoColorEmoji.ttf (usato sulle altre piattaforme) e' invece
+    // in formato bitmap CBDT/CBLC, che DirectWrite non sa renderizzare
+    // affatto.
+    return;
 #else
     const int id = QFontDatabase::addApplicationFont(
         QStringLiteral(":/qt/qml/Orme/assets/fonts/NotoColorEmoji.ttf"));
-#endif
-
     if (id < 0)
         return;
     const QStringList families = QFontDatabase::applicationFontFamilies(id);
@@ -34,25 +30,13 @@ static void installEmojiFontFallback()
         return;
 
     QFont font = QGuiApplication::font();
-#if defined(Q_OS_WINDOWS)
-    // Anche con un font in formato corretto, aggiungerlo solo in coda alla
-    // chain di fallback lascerebbe comunque il font UI di default (Segoe
-    // UI) risolvere per primo i glifi emoji tramite il proprio
-    // font-linking di sistema (Segoe UI Emoji) - stile diverso da Noto
-    // usato sulle altre piattaforme. Per coerenza visiva forziamo quindi
-    // il nostro font come UNICA famiglia esplicita: i glifi assenti (es.
-    // lettere latine, che Noto Color Emoji non contiene) continuano
-    // comunque a risolversi tramite il fallback di sistema automatico di
-    // Qt.
-    font.setFamilies(QStringList{families.first()});
-#else
     QStringList chain = font.families();
     if (chain.isEmpty() && !font.family().isEmpty())
         chain << font.family();
     chain << families.first();
     font.setFamilies(chain);
-#endif
     QGuiApplication::setFont(font);
+#endif
 }
 
 int main(int argc, char *argv[])
