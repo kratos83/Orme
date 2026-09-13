@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Metti a posto" - il concetto di CLASSIFICARE / condizione "se... allora...".
 // Un oggetto al centro: il bambino lo trascina nel cesto giusto. Quando entra,

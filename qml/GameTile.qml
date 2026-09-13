@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // Un riquadro del menu: icona grande, titolo (va a capo se lungo) ed età.
 Rectangle {

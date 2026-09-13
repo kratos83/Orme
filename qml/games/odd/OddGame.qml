@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Trova l'intruso" - quattro figure, tre uguali e una diversa: si tocca
 // quella diversa.

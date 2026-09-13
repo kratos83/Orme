@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Dov'è il coniglio?" - il coniglio si nasconde sotto un bicchiere; i
 // bicchieri si mescolano più volte (e il coniglio va con il suo bicchiere).

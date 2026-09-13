@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Bolle" - le bolle salgono piano dal basso, sparse su tutta l'altezza.
 // Si toccano per farle scoppiare. Quando ne hai scoppiate abbastanza, hai vinto.

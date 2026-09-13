@@ -1,5 +1,5 @@
 import QtQuick
-import Giochi
+import Orme
 
 // Messaggio "hai sbagliato, riprova" quando la sequenza e' sbagliata.
 // Compare per un attimo e sparisce da solo mentre i comandi si azzerano.

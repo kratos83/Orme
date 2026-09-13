@@ -8,17 +8,19 @@
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 
-// Molti tablet Android reali (soprattutto ROM senza servizi Google) non
-// hanno alcun font emoji a colori di sistema: le emoji usate come icone in
-// tutta l'app (menu e giochi) restano invisibili o come quadratini vuoti.
-// Includiamo Noto Color Emoji come font applicativo e lo mettiamo come
-// fallback del font di default: qualunque Text senza font.family esplicito
-// lo usera' automaticamente per i caratteri (le emoji) che il font
-// principale non ha, senza dover toccare ogni file QML.
+
 static void installEmojiFontFallback()
 {
+#if defined(Q_OS_WINDOWS)
+    // Su Windows il font a colori non viene caricato correttamente se
+    // l'applicazione non e' a DPI-aware, per cui lo dichiariamo subito all'avvio 
     const int id = QFontDatabase::addApplicationFont(
-        QStringLiteral(":/qt/qml/Giochi/assets/fonts/NotoColorEmoji.ttf"));
+        QStringLiteral(":/qt/qml/Orme/assets/fonts/NotoColorEmoji_Windows.ttf"));    
+#else
+    const int id = QFontDatabase::addApplicationFont(
+        QStringLiteral(":/qt/qml/Orme/assets/fonts/NotoColorEmoji.ttf"));
+#endif
+    
     if (id < 0)
         return;
     const QStringList families = QFontDatabase::applicationFontFamilies(id);
@@ -38,19 +40,12 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     app.setApplicationName(QStringLiteral("Orme"));
-    app.setOrganizationName(QStringLiteral("Giochi"));
+    app.setOrganizationName(QStringLiteral("Orme"));
     app.setApplicationVersion(QStringLiteral("0.2"));
 
     installEmojiFontFallback();
 
-    // Il renderer di testo di default di QtQuick (GPU, cache glyph a
-    // distance-field) non disegna in modo affidabile i glyph a colori
-    // (l'emoji font appena impostato come fallback) su tutti i backend
-    // grafici: su Windows (Direct3D/ANGLE) le emoji restano invisibili,
-    // anche se il glyph esiste ed e' quello giusto. NativeRendering usa
-    // invece QPainter/FreeType direttamente, che gestisce i glyph a colori
-    // in modo corretto e uniforme su ogni piattaforma.
-    QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
+    //QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
 
     QQmlApplicationEngine engine;
     QObject::connect(
@@ -58,7 +53,7 @@ int main(int argc, char *argv[])
         &app, []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
-    engine.loadFromModule("Giochi", "Main");
+    engine.loadFromModule("Orme", "Main");
 
     return app.exec();
 }

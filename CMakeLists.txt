@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(Orme VERSION 0.1 LANGUAGES CXX)
+project(Orme-app VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -9,7 +9,7 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Qml)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
-qt_add_executable(Orme
+qt_add_executable(Orme-app
     src/main.cpp
 )
 
@@ -18,7 +18,7 @@ set_source_files_properties(qml/Theme.qml   PROPERTIES QT_QML_SINGLETON_TYPE TRU
 set_source_files_properties(qml/Catalog.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 qt_add_qml_module(Orme
-    URI Giochi
+    URI Orme
     VERSION 1.0
     SOURCES
         src/pathengine.h
@@ -72,21 +72,22 @@ qt_add_qml_module(Orme
         assets/sounds/win.wav
         assets/sounds/bump.wav
         assets/fonts/NotoColorEmoji.ttf
+        assets/fonts/NotoColorEmoji_Windows.ttf
 )
 
 target_include_directories(Orme PRIVATE src)
 
-target_link_libraries(Orme PRIVATE Qt6::Quick Qt6::Qml)
+if(UNIX AND NOT APPLE)
+    target_link_libraries(Orme-app PRIVATE -Wl,--no-as-needed Orme -Wl,--as-needed Qt6::Quick Qt6::Qml)
+else()
+    target_link_libraries(Orme-app PRIVATE Orme Qt6::Quick Qt6::Qml)
+endif()
 
 if(WIN32)
-    target_sources(Orme PRIVATE packaging/windows/app.rc)
+    target_sources(Orme-app PRIVATE packaging/windows/app.rc)
 endif()
 
 if(APPLE)
-    # Generato a build-time (iconutil, disponibile solo su macOS) dal sorgente
-    # in packaging/macos/AppIcon.iconset/ - vedi .github/workflows/macos.yml.
-    # Se manca (build locale senza quello step) l'app resta senza icona
-    # invece di rompere la configurazione.
     set(MACOS_ICON_FILE "${CMAKE_SOURCE_DIR}/packaging/macos/AppIcon.icns")
     if(EXISTS "${MACOS_ICON_FILE}")
         target_sources(Orme PRIVATE "${MACOS_ICON_FILE}")
@@ -96,16 +97,6 @@ if(APPLE)
 endif()
 
 if(ANDROID)
-    # Su desktop "Orme" e' un vero eseguibile (RUNTIME/BUNDLE sotto), ma su
-    # Android qt_add_executable() crea in realta' una libreria MODULE (il
-    # .so caricato dalla Activity Java), per cui install(TARGETS) pretende
-    # anche una LIBRARY DESTINATION, altrimenti fallisce con:
-    #   "install TARGETS given no LIBRARY DESTINATION for module target"
-    # Intercettiamo install() per aggiungerla quando manca. Deve stare qui
-    # (non in un hook esterno via CMAKE_PROJECT_INCLUDE) perche' le
-    # sotto-build automatiche innescate da QT_ANDROID_BUILD_ALL_ABIS=ON
-    # (una per ogni ABI extra, es. armeabi-v7a) non ereditano
-    # CMAKE_PROJECT_INCLUDE e altrimenti fallirebbero allo stesso modo.
     function(install)
         set(_args ${ARGN})
         list(FIND _args "TARGETS" _targets_idx)
@@ -117,14 +108,11 @@ if(ANDROID)
     endfunction()
 endif()
 
-install(TARGETS Orme
+install(TARGETS Orme-app
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION bin
 )
 
-# Voce menu (.desktop) e icona per i desktop Linux (letta da tutti i
-# pacchetti: debian, arch, alpine e le tre RPM installano tramite
-# "cmake --install", quindi la ereditano automaticamente).
 install(FILES packaging/linux/debian/orme.desktop
     DESTINATION share/applications
 )

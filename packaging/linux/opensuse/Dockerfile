@@ -1,5 +1,5 @@
 # Build environment for the openSUSE Tumbleweed RPM package of "giochi"
-# (GiochiCoding).
+# (OrmeCoding).
 #
 # Usage: see build.sh in this directory.
 

@@ -43,7 +43,7 @@ zap CMakeFiles CMakeCache.txt cmake_install.cmake install_manifest.txt \
     CTestTestfile.cmake DartConfiguration.tcl \
     Makefile compile_commands.json .ninja_deps .ninja_log build.ninja \
     giochi giochi_autogen giochi_qmltyperegistrations.cpp \
-    Giochi meta_types qmltypes .qt .rcc .qmlls.ini Orme Orme_autogen orme_qmltyperegistrations.cpp \
+    Orme meta_types qmltypes .qt .rcc .qmlls.ini Orme Orme_autogen orme_qmltyperegistrations.cpp \
     aqtinstall.log .qmake.stash .qmake.cache .qmake.super .qmake.cache.shared 
 
 if [ "${1:-}" = "all" ]; then

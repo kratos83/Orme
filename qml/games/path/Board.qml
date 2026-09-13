@@ -1,5 +1,5 @@
 import QtQuick
-import Giochi
+import Orme
 
 // Il tabellone: griglia, rocce, mela e personaggio.
 // Riceve il motore come proprieta' `engine`.

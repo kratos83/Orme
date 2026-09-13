@@ -1,5 +1,5 @@
 import QtQuick
-import Giochi
+import Orme
 
 // "Ancora!" - il concetto di CICLO / RIPETIZIONE.
 // C'e' una sola azione (il salto): il bambino sceglie QUANTE VOLTE ripeterla

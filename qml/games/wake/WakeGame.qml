@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Sveglia gli animali" - ogni animale dorme (💤). Toccandolo si sveglia e
 // fa un saltino. Quando sono tutti svegli, hai vinto.

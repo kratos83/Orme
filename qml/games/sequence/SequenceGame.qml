@@ -1,5 +1,5 @@
 import QtQuick
-import Giochi
+import Orme
 
 // "E poi?" - il concetto di METTERE I PASSI IN ORDINE (algoritmo).
 // In alto le figure mescolate, in basso le caselle 1-2-3(-4).

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
 import QtQuick.Shapes
-import Giochi
+import Orme
 
 // "Disegna il percorso" - col dito si disegna una strada dal personaggio
 // fino all'oggetto (fiore, pupazzo...). Poi il personaggio la percorre:

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
 import QtMultimedia
-import Giochi
+import Orme
 
 // Schermata del gioco "Il percorso".
 Item {
@@ -26,10 +26,10 @@ Item {
     }
 
     // ---------- suoni ----------
-    SoundEffect { id: sndTap;  source: "qrc:/qt/qml/Giochi/assets/sounds/tap.wav" }
-    SoundEffect { id: sndStep; source: "qrc:/qt/qml/Giochi/assets/sounds/step.wav" }
-    SoundEffect { id: sndWin;  source: "qrc:/qt/qml/Giochi/assets/sounds/win.wav" }
-    SoundEffect { id: sndBump; source: "qrc:/qt/qml/Giochi/assets/sounds/bump.wav" }
+    SoundEffect { id: sndTap;  source: "qrc:/qt/qml/Orme/assets/sounds/tap.wav" }
+    SoundEffect { id: sndStep; source: "qrc:/qt/qml/Orme/assets/sounds/step.wav" }
+    SoundEffect { id: sndWin;  source: "qrc:/qt/qml/Orme/assets/sounds/win.wav" }
+    SoundEffect { id: sndBump; source: "qrc:/qt/qml/Orme/assets/sounds/bump.wav" }
 
     Connections {
         target: engine

@@ -8,7 +8,7 @@ import QtMultimedia
 //   nope() -> risposta sbagliata
 Item {
     id: root
-    property string base: "qrc:/qt/qml/Giochi/assets/sounds/"
+    property string base: "qrc:/qt/qml/Orme/assets/sounds/"
 
     function tap()  { sTap.play() }
     function ok()   { sStep.play() }

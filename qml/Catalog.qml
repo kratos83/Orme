@@ -1,6 +1,6 @@
 pragma Singleton
 import QtQuick
-import Giochi
+import Orme
 
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later

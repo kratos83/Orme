@@ -1,5 +1,5 @@
 import QtQuick
-import Giochi
+import Orme
 
 // Festa quando il bambino vince un livello: coriandoli, "BRAVO/A!",
 // le faccine guadagnate e un messaggio ("Sei al livello N").

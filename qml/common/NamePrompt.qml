@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // Schermata iniziale di ogni gioco: si inserisce il nome del bambino.
 // Emette accepted(nome) e si nasconde. "Salta" dà nome vuoto.

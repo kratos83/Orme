@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Scopri chi è" - dietro le mattonelle c'è un animale. Si toccano le
 // mattonelle per toglierle: quando è tutto scoperto, hai vinto.

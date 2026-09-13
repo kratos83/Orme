@@ -1,4 +1,4 @@
-# Build environment for the Mageia 10 RPM package of "giochi" (GiochiCoding).
+# Build environment for the Mageia 10 RPM package of "giochi" (OrmeCoding).
 #
 # Mageia 10 is available as an OFFICIAL Docker image (docker.io/library/mageia,
 # tags "10" and "latest" both resolve to the same digest as of 2026-09) - no

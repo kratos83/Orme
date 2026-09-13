@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // Menu iniziale: 20 riquadri da toccare, in una griglia che si adatta alla
 // larghezza (fino a 6 per riga) e scorre in verticale.

@@ -1,5 +1,5 @@
 import QtQuick
-import Giochi
+import Orme
 
 // La striscia dei comandi scelti. Toccando una freccia la si toglie.
 // Durante l'esecuzione la freccia in corso viene evidenziata.

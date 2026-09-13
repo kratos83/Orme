@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Raccogli i frutti" - i frutti colorati scendono piano dall'alto, si
 // toccano per metterli nel cesto. Quando ne hai raccolti abbastanza, hai vinto.

@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Le coppie" - come il vero memory: prima le 6 carte si vedono tutte a
 // faccia in su, poi si girano e si mescolano di posto; infine si cercano

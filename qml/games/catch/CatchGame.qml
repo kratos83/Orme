@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Acchiappa i conigli" - tocca solo i conigli 🐰 (gli altri animali no).
 // Concetto: condizione "se è un coniglio -> prendilo".

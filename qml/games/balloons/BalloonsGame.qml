@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Palloncini in fila" - si toccano i palloncini dal più piccolo al più
 // grande. Concetto: mettere in ordine per grandezza.

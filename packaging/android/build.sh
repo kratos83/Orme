@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build script per la APK Android di "Orme" (giochi-coding).
 #
-# Compila l'app QML/Qt6 esistente (target CMake "Orme", modulo QML "Giochi")
+# Compila l'app QML/Qt6 esistente (target CMake "Orme", modulo QML "Orme")
 # per Android arm64-v8a usando un kit Qt per Android scaricato con aqtinstall
 # e produce un APK (release, non firmato) in packaging/android/out/.
 # Per un APK debug-signed basta aggiungere -DCMAKE_BUILD_TYPE=Debug e usare il

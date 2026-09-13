@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
 import QtQuick.Shapes
-import Giochi
+import Orme
 
 // "Unisci i puntini" - si toccano i puntini in ordine da 1 a 5. A ogni
 // tocco giusto si disegna un pezzo di linea.

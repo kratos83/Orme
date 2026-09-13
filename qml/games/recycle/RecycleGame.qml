@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "La raccolta differenziata" - un oggetto al centro, tre bidoni colorati
 // (plastica/gialla, carta/blu, vetro/verde): si trascina l'oggetto nel

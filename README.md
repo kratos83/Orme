@@ -19,7 +19,7 @@ Linguagio utilizzato: Qt 6 + C++ + QML.
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
-./build/Orme
+./build/Orme-app
 ```
 
 Per ripulire i file di compilazione: `scripts/clean.sh` elimina `build/` e
@@ -103,7 +103,7 @@ targhetta, `Celebration.qml` per festa + faccine + messaggio.
 CMakeLists.txt        elenca ogni .qml in QML_FILES
 COPYRIGHT
 src/
-  main.cpp            avvio: carica il modulo QML "Giochi", pagina Main
+  main.cpp            avvio: carica il modulo QML "Orme", pagina Main
   pathengine.{h,cpp}  logica del gioco "Il percorso" (in C++)
 qml/
   Main.qml            finestra + Loader; mappa id-gioco -> Component (+ InfoPage)
@@ -132,6 +132,7 @@ qml/
                                              giochi 6-22 (radice MiniGame,
                                              tranne recycle che usa GameScaffold)
 assets/sounds/         effetti WAV (rigenerabili con scripts/make_sounds.py)
+assets/fonts/          font FluentEmojiColor (Windows)-NotoColorEmoji (Linux-MacOS-Android)
 scripts/               make_sounds.py, check_levels.py, clean.sh
 ```
 
@@ -193,7 +194,7 @@ script allineata a quella C++).
   palla...) hai vinto. 8 livelli.
 - **Acchiappa i conigli** (`games/catch/CatchGame.qml`) - fra gli animali che
   ondeggiano si toccano solo i 🐰; toccare un altro animale è un errore.
-- **Giochi "tocca la risposta"** (`count`, `color`, `odd`, `size`) - una
+- **Orme "tocca la risposta"** (`count`, `color`, `odd`, `size`) - una
   domanda visiva e alcune scelte; tocco giusto = livello vinto, tocco
   sbagliato = errore + scossa. ~10-12 livelli generati a caso.
 - **Le coppie** (`games/pairs/PairsGame.qml`) - memory 3x2: due carte girate,

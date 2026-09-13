@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // Estende GameScaffold con il "giro" standard di un mini-gioco:
 //   - livello corrente (levelIndex) su un totale (levelCount)

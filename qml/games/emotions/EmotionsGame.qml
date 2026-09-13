@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Le emozioni" - in alto una faccia che esprime un'emozione, sotto quattro
 // facce diverse: si tocca quella con la stessa emozione. Stessa struttura di

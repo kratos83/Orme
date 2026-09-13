@@ -1,5 +1,5 @@
 import QtQuick
-import Giochi
+import Orme
 
 // I quattro tasti-freccia disposti a croce. Emette moved(direction).
 Item {

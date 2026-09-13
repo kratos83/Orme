@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // Pagina "Info": presentazione del programma + elenco di tutti i giochi
 // (toccando una riga si apre quel gioco).

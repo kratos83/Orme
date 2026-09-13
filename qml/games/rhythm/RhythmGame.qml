@@ -1,5 +1,5 @@
 import QtQuick
-import Giochi
+import Orme
 
 // "Il ritmo" - il concetto di SEQUENZA CHE SI RIPETE (pattern, riconoscimento).
 // In alto una fila che segue un ritmo di colori e finisce con "?".

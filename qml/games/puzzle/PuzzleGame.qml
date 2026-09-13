@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // "Puzzle" - quattro pezzi da trascinare nella loro casella (2x2). Ogni
 // casella mostra in trasparenza il pezzo che ci va.

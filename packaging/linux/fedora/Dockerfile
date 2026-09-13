@@ -1,4 +1,4 @@
-# Build environment for the Fedora RPM package of "giochi" (GiochiCoding).
+# Build environment for the Fedora RPM package of "giochi" (OrmeCoding).
 #
 # Usage: see build.sh in this directory. This Dockerfile only prepares the
 # rpmbuild tree and toolchain; the actual RPM is built by build.sh invoking

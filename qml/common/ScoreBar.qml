@@ -1,7 +1,7 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import Giochi
+import Orme
 
 // Il punteggio del bambino, mostrato con una faccina e il numero.
 // Anche se si guadagnano piu' faccine insieme, il numero sale SEMPRE
