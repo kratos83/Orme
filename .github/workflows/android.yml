@@ -103,7 +103,7 @@ jobs:
         run: cmake --build build-android -j
 
       - name: Genera l'APK (androiddeployqt)
-        run: cmake --build build-android --target Orme_make_apk
+        run: cmake --build build-android --target Orme-app_make_apk
 
       # androiddeployqt/Gradle non hanno un signing config di release
       # collegato, quindi producono sempre un *-unsigned.apk: lo allineiamo

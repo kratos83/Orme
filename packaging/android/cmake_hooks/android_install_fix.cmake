@@ -26,14 +26,14 @@ if(ANDROID)
 endif()
 
 function(_giochi_apply_android_package_source_dir dir)
-    if(TARGET Orme)
-        set_target_properties(Orme PROPERTIES QT_ANDROID_PACKAGE_SOURCE_DIR "${dir}")
-        message(STATUS "Orme: QT_ANDROID_PACKAGE_SOURCE_DIR impostata su ${dir}")
+    if(TARGET Orme-app)
+        set_target_properties(Orme-app PROPERTIES QT_ANDROID_PACKAGE_SOURCE_DIR "${dir}")
+        message(STATUS "Orme-app: QT_ANDROID_PACKAGE_SOURCE_DIR impostata su ${dir}")
         # QT_ANDROID_MIN_SDK_VERSION e' una PROPERTY del target (letta da
         # Qt6AndroidMacros.cmake via TARGET_PROPERTY), non una variabile
         # CMake: passarla con -D non ha alcun effetto, va impostata cosi'.
         # 26 = Android 8.0 Oreo (il default di Qt e' piu' alto), per restare
         # compatibili con tablet come il Huawei MediaPad T5.
-        set_target_properties(Orme PROPERTIES QT_ANDROID_MIN_SDK_VERSION 26)
+        set_target_properties(Orme-app PROPERTIES QT_ANDROID_MIN_SDK_VERSION 26)
     endif()
 endfunction()

@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     app.setApplicationName(QStringLiteral("Orme"));
     app.setOrganizationName(QStringLiteral("Orme"));
-    app.setApplicationVersion(QStringLiteral("0.2"));
+    app.setApplicationVersion(QStringLiteral("0.1"));
 
     installEmojiFontFallback();
 

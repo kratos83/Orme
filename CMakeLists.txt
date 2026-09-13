@@ -13,13 +13,20 @@ qt_add_executable(Orme-app
     src/main.cpp
 )
 
+# Il target CMake si chiama "Orme-app" (per non confonderlo con l'URI del
+# modulo QML "Orme"), ma il binario/bundle installato deve restare "Orme":
+# tutti gli script di packaging (spec RPM, .desktop, PKGBUILD, APKBUILD,
+# installer Windows, layout del .dmg macOS) si aspettano quel nome.
+set_target_properties(Orme-app PROPERTIES OUTPUT_NAME "Orme")
+
 # I singleton QML vanno marcati PRIMA di qt_add_qml_module
 set_source_files_properties(qml/Theme.qml   PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 set_source_files_properties(qml/Catalog.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
-qt_add_qml_module(Orme
+qt_add_qml_module(Orme-app
     URI Orme
     VERSION 1.0
+    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
     SOURCES
         src/pathengine.h
         src/pathengine.cpp
@@ -75,13 +82,9 @@ qt_add_qml_module(Orme
         assets/fonts/NotoColorEmoji_Windows.ttf
 )
 
-target_include_directories(Orme PRIVATE src)
+target_include_directories(Orme-app PRIVATE src)
 
-if(UNIX AND NOT APPLE)
-    target_link_libraries(Orme-app PRIVATE -Wl,--no-as-needed Orme -Wl,--as-needed Qt6::Quick Qt6::Qml)
-else()
-    target_link_libraries(Orme-app PRIVATE Orme Qt6::Quick Qt6::Qml)
-endif()
+target_link_libraries(Orme-app PRIVATE Qt6::Quick Qt6::Qml)
 
 if(WIN32)
     target_sources(Orme-app PRIVATE packaging/windows/app.rc)
@@ -90,9 +93,9 @@ endif()
 if(APPLE)
     set(MACOS_ICON_FILE "${CMAKE_SOURCE_DIR}/packaging/macos/AppIcon.icns")
     if(EXISTS "${MACOS_ICON_FILE}")
-        target_sources(Orme PRIVATE "${MACOS_ICON_FILE}")
+        target_sources(Orme-app PRIVATE "${MACOS_ICON_FILE}")
         set_source_files_properties("${MACOS_ICON_FILE}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-        set_target_properties(Orme PROPERTIES MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
+        set_target_properties(Orme-app PROPERTIES MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
     endif()
 endif()
 
