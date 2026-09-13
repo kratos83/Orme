@@ -28,11 +28,15 @@ static void installEmojiFontFallback()
         return;
 
     QFont font = QGuiApplication::font();
+#if defined(Q_OS_WINDOWS)
+    font.setFamilies(QStringList{families.first()});
+#else
     QStringList chain = font.families();
     if (chain.isEmpty() && !font.family().isEmpty())
         chain << font.family();
     chain << families.first();
     font.setFamilies(chain);
+#endif
     QGuiApplication::setFont(font);
 }
 
@@ -45,7 +49,7 @@ int main(int argc, char *argv[])
 
     installEmojiFontFallback();
 
-    //QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
+    QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
 
     QQmlApplicationEngine engine;
     QObject::connect(
