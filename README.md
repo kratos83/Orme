@@ -21,7 +21,7 @@ Link al sito: <https://codelinsoft.it/orme>
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
-./build/Orme-app
+./build/Orme
 ```
 
 Per ripulire i file di compilazione: `scripts/clean.sh` elimina `build/` e
