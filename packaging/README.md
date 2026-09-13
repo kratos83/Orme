@@ -19,6 +19,7 @@ committato le modifiche** — non impacchettano file non ancora committati.
 | Alpine Linux          | `.apk`         | ✅ Verificata  | `packaging/linux/alpine/` |
 | Android (arm64-v8a)   | `.apk`         | ✅ Verificata  | `packaging/android/` |
 | Windows (MSVC)        | `.zip` portable| ✅ Verificata | `.github/workflows/windows.yml` |
+| Windows (installer)   | `.exe`         | ✅ Verificata | `.github/workflows/windows.yml` |
 | macOS (universale)    | `.dmg`         | ✅ Verificata | `.github/workflows/macos.yml` |
 
 Windows e macOS non sono compilabili in modo affidabile da questa macchina

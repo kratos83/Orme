@@ -5,6 +5,8 @@ coding.
 
 Linguagio utilizzato: Qt 6 + C++ + QML.
 
+Link al sito: <https://codelinsoft.it/orme>
+
 © 2026 Angelo Scarnà — vedi [COPYRIGHT](COPYRIGHT).
 
 ## Requisiti
