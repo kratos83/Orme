@@ -17,5 +17,13 @@ tell application "Finder"
         open
         update without registering applications
         delay 2
+        close
     end tell
 end tell
+
+-- Il Finder tiene aperta una finestra sul volume anche a script finito:
+-- se resta aperta il successivo "hdiutil detach" fallisce con
+-- "Resource busy". Chiudere la finestra qui non basta sempre (Finder puo'
+-- restare comunque agganciato al volume per un istante), ma riduce la
+-- finestra di tempo in cui il volume risulta occupato.
+tell application "Finder" to close every window

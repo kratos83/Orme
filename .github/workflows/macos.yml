@@ -56,7 +56,25 @@ jobs:
           osascript packaging/macos/dmg-layout.applescript
 
           sync
-          hdiutil detach "$mount_dir"
+          # Il Finder puo' restare agganciato al volume per un istante dopo
+          # l'applescript (osascript ritorna prima che Finder abbia finito
+          # di rilasciarlo): "hdiutil detach" puo' quindi fallire con
+          # "Resource busy" anche a finestra chiusa. Si riprova con un
+          # breve backoff prima di arrendersi con "-force".
+          detached=0
+          for attempt in 1 2 3 4 5; do
+            if hdiutil detach "$mount_dir"; then
+              detached=1
+              break
+            fi
+            echo "hdiutil detach fallito (tentativo $attempt), riprovo..."
+            sleep 5
+          done
+          if [ "$detached" -ne 1 ]; then
+            echo "hdiutil detach ancora occupato, forzo l'espulsione"
+            hdiutil detach "$mount_dir" -force
+          fi
+
           hdiutil convert Orme-rw.dmg -format UDZO -ov -o Orme-macos-universal.dmg
           rm -f Orme-rw.dmg
 
