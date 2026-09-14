@@ -79,11 +79,9 @@ Item {
         linkColor: Theme.accentDark
         font.pixelSize: 15
         color: Theme.text
-        opacity: 0.6
+        opacity: 1
         onLinkActivated: (link) => Qt.openUrlExternally(link)
 
-        // il testo da solo non riceve i click: MouseArea sopra per il link,
-        // con la "manina" quando si passa sopra l'indirizzo email
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true

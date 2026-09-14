@@ -51,6 +51,10 @@ QtObject {
         { id: "emotions", title: qsTr("Le emozioni"), age: qsTr("3-4 anni"), c: Theme.dirDown, e: "😀",
           desc: qsTr("In alto una faccia con un'emozione, sotto quattro facce diverse: tocca quella con la stessa emozione.") },
         { id: "recycle", title: qsTr("La raccolta differenziata"), age: qsTr("3-5 anni"), c: Theme.dirRight, e: "♻️",
-          desc: qsTr("Trascina l'oggetto nel bidone giusto: plastica, carta o vetro.") }
+          desc: qsTr("Trascina l'oggetto nel bidone giusto: plastica, carta o vetro.") },
+        { id: "shapes", title: qsTr("Il percorso delle forme"), age: qsTr("3-5 anni"), c: Theme.dirLeft, e: "🔺",
+          desc: qsTr("Sagome colorate sul pavimento in 5 file: in alto una forma o un colore indica la regola, tocca solo quelle giuste per attraversare l'aula.") },
+        { id: "snake", title: qsTr("Il serpente"), age: qsTr("4-5 anni"), c: Theme.accent, e: "🐍",
+          desc: qsTr("Muovi il serpente con le frecce, una casella alla volta: mangia le mele e cresci, senza toccare i muri o il tuo stesso corpo.") }
     ]
 }

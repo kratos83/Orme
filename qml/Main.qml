@@ -13,6 +13,10 @@ Window {
     title: qsTr("Orme")
     color: Theme.background
 
+    onClosing: function(close) {
+        close.accepted = false
+        view.sourceComponent = esciComponent
+    }
     // Loader che ospita a turno il menu o un gioco. Ogni gioco emette
     // exitRequested per tornare al menu; uscendo viene distrutto, quindi
     // nome e punteggio ripartono da zero.
@@ -29,7 +33,7 @@ Window {
             "color": colorC, "odd": oddC, "pairs": pairsC, "size": sizeC,
             "bubbles": bubblesC, "dots": dotsC, "wake": wakeC, "cups": cupsC,
             "puzzle": puzzleC, "harvest": harvestC, "balloons": balloonsC, "reveal": revealC,
-            "emotions": emotionsC, "recycle": recycleC
+            "emotions": emotionsC, "recycle": recycleC, "shapes": shapesC, "snake": snakeC
         }
         if (map[id]) view.sourceComponent = map[id]
     }
@@ -49,6 +53,8 @@ Window {
             onGameSelected: (id) => root.openGame(id)
         }
     }
+
+    Component { id: esciComponent; Esci { onExitRequested: view.sourceComponent = launcherComponent } }
 
     Component { id: pathC;     PathGame     { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: loopC;     LoopGame     { onExitRequested: view.sourceComponent = launcherComponent } }
@@ -72,4 +78,6 @@ Window {
     Component { id: revealC;   RevealGame   { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: emotionsC; EmotionsGame { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: recycleC;  RecycleGame  { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: shapesC;   ShapesGame   { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: snakeC;    SnakeGame    { onExitRequested: view.sourceComponent = launcherComponent } }
 }

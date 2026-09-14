@@ -31,6 +31,7 @@ qt_add_qml_module(Orme-app
         src/pathengine.h
         src/pathengine.cpp
     QML_FILES
+        qml/Esci.qml
         qml/Main.qml
         qml/Theme.qml
         qml/Catalog.qml
@@ -73,17 +74,22 @@ qt_add_qml_module(Orme-app
         qml/games/reveal/RevealGame.qml
         qml/games/emotions/EmotionsGame.qml
         qml/games/recycle/RecycleGame.qml
+        qml/games/shapes/ShapesGame.qml
+        qml/games/shapes/ShapeIcon.qml
+        qml/games/snake/SnakeGame.qml
     RESOURCES
         assets/sounds/tap.wav
         assets/sounds/step.wav
         assets/sounds/win.wav
         assets/sounds/bump.wav
         assets/fonts/NotoColorEmoji.ttf
+        images/exit.png
+        images/annulla.png
 )
 
 target_include_directories(Orme-app PRIVATE src)
 
-target_link_libraries(Orme-app PRIVATE Qt6::Quick Qt6::Qml)
+target_link_libraries(Orme-app PRIVATE Qt6::Quick Qt6::Qml )
 
 if(WIN32)
     target_sources(Orme-app PRIVATE packaging/windows/app.rc)

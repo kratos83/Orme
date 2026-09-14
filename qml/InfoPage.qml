@@ -80,7 +80,7 @@ Item {
                         font.pixelSize: 17
                         color: Theme.text
                         opacity: 0.85
-                        text: qsTr("22 giochi touch per bambini di 3, 4 e 5 anni, ispirati ai concetti del coding: sequenze, cicli, pattern, classificazione, ordine. Niente testo da leggere: icone, colori e suoni. Bersagli grandi, nessuna schermata di sconfitta.")
+                        text: qsTr("24 giochi touch per bambini di 3, 4 e 5 anni, ispirati ai concetti del coding: sequenze, cicli, pattern, classificazione, ordine. Niente testo da leggere: icone, colori e suoni. Bersagli grandi, nessuna schermata di sconfitta.")
                     }
                     Text {
                         width: parent.width
