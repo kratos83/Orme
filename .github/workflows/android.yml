@@ -45,10 +45,15 @@ jobs:
           dir: ${{ github.workspace }}/qt-desktop
           cache: true
 
+      # host: all_os - da install-qt-action 4.4.0 i pacchetti Android per Qt
+      # 6.8+ sono elencati solo sotto l'host "all_os" e non piu' sotto
+      # "linux" (vedi jurplel/install-qt-action#372); senza, aqt non trova
+      # nessuna versione e la risoluzione fallisce.
       - name: Installa Qt per Android (arm64-v8a)
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
+          host: all_os
           target: android
           arch: android_arm64_v8a
           modules: qtmultimedia
@@ -64,6 +69,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
+          host: all_os
           target: android
           arch: android_armv7
           modules: qtmultimedia
