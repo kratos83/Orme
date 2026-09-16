@@ -26,8 +26,13 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      # packages: sovrascrive il default "tools platform-tools" dell'azione:
+      # il package legacy "tools" e' stato rimosso dal repository Google e
+      # fa fallire sdkmanager (vedi android-actions/setup-android#537).
       - name: Imposta Android SDK/NDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
 
       - name: Installa l'NDK richiesto
         run: sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
