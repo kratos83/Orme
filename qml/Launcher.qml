@@ -22,6 +22,7 @@ Item {
     }
 
     Rectangle {   // pulsante Info, in alto a destra
+        id: infoBtn
         anchors { top: parent.top; right: parent.right; margins: 18 }
         width: 60; height: 60; radius: 30
         color: Theme.panel
@@ -31,6 +32,18 @@ Item {
         Behavior on scale { NumberAnimation { duration: 80 } }
         Text { anchors.centerIn: parent; text: "i"; font.pixelSize: 30; font.bold: true; font.italic: true; color: Theme.text }
         MouseArea { id: infoMa; anchors.fill: parent; onClicked: root.infoRequested() }
+    }
+
+    Rectangle {   // pulsante Esci, in alto a destra, a sinistra di Info
+        anchors { top: infoBtn.top; right: infoBtn.left; rightMargin: 12 }
+        width: 100; height: 60; radius: 30
+        color: Theme.panel
+        border.color: Theme.boardLine
+        border.width: 3
+        scale: m_esci.pressed ? 0.9 : 1
+        Behavior on scale { NumberAnimation { duration: 80 } }
+        Text { anchors.centerIn: parent; text: "Esci"; font.pixelSize: 30; font.bold: true; font.italic: true; color: Theme.text }
+        MouseArea { id: m_esci; anchors.fill: parent; onClicked: Qt.exit(0) }
     }
 
     Flickable {

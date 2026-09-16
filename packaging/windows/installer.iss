@@ -6,7 +6,7 @@
 ; La versione di default sotto viene sovrascritta in CI con
 ; /DMyAppVersion=<versione>.
 #define MyAppName "Orme"
-#define MyAppVersion "0.2"
+#define MyAppVersion "0.3"
 #define MyAppPublisher "Angelo Scarna"
 #define MyAppExeName "Orme.exe"
 ; GUID fisso: identifica l'app tra le versioni per aggiornamenti/disinstallazione pulita.

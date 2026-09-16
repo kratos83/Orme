@@ -3,10 +3,11 @@
 import QtQuick
 import Orme
 
-// "La raccolta differenziata" - un oggetto al centro, tre bidoni colorati
-// (plastica/gialla, carta/blu, vetro/verde): si trascina l'oggetto nel
-// bidone giusto. Stessa meccanica di trascinamento di SortGame, ma con
-// bidoni fissi (il concetto da imparare e' la categoria, non la regola).
+// "La raccolta differenziata" - un oggetto al centro, quattro bidoni colorati
+// (plastica/gialla, carta/blu, vetro/verde, umido/arancione), ognuno con
+// un'icona che ne identifica la categoria: si trascina l'oggetto nel bidone
+// giusto. Stessa meccanica di trascinamento di SortGame, ma con bidoni fissi
+// (il concetto da imparare e' la categoria, non la regola).
 GameScaffold {
     id: scaffold
     title: qsTr("La raccolta differenziata")
@@ -20,16 +21,19 @@ GameScaffold {
     readonly property int perRound: 9
 
     // key = indice del bidone; colorIndex punta a Theme.playColors (i colori
-    // reali della raccolta differenziata: plastica/giallo, carta/blu, vetro/verde)
+    // reali della raccolta differenziata: plastica/giallo, carta/blu, vetro/verde,
+    // umido/arancione); icon = simbolo mostrato sul bidone per riconoscere la categoria
     readonly property var bins: [
-        { key: "plastica", colorIndex: 2 },
-        { key: "carta",    colorIndex: 1 },
-        { key: "vetro",    colorIndex: 3 }
+        { key: "plastica", colorIndex: 2, icon: "🧴" },
+        { key: "carta",    colorIndex: 1, icon: "📄" },
+        { key: "vetro",    colorIndex: 3, icon: "🍾" },
+        { key: "umido",    colorIndex: 5, icon: "🍂" }
     ]
     readonly property var itemsByKey: ({
         plastica: ["🧴", "🥤", "🍼"],
         carta:    ["📰", "📦", "📚"],
-        vetro:    ["🍾", "🫙", "🥛"]
+        vetro:    ["🍾", "🫙", "🥛"],
+        umido:    ["🍌", "🍎", "🥕"]
     })
 
     property int  done: 0
@@ -37,7 +41,7 @@ GameScaffold {
     property bool busy: false
     property int  mistakes: 0
     property int  lastBin: -1
-    property var  binCounts: [0, 0, 0]
+    property var  binCounts: [0, 0, 0, 0]
     property var  item: ({ emoji: "🧴", key: "plastica" })
 
     SoundBank { id: snd }
@@ -55,7 +59,7 @@ GameScaffold {
         busy = false
         mistakes = 0
         lastBin = -1
-        binCounts = [0, 0, 0]
+        binCounts = [0, 0, 0, 0]
         makeItem()
         card.goHome()
     }
@@ -192,7 +196,7 @@ GameScaffold {
         Row {
             id: binRow
             anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 18 }
-            spacing: 40
+            spacing: 24
 
             Repeater {
                 id: binRep
@@ -203,7 +207,7 @@ GameScaffold {
                     width: 200; height: 200
                     radius: 28
                     color: Theme.playColors[modelData.colorIndex]
-                    opacity: 0.22
+                    opacity: 0.70
                     border.color: Theme.playColors[modelData.colorIndex]
                     border.width: 5
 
@@ -219,11 +223,17 @@ GameScaffold {
                         NumberAnimation { target: binRect; property: "scale"; to: 1.0; duration: 110 }
                     }
 
-                    Rectangle {   // pallina del colore del bidone, come indicatore
+                    Rectangle {   // pallina del colore del bidone, con l'icona della categoria
                         anchors.centerIn: parent
                         anchors.verticalCenterOffset: -20
                         width: 84; height: 84; radius: 42
                         color: Theme.playColors[binRect.modelData.colorIndex]
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: binRect.modelData.icon
+                            font.pixelSize: 46
+                        }
                     }
 
                     Flow {

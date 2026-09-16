@@ -22,10 +22,12 @@ MiniGame {
 
     onBuildLevel: (i) => load(i)
 
+    readonly property real cupGap: Math.min(230, (area.width - 40) / 3)
+    readonly property real cupW: Math.min(150, cupGap)   // mai più largo del suo slot: evita sovrapposizioni
+
     function slotX(s) {
-        var gap = Math.min(230, (area.width - 40) / 3)
-        var total = gap * 3
-        return (area.width - total) / 2 + s * gap + (gap - 150) / 2
+        var total = g.cupGap * 3
+        return (area.width - total) / 2 + s * g.cupGap + (g.cupGap - g.cupW) / 2
     }
 
     function load(i) {
@@ -107,7 +109,7 @@ MiniGame {
             Item {
                 id: cup
                 required property int index
-                width: 150; height: 210
+                width: g.cupW; height: 210
                 x: g.slotX(g.cupSlot[index])
                 y: area.height / 2 - height / 2 + 20
                 Behavior on x { NumberAnimation { duration: 400; easing.type: Easing.InOutQuad } }

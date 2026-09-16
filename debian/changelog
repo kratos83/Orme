@@ -1,8 +1,14 @@
 orme (0.2-1) unstable; urgency=medium
 
+  * Terza versione del pacchetto Debian.
+
+ -- Angelo Scarnà <angelo.scarna@primanotane.it>  Fri, 16 Sep 2026 18:53:10 +0200
+
+orme (0.2-1) unstable; urgency=medium
+
   * Seconda versione del pacchetto Debian.
 
- -- Angelo Scarnà <angelo.scarna@primanotane.it>  Fri, 14 Sep 2026 047:33:10 +0200
+ -- Angelo Scarnà <angelo.scarna@primanotane.it>  Fri, 14 Sep 2026 04:33:10 +0200
 
 orme (0.1-1) unstable; urgency=medium
 
