@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(Orme-app VERSION 0.1 LANGUAGES CXX)
+project(Orme-app VERSION 0.4 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -77,6 +77,11 @@ qt_add_qml_module(Orme-app
         qml/games/shapes/ShapesGame.qml
         qml/games/shapes/ShapeIcon.qml
         qml/games/snake/SnakeGame.qml
+        qml/games/stopgo/StopGoGame.qml
+        qml/games/poses/PosesGame.qml
+        qml/games/kitchen/KitchenGame.qml
+        qml/games/tower/TowerGame.qml
+        qml/games/beans/BeansGame.qml
     RESOURCES
         assets/sounds/tap.wav
         assets/sounds/step.wav

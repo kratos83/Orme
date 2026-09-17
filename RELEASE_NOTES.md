@@ -1,28 +1,33 @@
 ## Novità
-Raccolta di 26 giochi touch per bambini di 3-5 anni, ispirati ai concetti del
+Raccolta di 29 giochi touch per bambini di 3-5 anni, ispirati ai concetti del
 coding. 
 
 Linguagio utilizzato: Qt 6 + C++ + QML.
 
-**26 giochi**, tutti nel menu iniziale: griglia che si adatta alla larghezza
+**29 giochi**, tutti nel menu iniziale: griglia che si adatta alla larghezza
 (3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a capo.
 L'età consigliata è scritta su ogni riquadro e nell'intestazione del gioco
 (proprietà `age`).
 
-Aggiunti quattro nuovi giochi:
-- **Le emozioni** - tocca la faccia con la stessa emozione di quella mostrata.
-- **La raccolta differenziata** - trascina l'oggetto nel bidone giusto
-  (plastica, carta o vetro).
-- **Il percorso delle forme** - una forma o un colore indica la regola: salta
-  di fila in fila toccando solo la sagoma giusta, fino ad attraversare l'aula.
-- **Il serpente** - guida con le frecce (o toccando il campo) il serpente che
-  avanza da solo: mangia le mele e cresci, senza toccare i muri o te stesso.
+Aggiunti cinque nuovi giochi, tutti per bambini di 3-4 anni:
+- **Un, due, tre, stella!** - il semaforo cambia colore da solo: tocca
+  "cammina" per avanzare verso la stella, ma solo col verde. Il controllo
+  del corpo e la regola dello stop.
+- **Il gioco delle posizioni** - in alto una posa (un animale o un
+  supereroe): tocca fra le scelte quella uguale al comando mostrato.
+- **Cuciniamo insieme** - gioco di ruolo in cucina: tocca gli oggetti
+  nell'ordine giusto per completare l'azione (preparare la pappa, lavare i
+  piatti...).
+- **Costruisci la torre** - trascina i blocchi colorati dal vassoio nella
+  torre, dal basso verso l'alto, seguendo il modellino.
+- **Travasi e infilo** - trascina la bottiglia sopra il bicchiere e tienila
+  lì: il liquido si travasa piano piano (acqua, succo, limonata...). La
+  coordinazione occhio-mano.
 
 
 ## Bug risolti
 
-- Risolto problema del coniglio sovrapposto ad un altro animale
-- Risolto problema della raccolta differenziata
+Nessun bug segnalato in questa versione.
 
 ## I pacchetti sono disponibili:
 

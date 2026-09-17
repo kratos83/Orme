@@ -4,7 +4,7 @@ import Orme
 
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Elenco dei 20 giochi, usato dal menu (Launcher) e dalla pagina Info.
+// Elenco dei 29 giochi, usato dal menu (Launcher) e dalla pagina Info.
 // Campi: id, title, age, c (colore), e (emoji) o icon ("path"), desc.
 QtObject {
     readonly property var games: [
@@ -55,6 +55,16 @@ QtObject {
         { id: "shapes", title: qsTr("Il percorso delle forme"), age: qsTr("3-5 anni"), c: Theme.dirLeft, e: "🔺",
           desc: qsTr("Sagome colorate sul pavimento in 5 file: in alto una forma o un colore indica la regola, tocca solo quelle giuste per attraversare l'aula.") },
         { id: "snake", title: qsTr("Il serpente"), age: qsTr("4-5 anni"), c: Theme.accent, e: "🐍",
-          desc: qsTr("Muovi il serpente con le frecce, una casella alla volta: mangia le mele e cresci, senza toccare i muri o il tuo stesso corpo.") }
+          desc: qsTr("Muovi il serpente con le frecce, una casella alla volta: mangia le mele e cresci, senza toccare i muri o il tuo stesso corpo.") },
+        { id: "stopgo", title: qsTr("Un, due, tre, stella!"), age: qsTr("3-4 anni"), c: Theme.danger, e: "🚦",
+          desc: qsTr("Il semaforo cambia da solo: tocca 'cammina' per avanzare verso la stella solo col verde. Il controllo del corpo e lo stop.") },
+        { id: "poses", title: qsTr("Il gioco delle posizioni"), age: qsTr("3-4 anni"), c: Theme.dirUp, e: "🤸",
+          desc: qsTr("In alto una posa (animale o supereroe): tocca fra le scelte quella uguale. Eseguire il comando indicato.") },
+        { id: "kitchen", title: qsTr("Cuciniamo insieme"), age: qsTr("3-4 anni"), c: Theme.dirLeft, e: "🍳",
+          desc: qsTr("Gioco di ruolo in cucina: tocca gli oggetti nell'ordine giusto per completare l'azione. La sequenza dei passi.") },
+        { id: "tower", title: qsTr("Costruisci la torre"), age: qsTr("3-4 anni"), c: Theme.dirRight, e: "🧱",
+          desc: qsTr("Trascina i blocchi colorati dal vassoio nella torre, dal basso verso l'alto, seguendo il modellino. Spazio e pazienza.") },
+        { id: "beans", title: qsTr("Travasi e infilo"), age: qsTr("3-4 anni"), c: Theme.accent, e: "🧃",
+          desc: qsTr("Trascina la bottiglia sopra il bicchiere vuoto e tienila li': il liquido si travasa piano piano (acqua, succo, limonata...). La coordinazione occhio-mano.") }
     ]
 }

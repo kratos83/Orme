@@ -33,7 +33,8 @@ Window {
             "color": colorC, "odd": oddC, "pairs": pairsC, "size": sizeC,
             "bubbles": bubblesC, "dots": dotsC, "wake": wakeC, "cups": cupsC,
             "puzzle": puzzleC, "harvest": harvestC, "balloons": balloonsC, "reveal": revealC,
-            "emotions": emotionsC, "recycle": recycleC, "shapes": shapesC, "snake": snakeC
+            "emotions": emotionsC, "recycle": recycleC, "shapes": shapesC, "snake": snakeC,
+            "stopgo": stopgoC, "poses": posesC, "kitchen": kitchenC, "tower": towerC, "beans": beansC
         }
         if (map[id]) view.sourceComponent = map[id]
     }
@@ -80,4 +81,9 @@ Window {
     Component { id: recycleC;  RecycleGame  { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: shapesC;   ShapesGame   { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: snakeC;    SnakeGame    { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: stopgoC;   StopGoGame   { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: posesC;    PosesGame    { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: kitchenC;  KitchenGame  { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: towerC;    TowerGame    { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: beansC;    BeansGame    { onExitRequested: view.sourceComponent = launcherComponent } }
 }

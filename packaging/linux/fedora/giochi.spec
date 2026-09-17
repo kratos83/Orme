@@ -1,5 +1,5 @@
 Name:           orme-fedora
-Version:        0.3
+Version:        0.4
 Release:        1%{?dist}
 Summary:        Orme - raccolta di mini-giochi educativi per bambini (Qt6/QML)
 
@@ -8,7 +8,7 @@ Summary:        Orme - raccolta di mini-giochi educativi per bambini (Qt6/QML)
 %global debug_package %{nil}
 
 License:        GPL-3.0-or-later
-URL:            https://example.invalid/giochi-coding
+URL:            https://github.com/kratos83/Orme
 Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  cmake >= 3.21

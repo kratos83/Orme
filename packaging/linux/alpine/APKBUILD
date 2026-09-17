@@ -8,7 +8,7 @@
 # PRIMA di invocare abuild, quindi source="" e unpack() copia da lì invece
 # di scaricare/estrarre un tarball.
 pkgname=orme-alpine
-pkgver=0.3
+pkgver=0.4
 pkgrel=1
 pkgdesc="Orme - raccolta di giochi educativi Qt6/QML per bambini 3-5 anni"
 url="https://github.com/kratos83/Orme"

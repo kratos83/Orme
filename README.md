@@ -1,6 +1,6 @@
 # Orme
 
-Raccolta di 24 giochi touch per bambini di 3-5 anni, ispirati ai concetti del
+Raccolta di 29 giochi touch per bambini di 3-5 anni, ispirati ai concetti del
 coding. 
 
 Linguagio utilizzato: Qt 6 + C++ + QML.
@@ -36,7 +36,7 @@ macOS: vedi [packaging/README.md](packaging/README.md).
 
 ## I giochi
 
-**24 giochi**, tutti nel menu iniziale: griglia che si adatta alla larghezza
+**29 giochi**, tutti nel menu iniziale: griglia che si adatta alla larghezza
 (3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a capo.
 L'età consigliata è scritta su ogni riquadro e nell'intestazione del gioco
 (proprietà `age`). Le icone (menu e giochi) sono emoji; per non dipendere dal
@@ -72,12 +72,17 @@ OFL) e lo imposta come fallback del font di default all'avvio
 | 22 | **La raccolta differenziata** | 3-5 | `games/recycle/` | trascina l'oggetto nel bidone giusto (plastica/carta/vetro) |
 | 23 | **Il percorso delle forme** | 3-5 | `games/shapes/` | salta di fila in fila sulla sagoma giusta (forma o colore indicato) |
 | 24 | **Il serpente** | 4-5 | `games/snake/` | avanza da solo su una griglia, le frecce sterzano, mangia le mele e cresce |
+| 25 | **Un, due, tre, stella!** | 3-4 | `games/stopgo/` | il semaforo cambia da solo: avanza verso la stella solo col verde, controllo del corpo e stop |
+| 26 | **Il gioco delle posizioni** | 3-4 | `games/poses/` | tocca la posa (animale/supereroe) uguale a quella comandata |
+| 27 | **Cuciniamo insieme** | 3-4 | `games/kitchen/` | ruolo in cucina: tocca gli oggetti nell'ordine giusto per completare l'azione |
+| 28 | **Costruisci la torre** | 3-4 | `games/tower/` | trascina i blocchi colorati nella torre, dal basso verso l'alto, come il modellino |
+| 29 | **Travasi e infilo** | 3-4 | `games/beans/` | trascina la bottiglia sopra il bicchiere e travasa il liquido (acqua, succo, limonata...): coordinazione occhio-mano |
 
 Regole comuni pensate per 3-5 anni: niente testo da leggere (icone + colore +
 suono), bersagli touch grandi, nessuna schermata di sconfitta, festa e "Ops!
 Riprova" sempre uguali.
 
-**Nome del bambino (in tutti i 24 giochi).** All'ingresso di ogni gioco compare
+**Nome del bambino (in tutti i 29 giochi).** All'ingresso di ogni gioco compare
 la schermata "Come ti chiami?" (`NamePrompt.qml`, dentro `GameScaffold` quindi
 ereditata anche da `MiniGame` e da tutti i giochi): campo di testo + "Gioca" o
 "Salta". Il nome resta scritto nell'intestazione e si può **cambiare in
@@ -87,7 +92,7 @@ bambino successivo.
 
 **Menu Info.** In alto a destra nel menu c'è il tasto **i**: apre `InfoPage.qml`
 con la presentazione del programma (scopo, versione, © e email) e **l'elenco di
-tutti i 24 giochi** con concetto ed età; toccando una riga si apre quel gioco.
+tutti i 29 giochi** con concetto ed età; toccando una riga si apre quel gioco.
 L'elenco dei giochi (id, titolo, età, colore, emoji, descrizione) è il singleton
 `Catalog.qml`, usato sia dal menu sia dalla pagina Info.
 
@@ -112,7 +117,7 @@ src/
 qml/
   Main.qml            finestra + Loader; mappa id-gioco -> Component (+ InfoPage)
   Theme.qml           singleton: colori e misure condivise
-  Catalog.qml         singleton: elenco dei 24 giochi (id/titolo/età/colore/emoji/desc)
+  Catalog.qml         singleton: elenco dei 29 giochi (id/titolo/età/colore/emoji/desc)
   Launcher.qml        menu scorrevole (griglia 3-6 col.) + tasto "i" -> Info
   InfoPage.qml        presentazione del programma + elenco di tutti i giochi
   GameTile.qml        un riquadro del menu (title, age, emoji/icona)
@@ -136,6 +141,8 @@ qml/
         snake/
                                              giochi 6-24 (radice MiniGame,
                                              tranne recycle che usa GameScaffold)
+  games/stopgo|kitchen/                     giochi 25 e 27 (radice GameScaffold)
+  games/poses|tower|beans/                  giochi 26, 28 e 29 (radice MiniGame)
 assets/sounds/         effetti WAV (rigenerabili con scripts/make_sounds.py)
 assets/fonts/          font FluentEmojiColor (Windows)-NotoColorEmoji (Linux-MacOS-Android)
 scripts/               make_sounds.py, check_levels.py, clean.sh
@@ -248,6 +255,33 @@ script allineata a quella C++).
   e cresce; sbattere contro il muro o il proprio corpo è un errore ("Ops!
   Riprova", si torna alla partenza dello stesso livello). 6 livelli, da 3 a 5
   mele.
+- **Un, due, tre, stella!** (`games/stopgo/StopGoGame.qml`) - un semaforo
+  cambia colore da solo, a intervalli casuali (`Timer`). Il bambino tocca
+  "cammina" (👣) per avanzare di una casella verso la stella, ma solo mentre
+  è verde: toccare col rosso è un errore ("Ops! Riprova", si torna alla
+  partenza). Il controllo del corpo e la regola dello stop. 8 livelli,
+  distanza 2-6.
+- **Il gioco delle posizioni** (`games/poses/PosesGame.qml`) - in alto una
+  posa "comando" (un animale o un supereroe, es. 🐸 salta, 🦸 vola), sotto
+  tre scelte: tocca quella uguale al comando. Eseguire l'istruzione
+  mostrata. 10 round generati a caso.
+- **Cuciniamo insieme** (`games/kitchen/KitchenGame.qml`) - stessa struttura
+  di "E poi?" (oggetti mescolati in alto, caselle in basso, tocca in
+  ordine) ma con sequenze di ruolo più corte (2-3 passi, es. 🥣→🥛 per la
+  pappa, 🍽️→🧽→✨ per lavare i piatti). 8 sequenze.
+- **Costruisci la torre** (`games/tower/TowerGame.qml`) - in alto a sinistra
+  un modellino di torre a blocchi colorati; il bambino trascina i blocchi
+  dal vassoio nella torre, dal basso verso l'alto: solo il blocco giusto per
+  la posizione giusta si aggancia, un colore sbagliato per quella posizione
+  è un errore. Immaginazione spaziale e pazienza. 6 livelli, da 3 a 5
+  blocchi.
+- **Travasi e infilo** (`games/beans/BeansGame.qml`) - una bottiglia piena e
+  un bicchiere vuoto: si trascina la bottiglia sopra il bicchiere e,
+  tenendola lì, il liquido si travasa piano piano (livello che sale/scende
+  con un rivolo colorato fra i due). Ogni livello ha un liquido diverso
+  (acqua, succo d'arancia, succo d'uva, limonata). Nessuna risposta
+  sbagliata possibile (sempre 3 faccine), solo la coordinazione occhio-mano.
+  4 livelli.
 
 ## Aggiungere un nuovo gioco
 

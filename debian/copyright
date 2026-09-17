@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Orme
-Source: https://github.com/ (repository da definire)
+Source: https://github.com/kratos83/Orme
 
 Files: *
 Copyright: 2026 Angelo Scarnà
