@@ -5,6 +5,12 @@
     android:versionCode="-- %%INSERT_VERSION_CODE%% --"
     android:versionName="-- %%INSERT_VERSION_NAME%% --">
     <!-- %%INSERT_PERMISSIONS -->
+    <!-- Per l'Updater (src/updater.cpp): permette di mostrare il dialog di
+         sistema "Vuoi installare questa app?" per l'APK scaricato in
+         aggiornamento. Non concede mai un'installazione silenziosa: il tap
+         dell'utente sul dialog resta comunque obbligatorio (regola di
+         Android, non aggirabile). -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- %%INSERT_FEATURES -->
     <supports-screens
         android:anyDensity="true"

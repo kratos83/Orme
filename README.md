@@ -1,7 +1,9 @@
 # Orme
 
-Raccolta di 29 giochi touch per bambini di 3-5 anni, ispirati ai concetti del
-coding. 
+Raccolta di 45 giochi touch per bambini della scuola dell'infanzia (3-5 anni,
+29 giochi ispirati ai concetti del coding) e della scuola primaria (6-10 anni,
+16 giochi di matematica, italiano e geografia). All'avvio si sceglie la
+categoria (Infanzia o Primaria) e si vede solo la griglia di quella categoria.
 
 Linguagio utilizzato: Qt 6 + C++ + QML.
 
@@ -36,15 +38,20 @@ macOS: vedi [packaging/README.md](packaging/README.md).
 
 ## I giochi
 
-**29 giochi**, tutti nel menu iniziale: griglia che si adatta alla larghezza
-(3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a capo.
-L'età consigliata è scritta su ogni riquadro e nell'intestazione del gioco
-(proprietà `age`). Le icone (menu e giochi) sono emoji; per non dipendere dal
-font emoji di sistema - assente su molti tablet Android reali, specie senza
-servizi Google, con il risultato di icone invisibili o "quadratini vuoti" -
-l'app include Noto Color Emoji (`assets/fonts/NotoColorEmoji.ttf`, licenza
-OFL) e lo imposta come fallback del font di default all'avvio
-(`src/main.cpp`), cosi' le emoji si vedono uguali su ogni dispositivo.
+**45 giochi** in due categorie, scelte in una schermata iniziale
+(`CategoryPicker.qml`): **Infanzia** (29 giochi, 3-5 anni) e **Primaria**
+(16 giochi, 6-10 anni). Ogni categoria ha la sua griglia, che si adatta alla
+larghezza (3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a
+capo. L'età consigliata è scritta su ogni riquadro e nell'intestazione del
+gioco (proprietà `age`). Le icone (menu e giochi) sono emoji; per non
+dipendere dal font emoji di sistema - assente su molti tablet Android reali,
+specie senza servizi Google, con il risultato di icone invisibili o
+"quadratini vuoti" - l'app include Noto Color Emoji
+(`assets/fonts/NotoColorEmoji.ttf`, licenza OFL) e lo imposta come fallback
+del font di default all'avvio (`src/main.cpp`), cosi' le emoji si vedono
+uguali su ogni dispositivo.
+
+### Infanzia (29 giochi, 3-5 anni)
 
 | # | Riquadro | Età | Cartella | Idea |
 |---|---|---|---|---|
@@ -82,7 +89,37 @@ Regole comuni pensate per 3-5 anni: niente testo da leggere (icone + colore +
 suono), bersagli touch grandi, nessuna schermata di sconfitta, festa e "Ops!
 Riprova" sempre uguali.
 
-**Nome del bambino (in tutti i 29 giochi).** All'ingresso di ogni gioco compare
+### Primaria (16 giochi, 6-10 anni)
+
+Ispirati e derivati da una vecchia raccolta di giochi didattici Qt Widgets
+per la scuola primaria; riscritti da zero in QML, accorpando in un solo
+gioco parametrico le tante varianti quasi identiche dell'originale (es. 9
+cartelle "tabellina_N" -> un solo gioco con selettore 2-10).
+
+| # | Riquadro | Età | Cartella | Idea |
+|---|---|---|---|---|
+| 30 | **Addizioni** | 6-7 | `games/arithmetic/` | risolvi l'addizione col tastierino numerico |
+| 31 | **Sottrazioni** | 6-7 | `games/arithmetic/` | risolvi la sottrazione col tastierino numerico |
+| 32 | **Moltiplicazioni** | 8-9 | `games/arithmetic/` | risolvi la moltiplicazione col tastierino numerico |
+| 33 | **Divisioni** | 8-9 | `games/arithmetic/` | risolvi la divisione, anche col resto, col tastierino numerico |
+| 34 | **Frazioni** | 9-10 | `games/fractions/` | frazione di un intero, frazione di un numero, frazioni equivalenti |
+| 35 | **Tabelline** | 8-9 | `games/tables/` | scegli la tabellina (2-10) e tocca i multipli in ordine: ogni pesce pescato vola nella conchiglia |
+| 36 | **La linea dei numeri** | 6-8 | `games/numberline/` | scegli lunghezza (5/10/20) e modalità (conta/addizione/sottrazione), tocca il numero giusto sulla linea |
+| 37 | **Regioni d'Italia** | 8-10 | `games/regions/` | quiz a 4 risposte su regioni e capoluoghi |
+| 38 | **Sillabe** | 6-7 | `games/syllables/` | le sillabe di una parola sono mescolate: toccale in ordine per ricomporla |
+| 39 | **Le doppie** | 7-8 | `games/doubles/` | frase con spazio vuoto, tocca la parola scritta giusta (doppia o singola) |
+| 40 | **Ortografia** | 7-9 | `games/spelling/` | trabocchetti comuni (a/ha, e/è, o/ho, qu/cu...): tocca la parola giusta |
+| 41 | **Conta le lettere** | 6-7 | `games/lettercount/` | guarda la parola, scrivi col tastierino quante lettere ha |
+| 42 | **Indovina la parola** | 6-8 | `games/guessword/` | leggi l'indovinello, tocca la parola giusta fra quattro |
+| 43 | **Riordina la frase** | 7-9 | `games/reorder/` | le parole di una frase sono mescolate: toccale in ordine per ricomporla |
+| 44 | **Soggetto e predicato** | 8-9 | `games/subjectverb/` | una frase in due pezzi: tocca il soggetto o il predicato richiesto |
+| 45 | **Pronomi** | 9-10 | `games/pronouns/` | scegli il tipo (personali/possessivi/dimostrativi/indefiniti/relativi), completa la frase |
+
+Meccanica comune: tastierino numerico touch (`common/NumberPad.qml`) per le
+risposte numeriche, tocco su carte/riquadri per le scelte multiple; stessa
+cornice (`MiniGame`/`GameScaffold`) e stelle di punteggio dei giochi Infanzia.
+
+**Nome del bambino (in tutti i 45 giochi).** All'ingresso di ogni gioco compare
 la schermata "Come ti chiami?" (`NamePrompt.qml`, dentro `GameScaffold` quindi
 ereditata anche da `MiniGame` e da tutti i giochi): campo di testo + "Gioca" o
 "Salta". Il nome resta scritto nell'intestazione e si può **cambiare in
@@ -92,7 +129,8 @@ bambino successivo.
 
 **Menu Info.** In alto a destra nel menu c'è il tasto **i**: apre `InfoPage.qml`
 con la presentazione del programma (scopo, versione, © e email) e **l'elenco di
-tutti i 29 giochi** con concetto ed età; toccando una riga si apre quel gioco.
+tutti i 45 giochi**, divisi per categoria, con concetto ed età; toccando una
+riga si apre quel gioco.
 L'elenco dei giochi (id, titolo, età, colore, emoji, descrizione) è il singleton
 `Catalog.qml`, usato sia dal menu sia dalla pagina Info.
 
@@ -115,11 +153,15 @@ src/
   main.cpp            avvio: carica il modulo QML "Orme", pagina Main
   pathengine.{h,cpp}  logica del gioco "Il percorso" (in C++)
 qml/
-  Main.qml            finestra + Loader; mappa id-gioco -> Component (+ InfoPage)
+  Main.qml            finestra + Loader; sceglie CategoryPicker o Launcher,
+                      mappa id-gioco -> Component (+ InfoPage)
   Theme.qml           singleton: colori e misure condivise
-  Catalog.qml         singleton: elenco dei 29 giochi (id/titolo/età/colore/emoji/desc)
-  Launcher.qml        menu scorrevole (griglia 3-6 col.) + tasto "i" -> Info
+  Catalog.qml         singleton: elenco dei 45 giochi (id/cat/titolo/età/colore/emoji/desc)
+  CategoryPicker.qml  schermata iniziale: scegli Infanzia o Primaria
+  Launcher.qml        menu scorrevole (griglia 3-6 col.), filtrato per categoria,
+                      + tasto "◀" (torna alla scelta) e "i" -> Info
   InfoPage.qml        presentazione del programma + elenco di tutti i giochi
+                      (due sezioni: Infanzia e Primaria)
   GameTile.qml        un riquadro del menu (title, age, emoji/icona)
   common/
     GameScaffold.qml  cornice: nome bambino, sfondo, intestazione
@@ -132,6 +174,8 @@ qml/
     NamePrompt.qml     schermata iniziale "Come ti chiami?"
     SoundBank.qml      i 4 effetti sonori: tap()/ok()/win()/nope()
     ScoreBar.qml       targhetta 😊 + numero
+    NumberPad.qml      tastierino numerico touch (0-9/canc./conferma), usato
+                      dai giochi di matematica e "Conta le lettere" (Primaria)
   games/path/          "Il percorso": PathGame + Board, DirectionPad,
                       CommandStrip, Arrow, Character, Goal, Rock,
                       Celebration, TryAgainBanner
@@ -143,6 +187,9 @@ qml/
                                              tranne recycle che usa GameScaffold)
   games/stopgo|kitchen/                     giochi 25 e 27 (radice GameScaffold)
   games/poses|tower|beans/                  giochi 26, 28 e 29 (radice MiniGame)
+  games/arithmetic|fractions|tables|numberline|regions|syllables|doubles|
+        spelling|lettercount|guessword|reorder|subjectverb|pronouns/
+                                             giochi Primaria 30-45 (radice MiniGame)
 assets/sounds/         effetti WAV (rigenerabili con scripts/make_sounds.py)
 assets/fonts/          font FluentEmojiColor (Windows)-NotoColorEmoji (Linux-MacOS-Android)
 scripts/               make_sounds.py, check_levels.py, clean.sh
@@ -151,7 +198,7 @@ scripts/               make_sounds.py, check_levels.py, clean.sh
 Tutti i file `.qml` del modulo sono referenziabili per nome (`GameScaffold`,
 `MiniGame`, `SoundBank`, `Arrow`, ...) grazie a `qt_add_qml_module`: i nomi
 devono essere **unici in tutto il progetto**. "Il percorso" ha un motore in
-C++ (`PathEngine`), gli altri 23 hanno la logica in QML/JS.
+C++ (`PathEngine`), gli altri 44 hanno la logica in QML/JS.
 
 ## Il gioco "Il percorso"
 

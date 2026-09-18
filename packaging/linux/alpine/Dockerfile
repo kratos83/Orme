@@ -30,7 +30,7 @@ RUN adduser -D builder && \
     chmod 440 /etc/sudoers.d/builder
 
 # Sorgenti del progetto copiate esplicitamente (niente .git, build/, packaging/)
-COPY --chown=builder:builder CMakeLists.txt COPYRIGHT LICENSE /home/builder/orme-source/
+COPY --chown=builder:builder CMakeLists.txt COPYRIGHT LICENSE VERSION /home/builder/orme-source/
 COPY --chown=builder:builder src/    /home/builder/orme-source/src/
 COPY --chown=builder:builder qml/    /home/builder/orme-source/qml/
 COPY --chown=builder:builder assets/ /home/builder/orme-source/assets/

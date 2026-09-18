@@ -7,18 +7,33 @@ import Orme
 // larghezza (fino a 6 per riga) e scorre in verticale.
 Item {
     id: root
+    property string category: "infanzia"   // "infanzia" o "primaria"
     signal gameSelected(string game)
     signal infoRequested()
+    signal backRequested()
 
     Rectangle { anchors.fill: parent; color: Theme.background }
 
     Text {
         id: heading
         anchors { top: parent.top; topMargin: 20; horizontalCenter: parent.horizontalCenter }
-        text: qsTr("Scegli un gioco")
+        text: root.category === "primaria" ? qsTr("Giochi per la primaria") : qsTr("Giochi per l'infanzia")
         font.pixelSize: 38
         font.bold: true
         color: Theme.text
+    }
+
+    Rectangle {   // pulsante indietro (torna alla scelta Infanzia/Primaria), in alto a sinistra
+        id: backBtn
+        anchors { top: parent.top; left: parent.left; margins: 18 }
+        width: 60; height: 60; radius: 30
+        color: Theme.panel
+        border.color: Theme.boardLine
+        border.width: 3
+        scale: backMa.pressed ? 0.9 : 1
+        Behavior on scale { NumberAnimation { duration: 80 } }
+        Text { anchors.centerIn: parent; text: "◀"; font.pixelSize: 26; font.bold: true; color: Theme.text }
+        MouseArea { id: backMa; anchors.fill: parent; onClicked: root.backRequested() }
     }
 
     Rectangle {   // pulsante Info, in alto a destra
@@ -66,7 +81,7 @@ Item {
             columnSpacing: 18
 
             Repeater {
-                model: Catalog.games
+                model: Catalog.games.filter((g) => g.cat === root.category)
                 GameTile {
                     required property var modelData
                     title: modelData.title

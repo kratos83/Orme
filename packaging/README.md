@@ -1,5 +1,29 @@
 # Pacchettizzazione multi-piattaforma
 
+## Numero di versione: un solo file
+
+Il file [`VERSION`](../VERSION) alla radice del repo è l'**unica** fonte del
+numero di versione. Per rilasciare una nuova versione si modifica solo
+quello (es. `0.5`), poi si committa e si taggga `v0.5` — nessun altro file va
+più toccato a mano:
+
+- **CMake/l'app stessa**: `CMakeLists.txt` legge `VERSION` all'avvio della
+  configurazione (`file(STRINGS ...)`) e la propaga a `PROJECT_VERSION`,
+  da cui derivano sia `app.applicationVersion()`/`Updater` (via
+  `ORME_VERSION`) sia, tramite `androiddeployqt`, `versionName`/`versionCode`
+  di Android.
+- **Windows**: `windows.yml` prende la versione direttamente dal tag git
+  push (`v0.5` → `0.5`) e la passa a Inno Setup con `/DMyAppVersion=...`.
+- **Arch / Alpine**: `PKGBUILD`/`APKBUILD` leggono `VERSION` direttamente
+  (`pkgver=$(cat .../VERSION)`), sono script bash veri.
+- **Fedora / openSUSE / Mageia**: i rispettivi `build.sh` sincronizzano da
+  soli il campo `Version:` dello `.spec` da `VERSION` prima di buildare
+  (`sed -i "s/^Version:.*/Version: .../"`).
+- **Debian**: `packaging/linux/debian/build.sh` sincronizza da solo il
+  numero fra parentesi nella prima riga di `debian/changelog` da `VERSION`
+  (il testo della voce non cambia: per un messaggio diverso si usa comunque
+  `dch` come sempre).
+
 Stato di avanzamento per ciascuna piattaforma richiesta. Tutte le build
 elencate come "verificata" sono state **eseguite per davvero** (non solo
 scritte a mano) e il pacchetto risultante è stato ispezionato e/o installato
@@ -28,6 +52,17 @@ pronti e usano ricette standard (Qt via `jurplel/install-qt-action`,
 `windeployqt`/`macdeployqt`), ma la prima esecuzione reale avverrà solo
 quando il repository sarà pubblicato su GitHub e la Action gireà sulle
 macchine cloud reali di GitHub Actions.
+
+## Repository apt/rpm (aggiornamenti automatici)
+
+Debian/Ubuntu e le tre distro rpm (Fedora/openSUSE/Mageia) hanno anche un
+vero repository di sistema, non solo il pacchetto scaricabile dalle
+Release: installando `.deb`/`.rpm` si abilita da solo, cosi' le versioni
+future arrivano con `apt upgrade`/`dnf update`/`zypper update`. Vedi
+[packaging/repo/README.md](repo/README.md) per i dettagli, inclusa la
+configurazione una tantum (Pages + secret GPG) che solo chi amministra il
+repository GitHub può fare. Arch e Alpine restano volutamente fuori da
+questo meccanismo.
 
 
 ## Una scoperta comune a tutte le distro Linux

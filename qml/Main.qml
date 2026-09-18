@@ -23,8 +23,19 @@ Window {
     Loader {
         id: view
         anchors.fill: parent
-        sourceComponent: launcherComponent
+        sourceComponent: categoryComponent
     }
+
+    // Avviso di aggiornamento disponibile, sopra a tutto il resto; non
+    // blocca il gioco, si può chiudere con "più tardi" (vedi UpdateBanner.qml).
+    UpdateBanner {
+        anchors { top: parent.top; left: parent.left; right: parent.right }
+    }
+
+    // Controllo silenzioso all'avvio: fallisce senza avvisi se non c'è rete.
+    Timer { interval: 2000; running: true; onTriggered: Updater.checkForUpdates() }
+
+    property string currentCategory: "infanzia"
 
     function openGame(id) {
         var map = {
@@ -34,16 +45,34 @@ Window {
             "bubbles": bubblesC, "dots": dotsC, "wake": wakeC, "cups": cupsC,
             "puzzle": puzzleC, "harvest": harvestC, "balloons": balloonsC, "reveal": revealC,
             "emotions": emotionsC, "recycle": recycleC, "shapes": shapesC, "snake": snakeC,
-            "stopgo": stopgoC, "poses": posesC, "kitchen": kitchenC, "tower": towerC, "beans": beansC
+            "stopgo": stopgoC, "poses": posesC, "kitchen": kitchenC, "tower": towerC, "beans": beansC,
+            "add": addC, "sub": subC, "mul": mulC, "div": divC,
+            "fractions": fractionsC, "tables": tablesC, "numberline": numberlineC,
+            "regions": regionsC,
+            "syllables": syllablesC, "doubles": doublesC, "spelling": spellingC,
+            "lettercount": lettercountC, "guessword": guesswordC, "reorder": reorderC,
+            "subjectverb": subjectverbC, "pronouns": pronounsC
         }
         if (map[id]) view.sourceComponent = map[id]
     }
 
     Component {
+        id: categoryComponent
+        CategoryPicker {
+            onCategorySelected: (cat) => {
+                root.currentCategory = cat
+                view.sourceComponent = launcherComponent
+            }
+        }
+    }
+
+    Component {
         id: launcherComponent
         Launcher {
+            category: root.currentCategory
             onGameSelected: (game) => root.openGame(game)
             onInfoRequested: view.sourceComponent = infoComponent
+            onBackRequested: view.sourceComponent = categoryComponent
         }
     }
 
@@ -86,4 +115,22 @@ Window {
     Component { id: kitchenC;  KitchenGame  { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: towerC;    TowerGame    { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: beansC;    BeansGame    { onExitRequested: view.sourceComponent = launcherComponent } }
+
+    Component { id: addC;        ArithmeticGame { opMode: "add"; onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: subC;        ArithmeticGame { opMode: "sub"; onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: mulC;        ArithmeticGame { opMode: "mul"; onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: divC;        ArithmeticGame { opMode: "div"; onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: fractionsC;  FractionsGame  { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: tablesC;     TablesGame     { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: numberlineC; NumberLineGame { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: regionsC;    RegionsGame    { onExitRequested: view.sourceComponent = launcherComponent } }
+
+    Component { id: syllablesC;   SyllablesGame   { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: doublesC;     DoublesGame     { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: spellingC;    SpellingGame    { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: lettercountC; LetterCountGame { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: guesswordC;   GuessWordGame   { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: reorderC;     ReorderGame     { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: subjectverbC; SubjectVerbGame { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: pronounsC;    PronounsGame    { onExitRequested: view.sourceComponent = launcherComponent } }
 }

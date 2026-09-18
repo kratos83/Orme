@@ -15,10 +15,14 @@ mkdir -p "${OUT_DIR}"
 echo "==> Building Fedora builder image (${IMAGE_TAG})..."
 docker build -t "${IMAGE_TAG}" "${SCRIPT_DIR}"
 
-# Read name/version straight out of the spec file so the tarball name always
+# Sincronizza lo spec con l'unica fonte del numero di versione (VERSION alla
+# radice del repo), cosi' non va mai piu' modificato a mano qui.
+VERSION=$(cat "${REPO_ROOT}/VERSION")
+sed -i "s/^Version:.*/Version:        ${VERSION}/" "${SCRIPT_DIR}/giochi.spec"
+
+# Read the name straight out of the spec file so the tarball name always
 # matches what the spec expects.
 NAME=$(awk '/^Name:/{print $2}' "${SCRIPT_DIR}/giochi.spec")
-VERSION=$(awk '/^Version:/{print $2}' "${SCRIPT_DIR}/giochi.spec")
 TARBALL="${NAME}-${VERSION}.tar.gz"
 
 echo "==> Packaging source tree as ${TARBALL}..."

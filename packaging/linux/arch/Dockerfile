@@ -27,7 +27,7 @@ RUN useradd -m -G wheel -s /bin/bash builder && \
 # Sorgenti del progetto copiate esplicitamente (niente .git, build/, packaging/):
 # così il contesto di build Docker resta la root del repo senza bisogno di un
 # .dockerignore fuori da packaging/.
-COPY --chown=builder:builder CMakeLists.txt COPYRIGHT LICENSE /home/builder/orme-source/
+COPY --chown=builder:builder CMakeLists.txt COPYRIGHT LICENSE VERSION /home/builder/orme-source/
 COPY --chown=builder:builder src/    /home/builder/orme-source/src/
 COPY --chown=builder:builder qml/    /home/builder/orme-source/qml/
 COPY --chown=builder:builder assets/ /home/builder/orme-source/assets/

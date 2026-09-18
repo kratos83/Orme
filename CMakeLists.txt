@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(Orme-app VERSION 0.4 LANGUAGES CXX)
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" ORME_VERSION_STRING LIMIT_COUNT 1)
+
+project(Orme-app VERSION ${ORME_VERSION_STRING} LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Qml)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Qml Network)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -19,6 +21,10 @@ qt_add_executable(Orme-app
 # installer Windows, layout del .dmg macOS) si aspettano quel nome.
 set_target_properties(Orme-app PROPERTIES OUTPUT_NAME "Orme")
 
+# Versione reale dell'app (per Updater e app.applicationVersion()): prima
+# era hardcoded "0.1" in main.cpp, ora segue la VERSION del progetto qui sopra.
+target_compile_definitions(Orme-app PRIVATE ORME_VERSION="${PROJECT_VERSION}")
+
 # I singleton QML vanno marcati PRIMA di qt_add_qml_module
 set_source_files_properties(qml/Theme.qml   PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 set_source_files_properties(qml/Catalog.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
@@ -30,19 +36,24 @@ qt_add_qml_module(Orme-app
     SOURCES
         src/pathengine.h
         src/pathengine.cpp
+        src/updater.h
+        src/updater.cpp
     QML_FILES
         qml/Esci.qml
         qml/Main.qml
+        qml/UpdateBanner.qml
         qml/Theme.qml
         qml/Catalog.qml
         qml/Launcher.qml
         qml/InfoPage.qml
         qml/GameTile.qml
+        qml/CategoryPicker.qml
         qml/common/SoundBank.qml
         qml/common/ScoreBar.qml
         qml/common/NamePrompt.qml
         qml/common/GameScaffold.qml
         qml/common/MiniGame.qml
+        qml/common/NumberPad.qml
         qml/games/path/PathGame.qml
         qml/games/path/Board.qml
         qml/games/path/Character.qml
@@ -82,6 +93,19 @@ qt_add_qml_module(Orme-app
         qml/games/kitchen/KitchenGame.qml
         qml/games/tower/TowerGame.qml
         qml/games/beans/BeansGame.qml
+        qml/games/arithmetic/ArithmeticGame.qml
+        qml/games/fractions/FractionsGame.qml
+        qml/games/tables/TablesGame.qml
+        qml/games/numberline/NumberLineGame.qml
+        qml/games/regions/RegionsGame.qml
+        qml/games/syllables/SyllablesGame.qml
+        qml/games/doubles/DoublesGame.qml
+        qml/games/spelling/SpellingGame.qml
+        qml/games/lettercount/LetterCountGame.qml
+        qml/games/guessword/GuessWordGame.qml
+        qml/games/reorder/ReorderGame.qml
+        qml/games/subjectverb/SubjectVerbGame.qml
+        qml/games/pronouns/PronounsGame.qml
     RESOURCES
         assets/sounds/tap.wav
         assets/sounds/step.wav
@@ -94,7 +118,7 @@ qt_add_qml_module(Orme-app
 
 target_include_directories(Orme-app PRIVATE src)
 
-target_link_libraries(Orme-app PRIVATE Qt6::Quick Qt6::Qml )
+target_link_libraries(Orme-app PRIVATE Qt6::Quick Qt6::Qml Qt6::Network)
 
 if(WIN32)
     target_sources(Orme-app PRIVATE packaging/windows/app.rc)

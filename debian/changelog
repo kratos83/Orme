@@ -1,3 +1,9 @@
+orme (1.0-1) unstable; urgency=medium
+
+  * Nuova versione: 1.0.
+
+ -- Angelo Scarnà <angelo.scarna@primanotanet.it>  Fri, 18 Sep 2026 19:20:27 +0200
+
 orme (0.4-1) unstable; urgency=medium
 
   * Terza versione del pacchetto Debian.

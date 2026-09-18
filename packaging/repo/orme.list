@@ -1,0 +1,1 @@
+deb [signed-by=/etc/apt/keyrings/orme-archive-keyring.gpg] https://kratos83.github.io/Orme/apt ./

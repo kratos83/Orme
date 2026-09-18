@@ -2,7 +2,7 @@
 Type=Application
 Name=Orme
 GenericName=Orme educativi
-Comment=Raccolta di giochi touch per bambini di 3-5 anni
+Comment=Raccolta di giochi touch per bambini
 Exec=Orme
 Icon=orme
 Terminal=false

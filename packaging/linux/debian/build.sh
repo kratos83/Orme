@@ -10,6 +10,28 @@ IMAGE_TAG="orme-debian-builder"
 
 mkdir -p "$OUT_DIR"
 
+# Sincronizza debian/changelog con l'unica fonte del numero di versione
+# (VERSION alla radice del repo). Se la versione e' cambiata rispetto alla
+# voce piu' recente, ne aggiunge una nuova in cima (con data di oggi) invece
+# di riscrivere quella vecchia: per rilasciare una nuova versione basta
+# modificare VERSION, non serve piu' toccare debian/changelog a mano. Se e'
+# gia' aggiornato (es. il changelog e' stato ricommittato dopo l'ultima
+# build) non fa nulla, cosi' non si accumulano voci duplicate ad ogni build.
+VERSION=$(cat "$REPO_ROOT/VERSION")
+CHANGELOG="$REPO_ROOT/debian/changelog"
+CURRENT_TOP_VERSION=$(sed -n '1s/^orme (\([^)]*\)).*/\1/p' "$CHANGELOG")
+if [ "$CURRENT_TOP_VERSION" != "${VERSION}-1" ]; then
+  echo "== Nuova voce in debian/changelog: ${VERSION}-1 (era ${CURRENT_TOP_VERSION}) =="
+  TMP_CHANGELOG=$(mktemp)
+  {
+    printf 'orme (%s-1) unstable; urgency=medium\n\n' "$VERSION"
+    printf '  * Nuova versione: %s.\n\n' "$VERSION"
+    printf ' -- Angelo Scarnà <angelo.scarna@primanotanet.it>  %s\n\n' "$(date -R)"
+    cat "$CHANGELOG"
+  } > "$TMP_CHANGELOG"
+  mv "$TMP_CHANGELOG" "$CHANGELOG"
+fi
+
 echo "== docker build (Debian) =="
 docker build -t "$IMAGE_TAG" -f "$SCRIPT_DIR/Dockerfile" "$REPO_ROOT"
 

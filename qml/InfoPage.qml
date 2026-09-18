@@ -80,7 +80,7 @@ Item {
                         font.pixelSize: 17
                         color: Theme.text
                         opacity: 0.85
-                        text: qsTr("24 giochi touch per bambini di 3, 4 e 5 anni, ispirati ai concetti del coding: sequenze, cicli, pattern, classificazione, ordine. Niente testo da leggere: icone, colori e suoni. Bersagli grandi, nessuna schermata di sconfitta.")
+                        text: qsTr("45 giochi touch per bambini della scuola dell'infanzia e della primaria: dai concetti del coding (sequenze, cicli, pattern, classificazione, ordine) fino a numeri, operazioni, tabelline, grammatica e geografia. Bersagli grandi, nessuna schermata di sconfitta.")
                     }
                     Text {
                         width: parent.width
@@ -90,11 +90,40 @@ Item {
                         opacity: 0.85
                         text: qsTr("All'inizio di ogni gioco si può scrivere il nome del bambino oppure premere \"Salta\"; il nome si può cambiare durante il gioco con il tasto 👤. Ogni livello vinto dà da 1 a 3 faccine 😊 e si passa da soli al livello dopo.")
                     }
-                    Text {
-                        text: qsTr("Versione 0.2")
-                        font.pixelSize: 14
-                        color: Theme.text
-                        opacity: 0.6
+                    Row {
+                        spacing: 14
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: qsTr("Versione %1").arg(Updater.currentVersion)
+                            font.pixelSize: 14
+                            color: Theme.text
+                            opacity: 0.6
+                        }
+                        Rectangle {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: checkText.implicitWidth + 24; height: 34; radius: 17
+                            color: Theme.panel
+                            border.color: Theme.boardLine
+                            border.width: 2
+                            scale: checkMa.pressed ? 0.95 : 1
+                            Behavior on scale { NumberAnimation { duration: 80 } }
+                            Text {
+                                id: checkText
+                                anchors.centerIn: parent
+                                text: Updater.checking ? qsTr("Verifica in corso...") : qsTr("Cerca aggiornamenti")
+                                font.pixelSize: 13
+                                font.bold: true
+                                color: Theme.text
+                            }
+                            MouseArea { id: checkMa; anchors.fill: parent; enabled: !Updater.checking; onClicked: Updater.checkForUpdates() }
+                        }
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            visible: !Updater.checking && !Updater.updateAvailable && Updater.latestVersion !== ""
+                            text: qsTr("Hai già l'ultima versione")
+                            font.pixelSize: 13
+                            color: Theme.accentDark
+                        }
                     }
                     Text {
                         id: credit
@@ -125,15 +154,15 @@ Item {
             }
 
             Text {
-                text: qsTr("Tutti i giochi")
+                text: qsTr("Giochi per l'infanzia")
                 font.pixelSize: 24
                 font.bold: true
                 color: Theme.text
             }
 
-            // ----- elenco giochi -----
+            // ----- elenco giochi Infanzia -----
             Repeater {
-                model: Catalog.games
+                model: Catalog.games.filter((g) => g.cat === "infanzia")
 
                 Rectangle {
                     id: card
@@ -207,6 +236,93 @@ Item {
                         id: cardMa
                         anchors.fill: parent
                         onClicked: root.gameSelected(card.modelData.id)
+                    }
+                }
+            }
+
+            Text {
+                text: qsTr("Giochi per la primaria")
+                font.pixelSize: 24
+                font.bold: true
+                color: Theme.text
+            }
+
+            // ----- elenco giochi Primaria -----
+            Repeater {
+                model: Catalog.games.filter((g) => g.cat === "primaria")
+
+                Rectangle {
+                    id: card2
+                    required property var modelData
+                    width: col.width
+                    height: Math.max(100, body2.implicitHeight + 26)
+                    radius: 18
+                    color: Theme.panel
+                    border.color: Theme.boardLine
+                    border.width: 2
+                    scale: card2Ma.pressed ? 0.99 : 1
+                    Behavior on scale { NumberAnimation { duration: 80 } }
+
+                    Rectangle {
+                        id: badge2
+                        x: 14
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 74; height: 74; radius: 18
+                        color: card2.modelData.c
+                        Text {
+                            anchors.centerIn: parent
+                            text: card2.modelData.e ? card2.modelData.e : "▶"
+                            font.pixelSize: 40
+                            color: "white"
+                        }
+                    }
+
+                    Rectangle {
+                        id: ageChip2
+                        anchors { right: parent.right; rightMargin: 16; verticalCenter: parent.verticalCenter }
+                        width: chipT2.implicitWidth + 16
+                        height: 26
+                        radius: 13
+                        color: card2.modelData.c
+                        opacity: 0.9
+                        Text {
+                            id: chipT2
+                            anchors.centerIn: parent
+                            text: card2.modelData.age
+                            font.pixelSize: 13
+                            font.bold: true
+                            color: "white"
+                        }
+                    }
+
+                    Column {
+                        id: body2
+                        anchors {
+                            left: badge2.right; leftMargin: 16
+                            right: ageChip2.left; rightMargin: 12
+                            verticalCenter: parent.verticalCenter
+                        }
+                        spacing: 4
+                        Text {
+                            text: card2.modelData.title
+                            font.pixelSize: 20
+                            font.bold: true
+                            color: Theme.text
+                        }
+                        Text {
+                            width: parent.width
+                            wrapMode: Text.WordWrap
+                            text: card2.modelData.desc
+                            font.pixelSize: 14
+                            color: Theme.text
+                            opacity: 0.75
+                        }
+                    }
+
+                    MouseArea {
+                        id: card2Ma
+                        anchors.fill: parent
+                        onClicked: root.gameSelected(card2.modelData.id)
                     }
                 }
             }

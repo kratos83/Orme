@@ -32,10 +32,13 @@ BuildRequires:  qt6-declarative-devel >= 6.5
 Requires:       qt6-multimedia-imports
 
 %description
-Orme e' una raccolta di 22 mini-giochi touch pensati per bambini di 3-5
-anni, ispirati ai concetti base della programmazione (percorsi, sequenze,
-cicli, ordinamento, ecc). Applicazione Qt6/QML pura (Quick + Qml), con
-effetti sonori riprodotti tramite il modulo QML QtMultimedia.
+Orme e' una raccolta di 45 mini-giochi touch per bambini di 3-10 anni:
+giochi per l'infanzia ispirati ai concetti base della programmazione
+(percorsi, sequenze, cicli, ordinamento, ecc) e giochi di matematica,
+italiano e geografia per la primaria. Applicazione Qt6/QML pura
+(Quick + Qml), con effetti sonori riprodotti tramite il modulo QML
+QtMultimedia. Abilita anche il repository RPM di Orme, cosi' gli
+aggiornamenti futuri arrivano con i normali "zypper update" del sistema.
 
 %prep
 %autosetup -n %{name}-%{version}
@@ -46,6 +49,18 @@ effetti sonori riprodotti tramite il modulo QML QtMultimedia.
 
 %install
 %cmake_install
+# Abilita il repository RPM di Orme (vedi packaging/repo/README.md): il
+# file .repo e la chiave pubblica GPG vengono installati dal pacchetto
+# stesso, cosi' "zypper update" trova da solo le versioni future.
+install -Dm644 packaging/repo/orme-opensuse.repo %{buildroot}%{_sysconfdir}/zypp/repos.d/orme.repo
+install -Dm644 packaging/repo/orme-archive-keyring.asc %{buildroot}%{_datadir}/orme/orme-archive-keyring.asc
+
+%post
+# Pre-importa la chiave dal file shipped nel pacchetto (non da rete, cosi'
+# funziona anche offline): evita il prompt interattivo "import this key?"
+# al primo aggiornamento dal repo Orme. Fallisce in modo innocuo se rpm non
+# e' disponibile in questo contesto.
+rpm --import %{_datadir}/orme/orme-archive-keyring.asc >/dev/null 2>&1 || :
 
 %files
 %license LICENSE
@@ -53,6 +68,8 @@ effetti sonori riprodotti tramite il modulo QML QtMultimedia.
 %{_bindir}/Orme
 %{_datadir}/applications/orme.desktop
 %{_datadir}/icons/hicolor/scalable/apps/orme.svg
+%config(noreplace) %{_sysconfdir}/zypp/repos.d/orme.repo
+%{_datadir}/orme/orme-archive-keyring.asc
 
 %changelog
 * Fri Sep 11 2026 Angelo Scarna <angelo.scarna@primanotanet.it> - 0.1-1
