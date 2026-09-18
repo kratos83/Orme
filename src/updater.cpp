@@ -20,7 +20,9 @@
 #include <QProcess>
 #elif defined(Q_OS_ANDROID)
 #include <QJniObject>
-#include <QNativeInterface>
+// Non esiste un header "convenience" <QNativeInterface> per Android nel kit
+// Qt6 (e' un namespace, non una classe): serve l'header esplicito.
+#include <QtCore/qnativeinterface.h>
 #endif
 
 namespace {

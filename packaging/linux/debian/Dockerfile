@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Pacchetto Debian "3.0 (native)": dpkg-buildpackage lavora direttamente
 # sull'albero sorgente (nessun tarball upstream separato), quindi copiamo
 # l'intero albero necessario, incluso debian/, dentro il container.
-COPY --chown=root:root CMakeLists.txt COPYRIGHT LICENSE VERSION /build/orme/
+COPY --chown=root:root CMakeLists.txt COPYRIGHT LICENSE VERSION.txt /build/orme/
 COPY --chown=root:root src/     /build/orme/src/
 COPY --chown=root:root qml/     /build/orme/qml/
 COPY --chown=root:root assets/  /build/orme/assets/

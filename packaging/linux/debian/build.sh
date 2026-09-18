@@ -17,7 +17,7 @@ mkdir -p "$OUT_DIR"
 # modificare VERSION, non serve piu' toccare debian/changelog a mano. Se e'
 # gia' aggiornato (es. il changelog e' stato ricommittato dopo l'ultima
 # build) non fa nulla, cosi' non si accumulano voci duplicate ad ogni build.
-VERSION=$(cat "$REPO_ROOT/VERSION")
+VERSION=$(cat "$REPO_ROOT/VERSION.txt")
 CHANGELOG="$REPO_ROOT/debian/changelog"
 CURRENT_TOP_VERSION=$(sed -n '1s/^orme (\([^)]*\)).*/\1/p' "$CHANGELOG")
 if [ "$CURRENT_TOP_VERSION" != "${VERSION}-1" ]; then

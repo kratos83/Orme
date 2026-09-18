@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.21)
 
-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" ORME_VERSION_STRING LIMIT_COUNT 1)
+# Nome file VERSION.txt e non VERSION: su filesystem case-insensitive
+# (Windows, macOS) un file chiamato "VERSION" collide con l'header standard
+# C++ <version> quando la radice del repo e' nel path di include (lo e',
+# per l'autogen di qt_add_qml_module) - il compilatore trova il nostro file
+# di testo al posto del vero header di sistema e fallisce con errori di
+# sintassi assurdi. Costato una release rotta su Windows/macOS per scoprirlo.
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION.txt" ORME_VERSION_STRING LIMIT_COUNT 1)
 
 project(Orme-app VERSION ${ORME_VERSION_STRING} LANGUAGES CXX)
 

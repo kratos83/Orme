@@ -8,11 +8,11 @@
 # PRIMA di invocare makepkg, quindi source=() e build()/package() puntano
 # direttamente lì.
 pkgname=orme-archlinux
-# Letta dal file VERSION alla radice del repo (unica fonte del numero di
+# Letta dal file VERSION.txt alla radice del repo (unica fonte del numero di
 # versione: per un nuovo rilascio si modifica solo quello, non questo file).
 # Path letterale invece di $_upstream_src perche' questa riga viene eseguita
 # prima che _upstream_src sia assegnata, piu' sotto.
-pkgver=$(cat /home/builder/orme-source/VERSION)
+pkgver=$(cat /home/builder/orme-source/VERSION.txt)
 pkgrel=1
 pkgdesc="Orme - raccolta di giochi educativi Qt6/QML per bambini 3-5 anni"
 arch=('x86_64')

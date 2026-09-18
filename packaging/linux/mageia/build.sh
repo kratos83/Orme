@@ -22,7 +22,7 @@ docker build -t "${IMAGE_TAG}" "${SCRIPT_DIR}"
 
 # Sincronizza lo spec con l'unica fonte del numero di versione (VERSION alla
 # radice del repo), cosi' non va mai piu' modificato a mano qui.
-VERSION=$(cat "${REPO_ROOT}/VERSION")
+VERSION=$(cat "${REPO_ROOT}/VERSION.txt")
 sed -i "s/^Version:.*/Version:        ${VERSION}/" "${SCRIPT_DIR}/giochi.spec"
 
 NAME=$(awk '/^Name:/{print $2}' "${SCRIPT_DIR}/giochi.spec")

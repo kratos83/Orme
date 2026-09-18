@@ -2,27 +2,31 @@
 
 ## Numero di versione: un solo file
 
-Il file [`VERSION`](../VERSION) alla radice del repo è l'**unica** fonte del
-numero di versione. Per rilasciare una nuova versione si modifica solo
-quello (es. `0.5`), poi si committa e si taggga `v0.5` — nessun altro file va
-più toccato a mano:
+Il file [`VERSION.txt`](../VERSION.txt) alla radice del repo è l'**unica**
+fonte del numero di versione. Per rilasciare una nuova versione si modifica
+solo quello (es. `0.5`), poi si committa e si tagga `v0.5` — nessun altro
+file va più toccato a mano:
 
-- **CMake/l'app stessa**: `CMakeLists.txt` legge `VERSION` all'avvio della
-  configurazione (`file(STRINGS ...)`) e la propaga a `PROJECT_VERSION`,
-  da cui derivano sia `app.applicationVersion()`/`Updater` (via
-  `ORME_VERSION`) sia, tramite `androiddeployqt`, `versionName`/`versionCode`
-  di Android.
+- **CMake/l'app stessa**: `CMakeLists.txt` legge `VERSION.txt` all'avvio
+  della configurazione (`file(STRINGS ...)`) e la propaga a
+  `PROJECT_VERSION`, da cui derivano sia `app.applicationVersion()`/
+  `Updater` (via `ORME_VERSION`) sia, tramite `androiddeployqt`,
+  `versionName`/`versionCode` di Android.
+  ⚠️ Il nome è `VERSION.txt` e non `VERSION`: su filesystem
+  case-insensitive (Windows, macOS) un file chiamato `VERSION` collide con
+  l'header standard C++ `<version>`, perché la radice del repo è nel path
+  di include del progetto — è già successo, build rotta su entrambe le
+  piattaforme.
 - **Windows**: `windows.yml` prende la versione direttamente dal tag git
   push (`v0.5` → `0.5`) e la passa a Inno Setup con `/DMyAppVersion=...`.
-- **Arch / Alpine**: `PKGBUILD`/`APKBUILD` leggono `VERSION` direttamente
-  (`pkgver=$(cat .../VERSION)`), sono script bash veri.
+- **Arch / Alpine**: `PKGBUILD`/`APKBUILD` leggono `VERSION.txt` direttamente
+  (`pkgver=$(cat .../VERSION.txt)`), sono script bash veri.
 - **Fedora / openSUSE / Mageia**: i rispettivi `build.sh` sincronizzano da
-  soli il campo `Version:` dello `.spec` da `VERSION` prima di buildare
+  soli il campo `Version:` dello `.spec` da `VERSION.txt` prima di buildare
   (`sed -i "s/^Version:.*/Version: .../"`).
-- **Debian**: `packaging/linux/debian/build.sh` sincronizza da solo il
-  numero fra parentesi nella prima riga di `debian/changelog` da `VERSION`
-  (il testo della voce non cambia: per un messaggio diverso si usa comunque
-  `dch` come sempre).
+- **Debian**: `packaging/linux/debian/build.sh` legge `VERSION.txt` e, se
+  diversa dall'ultima voce di `debian/changelog`, ne aggiunge una nuova in
+  cima con data di oggi (non riscrive quella vecchia).
 
 Stato di avanzamento per ciascuna piattaforma richiesta. Tutte le build
 elencate come "verificata" sono state **eseguite per davvero** (non solo
