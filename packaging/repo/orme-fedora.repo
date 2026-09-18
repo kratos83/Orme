@@ -1,6 +1,6 @@
 [orme]
 name=Orme
-baseurl=https://kratos83.github.io/Orme/rpm/fedora/$basearch
+baseurl=https://kratos83.github.io/Orme/rpm/fedora
 enabled=1
 gpgcheck=1
 gpgkey=https://kratos83.github.io/Orme/orme-archive-keyring.asc
