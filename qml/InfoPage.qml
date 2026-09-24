@@ -80,7 +80,7 @@ Item {
                         font.pixelSize: 17
                         color: Theme.text
                         opacity: 0.85
-                        text: qsTr("45 giochi touch per bambini della scuola dell'infanzia e della primaria: dai concetti del coding (sequenze, cicli, pattern, classificazione, ordine) fino a numeri, operazioni, tabelline, grammatica e geografia. Bersagli grandi, nessuna schermata di sconfitta.")
+                        text: qsTr("46 giochi touch per bambini della scuola dell'infanzia e della primaria: dai concetti del coding (sequenze, cicli, pattern, classificazione, ordine) fino a numeri, operazioni, tabelline, grammatica e geografia. Bersagli grandi, nessuna schermata di sconfitta.")
                     }
                     Text {
                         width: parent.width

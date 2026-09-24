@@ -30,9 +30,17 @@ BuildRequires:  qt6-declarative-devel >= 6.5
 # `rpm -ql qt6-multimedia-imports` in an opensuse/tumbleweed container) -
 # unlike Fedora, where it ships inside the main qt6-qtmultimedia package.
 Requires:       qt6-multimedia-imports
+# Stessa storia per QtQuick.Shapes (qml/games/regions/ItalyMap.qml, mappa
+# d'Italia): plugin QML-only, non rilevato dalle dipendenze ELF automatiche.
+# Su openSUSE Tumbleweed vive in qt6-declarative-imports (verificato con
+# `rpm -qf /usr/lib64/qt6/qml/QtQuick/Shapes/qmldir` in un container
+# opensuse/tumbleweed) - su Fedora e Mageia invece e' gia' incluso nel
+# pacchetto base (qt6-qtdeclarative / qtdeclarative6, tirato dentro in
+# automatico dal linking ELF), quindi li' non serve una Requires esplicita.
+Requires:       qt6-declarative-imports
 
 %description
-Orme e' una raccolta di 45 mini-giochi touch per bambini di 3-10 anni:
+Orme e' una raccolta di 46 mini-giochi touch per bambini di 3-10 anni:
 giochi per l'infanzia ispirati ai concetti base della programmazione
 (percorsi, sequenze, cicli, ordinamento, ecc) e giochi di matematica,
 italiano e geografia per la primaria. Applicazione Qt6/QML pura

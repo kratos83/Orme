@@ -1,6 +1,6 @@
 ## Novità
 
-Raccolta di 45 giochi touch per bambini della scuola dell'infanzia (3-5 anni)
+Raccolta di 46 giochi touch per bambini della scuola dell'infanzia (3-5 anni)
 e della scuola primaria (6-10 anni), ispirati ai concetti del coding e ai
 programmi scolastici.
 
@@ -10,7 +10,7 @@ All'avvio si sceglie la categoria - **Infanzia** o **Primaria** - e si vede
 solo la griglia dei giochi di quella categoria; il titolo lungo va a capo e
 l'età consigliata è scritta su ogni riquadro e nell'intestazione del gioco.
 
-**Novità di questa versione: 16 nuovi giochi per la scuola primaria**, in tre
+**Novità di questa versione: 17 nuovi giochi per la scuola primaria**, in tre
 aree:
 
 - **Matematica** (7 giochi) - Addizioni, Sottrazioni, Moltiplicazioni,
@@ -19,13 +19,14 @@ aree:
   e pesca i multipli in ordine crescente, ogni pesce pescato vola nella
   conchiglia; La linea dei numeri - scegli lunghezza (5/10/20) e modalità
   (conta/addizione/sottrazione).
-- **Italiano** (8 giochi) - Sillabe e Riordina la frase (tocca nell'ordine
+- **Italiano** (9 giochi) - Sillabe e Riordina la frase (tocca nell'ordine
   giusto le sillabe/parole mescolate); Le doppie e Ortografia (tocca la
   parola scritta giusta); Conta le lettere; Indovina la parola (indovinello
   a 4 risposte); Soggetto e predicato; Pronomi (personali, possessivi,
-  dimostrativi, indefiniti, relativi, con scelta della categoria).
-- **Geografia** (1 gioco) - Regioni d'Italia: quiz a 4 risposte su regioni e
-  capoluoghi.
+  dimostrativi, indefiniti, relativi, con scelta della categoria); L'alfabeto
+  (un'emoji e la sua parola, tocca la lettera iniziale giusta fra due carte).
+- **Geografia** (1 gioco) - Regioni d'Italia: la vera mappa dell'Italia
+  (confini reali, dati ISTAT), tocca la regione giusta.
 
 ## Bug risolti
 

@@ -83,7 +83,7 @@ QtObject {
         { cat: "primaria", id: "numberline", title: qsTr("La linea dei numeri"), age: qsTr("6-8 anni"), c: Theme.dirDown, e: "📏",
           desc: qsTr("Scegli la lunghezza della linea e la modalità (conta, addizione o sottrazione) e posiziona il segnalino sul numero giusto.") },
         { cat: "primaria", id: "regions", title: qsTr("Regioni d'Italia"), age: qsTr("8-10 anni"), c: Theme.accent, e: "🗺️",
-          desc: qsTr("Quiz a 4 risposte su regioni e capoluoghi d'Italia: a volte si cerca il capoluogo, a volte la regione.") },
+          desc: qsTr("Leggi il nome della regione o del capoluogo e toccala sulla mappa dell'Italia.") },
         { cat: "primaria", id: "syllables", title: qsTr("Sillabe"), age: qsTr("6-7 anni"), c: Theme.dirRight, e: "🔤",
           desc: qsTr("Le sillabe di una parola sono mescolate: toccale nell'ordine giusto per ricomporla.") },
         { cat: "primaria", id: "doubles", title: qsTr("Le doppie"), age: qsTr("7-8 anni"), c: Theme.dirUp, e: "✌️",
@@ -99,6 +99,8 @@ QtObject {
         { cat: "primaria", id: "subjectverb", title: qsTr("Soggetto e predicato"), age: qsTr("8-9 anni"), c: Theme.dirUp, e: "📖",
           desc: qsTr("Una frase divisa in due pezzi: a volte tocca il soggetto, a volte il predicato.") },
         { cat: "primaria", id: "pronouns", title: qsTr("Pronomi"), age: qsTr("9-10 anni"), c: Theme.dirLeft, e: "💬",
-          desc: qsTr("Scegli il tipo (personali, possessivi, dimostrativi, indefiniti, relativi) e completa la frase col pronome giusto.") }
+          desc: qsTr("Scegli il tipo (personali, possessivi, dimostrativi, indefiniti, relativi) e completa la frase col pronome giusto.") },
+        { cat: "primaria", id: "alphabet", title: qsTr("L'alfabeto"), age: qsTr("6-8 anni"), c: Theme.dirDown, e: "🔠",
+          desc: qsTr("Un'emoji e la sua parola: tocca la lettera giusta tra le due carte, la posizione cambia ogni volta.") }
     ]
 }

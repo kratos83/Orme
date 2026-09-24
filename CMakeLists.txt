@@ -104,6 +104,7 @@ qt_add_qml_module(Orme-app
         qml/games/tables/TablesGame.qml
         qml/games/numberline/NumberLineGame.qml
         qml/games/regions/RegionsGame.qml
+        qml/games/regions/ItalyMap.qml
         qml/games/syllables/SyllablesGame.qml
         qml/games/doubles/DoublesGame.qml
         qml/games/spelling/SpellingGame.qml
@@ -112,6 +113,7 @@ qt_add_qml_module(Orme-app
         qml/games/reorder/ReorderGame.qml
         qml/games/subjectverb/SubjectVerbGame.qml
         qml/games/pronouns/PronounsGame.qml
+        qml/games/alphabet/AlphabetGame.qml
     RESOURCES
         assets/sounds/tap.wav
         assets/sounds/step.wav

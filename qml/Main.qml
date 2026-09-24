@@ -51,7 +51,7 @@ Window {
             "regions": regionsC,
             "syllables": syllablesC, "doubles": doublesC, "spelling": spellingC,
             "lettercount": lettercountC, "guessword": guesswordC, "reorder": reorderC,
-            "subjectverb": subjectverbC, "pronouns": pronounsC
+            "subjectverb": subjectverbC, "pronouns": pronounsC, "alphabet": alphabetC
         }
         if (map[id]) view.sourceComponent = map[id]
     }
@@ -133,4 +133,5 @@ Window {
     Component { id: reorderC;     ReorderGame     { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: subjectverbC; SubjectVerbGame { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: pronounsC;    PronounsGame    { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: alphabetC;    AlphabetGame    { onExitRequested: view.sourceComponent = launcherComponent } }
 }

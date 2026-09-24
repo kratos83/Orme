@@ -35,7 +35,7 @@ BuildRequires:  lib64qt6quick-devel >= 6.5
 Requires:       qtmultimedia6
 
 %description
-Orme e' una raccolta di 45 mini-giochi touch per bambini di 3-10 anni:
+Orme e' una raccolta di 46 mini-giochi touch per bambini di 3-10 anni:
 giochi per l'infanzia ispirati ai concetti base della programmazione
 (percorsi, sequenze, cicli, ordinamento, ecc) e giochi di matematica,
 italiano e geografia per la primaria. Applicazione Qt6/QML pura

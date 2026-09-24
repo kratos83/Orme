@@ -1,5 +1,5 @@
 Name:           orme-fedora
-Version:        0.4
+Version:        1.0
 Release:        1%{?dist}
 Summary:        Orme - raccolta di mini-giochi educativi per bambini (Qt6/QML)
 
@@ -31,7 +31,7 @@ BuildRequires:  qt6-qtdeclarative-devel >= 6.5
 Requires:       qt6-qtmultimedia
 
 %description
-Orme e' una raccolta di 45 mini-giochi touch per bambini di 3-10 anni:
+Orme e' una raccolta di 46 mini-giochi touch per bambini di 3-10 anni:
 giochi per l'infanzia ispirati ai concetti base della programmazione
 (percorsi, sequenze, cicli, ordinamento, ecc) e giochi di matematica,
 italiano e geografia per la primaria. Applicazione Qt6/QML pura

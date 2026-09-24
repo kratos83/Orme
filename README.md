@@ -1,8 +1,8 @@
 # Orme
 
-Raccolta di 45 giochi touch per bambini della scuola dell'infanzia (3-5 anni,
+Raccolta di 46 giochi touch per bambini della scuola dell'infanzia (3-5 anni,
 29 giochi ispirati ai concetti del coding) e della scuola primaria (6-10 anni,
-16 giochi di matematica, italiano e geografia). All'avvio si sceglie la
+17 giochi di matematica, italiano e geografia). All'avvio si sceglie la
 categoria (Infanzia o Primaria) e si vede solo la griglia di quella categoria.
 
 Linguagio utilizzato: Qt 6 + C++ + QML.
@@ -38,9 +38,9 @@ macOS: vedi [packaging/README.md](packaging/README.md).
 
 ## I giochi
 
-**45 giochi** in due categorie, scelte in una schermata iniziale
+**46 giochi** in due categorie, scelte in una schermata iniziale
 (`CategoryPicker.qml`): **Infanzia** (29 giochi, 3-5 anni) e **Primaria**
-(16 giochi, 6-10 anni). Ogni categoria ha la sua griglia, che si adatta alla
+(17 giochi, 6-10 anni). Ogni categoria ha la sua griglia, che si adatta alla
 larghezza (3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a
 capo. L'età consigliata è scritta su ogni riquadro e nell'intestazione del
 gioco (proprietà `age`). Le icone (menu e giochi) sono emoji; per non
@@ -89,7 +89,7 @@ Regole comuni pensate per 3-5 anni: niente testo da leggere (icone + colore +
 suono), bersagli touch grandi, nessuna schermata di sconfitta, festa e "Ops!
 Riprova" sempre uguali.
 
-### Primaria (16 giochi, 6-10 anni)
+### Primaria (17 giochi, 6-10 anni)
 
 Ispirati e derivati da una vecchia raccolta di giochi didattici Qt Widgets
 per la scuola primaria; riscritti da zero in QML, accorpando in un solo
@@ -105,7 +105,7 @@ cartelle "tabellina_N" -> un solo gioco con selettore 2-10).
 | 34 | **Frazioni** | 9-10 | `games/fractions/` | frazione di un intero, frazione di un numero, frazioni equivalenti |
 | 35 | **Tabelline** | 8-9 | `games/tables/` | scegli la tabellina (2-10) e tocca i multipli in ordine: ogni pesce pescato vola nella conchiglia |
 | 36 | **La linea dei numeri** | 6-8 | `games/numberline/` | scegli lunghezza (5/10/20) e modalità (conta/addizione/sottrazione), tocca il numero giusto sulla linea |
-| 37 | **Regioni d'Italia** | 8-10 | `games/regions/` | quiz a 4 risposte su regioni e capoluoghi |
+| 37 | **Regioni d'Italia** | 8-10 | `games/regions/` | leggi il nome della regione o del capoluogo e toccala sulla vera mappa d'Italia (confini reali, dati ISTAT) |
 | 38 | **Sillabe** | 6-7 | `games/syllables/` | le sillabe di una parola sono mescolate: toccale in ordine per ricomporla |
 | 39 | **Le doppie** | 7-8 | `games/doubles/` | frase con spazio vuoto, tocca la parola scritta giusta (doppia o singola) |
 | 40 | **Ortografia** | 7-9 | `games/spelling/` | trabocchetti comuni (a/ha, e/è, o/ho, qu/cu...): tocca la parola giusta |
@@ -114,12 +114,13 @@ cartelle "tabellina_N" -> un solo gioco con selettore 2-10).
 | 43 | **Riordina la frase** | 7-9 | `games/reorder/` | le parole di una frase sono mescolate: toccale in ordine per ricomporla |
 | 44 | **Soggetto e predicato** | 8-9 | `games/subjectverb/` | una frase in due pezzi: tocca il soggetto o il predicato richiesto |
 | 45 | **Pronomi** | 9-10 | `games/pronouns/` | scegli il tipo (personali/possessivi/dimostrativi/indefiniti/relativi), completa la frase |
+| 46 | **L'alfabeto** | 6-8 | `games/alphabet/` | un'emoji e la sua parola: tocca la lettera giusta fra due carte, in posizione casuale |
 
 Meccanica comune: tastierino numerico touch (`common/NumberPad.qml`) per le
 risposte numeriche, tocco su carte/riquadri per le scelte multiple; stessa
 cornice (`MiniGame`/`GameScaffold`) e stelle di punteggio dei giochi Infanzia.
 
-**Nome del bambino (in tutti i 45 giochi).** All'ingresso di ogni gioco compare
+**Nome del bambino (in tutti i 46 giochi).** All'ingresso di ogni gioco compare
 la schermata "Come ti chiami?" (`NamePrompt.qml`, dentro `GameScaffold` quindi
 ereditata anche da `MiniGame` e da tutti i giochi): campo di testo + "Gioca" o
 "Salta". Il nome resta scritto nell'intestazione e si può **cambiare in
@@ -129,7 +130,7 @@ bambino successivo.
 
 **Menu Info.** In alto a destra nel menu c'è il tasto **i**: apre `InfoPage.qml`
 con la presentazione del programma (scopo, versione, © e email) e **l'elenco di
-tutti i 45 giochi**, divisi per categoria, con concetto ed età; toccando una
+tutti i 46 giochi**, divisi per categoria, con concetto ed età; toccando una
 riga si apre quel gioco.
 L'elenco dei giochi (id, titolo, età, colore, emoji, descrizione) è il singleton
 `Catalog.qml`, usato sia dal menu sia dalla pagina Info.
@@ -156,7 +157,7 @@ qml/
   Main.qml            finestra + Loader; sceglie CategoryPicker o Launcher,
                       mappa id-gioco -> Component (+ InfoPage)
   Theme.qml           singleton: colori e misure condivise
-  Catalog.qml         singleton: elenco dei 45 giochi (id/cat/titolo/età/colore/emoji/desc)
+  Catalog.qml         singleton: elenco dei 46 giochi (id/cat/titolo/età/colore/emoji/desc)
   CategoryPicker.qml  schermata iniziale: scegli Infanzia o Primaria
   Launcher.qml        menu scorrevole (griglia 3-6 col.), filtrato per categoria,
                       + tasto "◀" (torna alla scelta) e "i" -> Info
@@ -188,8 +189,8 @@ qml/
   games/stopgo|kitchen/                     giochi 25 e 27 (radice GameScaffold)
   games/poses|tower|beans/                  giochi 26, 28 e 29 (radice MiniGame)
   games/arithmetic|fractions|tables|numberline|regions|syllables|doubles|
-        spelling|lettercount|guessword|reorder|subjectverb|pronouns/
-                                             giochi Primaria 30-45 (radice MiniGame)
+        spelling|lettercount|guessword|reorder|subjectverb|pronouns|alphabet/
+                                             giochi Primaria 30-46 (radice MiniGame)
 assets/sounds/         effetti WAV (rigenerabili con scripts/make_sounds.py)
 assets/fonts/          font FluentEmojiColor (Windows)-NotoColorEmoji (Linux-MacOS-Android)
 scripts/               make_sounds.py, check_levels.py, clean.sh
