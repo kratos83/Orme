@@ -29,11 +29,16 @@ MiniGame {
         mistakes = 0
         fromLevel = 1
         toLevel = 0
+        pourTicks = 0
         bottle.goHome()
     }
 
+    property int pourTicks: 0
+
     function pourStep() {
         if (won) return
+        pourTicks += 1
+        if (pourTicks % 4 === 0) snd.tap()
         var delta = Math.min(0.10, fromLevel, 1 - toLevel)
         fromLevel -= delta
         toLevel += delta
@@ -64,25 +69,59 @@ MiniGame {
             }
         }
 
-        // ===== rivolo colorato fra bottiglia e bicchiere, mentre si versa =====
+        // ===== getto colorato dal collo della bottiglia al pelo del liquido =====
         Rectangle {
             id: stream
             z: 1
-            visible: g.pouring
-            readonly property real ax: bottle.x + bottle.width / 2
-            readonly property real ay: bottle.y + bottle.height * 0.30
-            readonly property real bx: cup.x + cup.width / 2
-            readonly property real by: cup.y + 12
-            readonly property real dx: bx - ax
-            readonly property real dy: by - ay
-            width: Math.sqrt(dx * dx + dy * dy)
-            height: 10
+            readonly property real rad: tilt.rotation * Math.PI / 180
+            // punta del collo (in alto nella bottiglia a riposo), ruotata con la bottiglia
+            readonly property real tipX: bottle.x + bottle.width / 2 + 97 * Math.sin(rad)
+            readonly property real tipY: bottle.y + 97 - 97 * Math.cos(rad)
+            readonly property real surfaceY: cup.y + cup.height * (1 - g.toLevel)
+            readonly property real sx: Math.max(cup.x + 14, Math.min(cup.x + cup.width - 14, tipX))
+            visible: g.pouring && tilt.rotation > 25 && surfaceY > tipY
+            x: sx - width / 2
+            y: tipY
+            height: Math.max(0, surfaceY - tipY)
+            width: 10
             radius: 5
             color: g.liquidColor
-            x: ax
-            y: ay - height / 2
-            transformOrigin: Item.Left
-            rotation: Math.atan2(dy, dx) * 180 / Math.PI
+            SequentialAnimation on width {
+                running: stream.visible
+                loops: Animation.Infinite
+                NumberAnimation { to: 14; duration: 120 }
+                NumberAnimation { to: 8; duration: 120 }
+            }
+        }
+
+        // schizzi sul pelo del liquido mentre si versa
+        Item {
+            z: 2
+            x: stream.sx
+            y: stream.surfaceY
+            visible: stream.visible
+            Repeater {
+                model: 4
+                Rectangle {
+                    id: drop
+                    required property int index
+                    width: 9; height: 9; radius: 5
+                    color: g.liquidColor
+                    x: 0; y: 0
+                    SequentialAnimation {
+                        running: stream.visible
+                        loops: Animation.Infinite
+                        PauseAnimation { duration: drop.index * 70 }
+                        ParallelAnimation {
+                            NumberAnimation { target: drop; property: "x"; from: 0; to: (drop.index % 2 ? 1 : -1) * (16 + drop.index * 7); duration: 300 }
+                            SequentialAnimation {
+                                NumberAnimation { target: drop; property: "y"; from: 0; to: -26 - drop.index * 4; duration: 150; easing.type: Easing.OutQuad }
+                                NumberAnimation { target: drop; property: "y"; to: 0; duration: 150; easing.type: Easing.InQuad }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         // ===== bicchiere (destra, fisso) - trapezio, largo sopra e stretto sotto =====
@@ -94,6 +133,18 @@ MiniGame {
             readonly property real botW: width * 0.72
             readonly property real botLeftX: (width - botW) / 2
             readonly property real botRightX: botLeftX + botW
+
+            transformOrigin: Item.Bottom
+            SequentialAnimation {
+                id: cupBounce
+                NumberAnimation { target: cup; property: "scale"; to: 1.15; duration: 140; easing.type: Easing.OutQuad }
+                NumberAnimation { target: cup; property: "scale"; to: 0.95; duration: 120 }
+                NumberAnimation { target: cup; property: "scale"; to: 1.0; duration: 120 }
+            }
+            Connections {
+                target: g
+                function onWonChanged() { if (g.won) cupBounce.restart() }
+            }
 
             // il vetro
             Shape {
@@ -134,6 +185,33 @@ MiniGame {
                     PathLine { x: cup.botLeftX; y: cup.height }
                 }
             }
+
+            // pelo del liquido: si increspa mentre ci si versa sopra
+            Rectangle {
+                visible: g.toLevel > 0.001
+                x: cupLiquid.liqLeftX + 2
+                y: cupLiquid.liqY - height / 2
+                width: cupLiquid.liqW - 4
+                height: 8
+                radius: 4
+                color: Qt.lighter(g.liquidColor, 1.3)
+                SequentialAnimation on height {
+                    running: g.pouring
+                    loops: Animation.Infinite
+                    NumberAnimation { to: 14; duration: 130 }
+                    NumberAnimation { to: 6; duration: 130 }
+                }
+            }
+
+            // festa quando e' pieno
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                y: -70
+                text: "🎉"
+                font.pixelSize: 60
+                scale: g.won ? 1 : 0
+                Behavior on scale { NumberAnimation { duration: 260; easing.type: Easing.OutBack } }
+            }
         }
 
         // ===== bottiglia (draggabile) =====
@@ -158,34 +236,56 @@ MiniGame {
 
             Component.onCompleted: goHome()
 
-            // corpo della bottiglia
-            Rectangle {
-                id: bottleBody
-                anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-                height: 150
-                radius: 16
-                color: "#55FFFFFF"
-                border.color: Theme.boardLine
-                border.width: 5
-                clip: true
+            // la bottiglia si inclina verso il bicchiere quando ci si trova sopra
+            property real tiltTarget: g.pouring ? 55 : 0
+            property real wob: 0
+            Behavior on tiltTarget { NumberAnimation { duration: 260; easing.type: Easing.OutBack } }
 
-                Rectangle {
-                    anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 4 }
-                    height: (parent.height - 8) * g.fromLevel
-                    radius: 10
-                    color: g.liquidColor
-                    Behavior on height { enabled: !g.pouring; NumberAnimation { duration: 200 } }
-                }
+            // un tocco la fa dondolare (invito a trascinarla)
+            SequentialAnimation {
+                id: wobble
+                NumberAnimation { target: bottle; property: "wob"; to: -10; duration: 90 }
+                NumberAnimation { target: bottle; property: "wob"; to: 10; duration: 140 }
+                NumberAnimation { target: bottle; property: "wob"; to: -6; duration: 110 }
+                NumberAnimation { target: bottle; property: "wob"; to: 0; duration: 90 }
             }
 
-            // collo della bottiglia
-            Rectangle {
-                width: 40; height: 44
-                radius: 8
-                anchors { horizontalCenter: parent.horizontalCenter; bottom: bottleBody.top }
-                color: "#55FFFFFF"
-                border.color: Theme.boardLine
-                border.width: 4
+            Item {
+                id: tilt
+                anchors.fill: parent
+                rotation: bottle.tiltTarget + bottle.wob
+                scale: dragArea.pressed ? 1.08 : 1
+
+                // corpo della bottiglia
+                Rectangle {
+                    id: bottleBody
+                    anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+                    height: 150
+                    radius: 16
+                    color: "#55FFFFFF"
+                    border.color: Theme.boardLine
+                    border.width: 5
+                    clip: true
+
+                    Rectangle {
+                        anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 4 }
+                        height: (parent.height - 8) * g.fromLevel
+                        radius: 10
+                        color: g.liquidColor
+                        Behavior on height { enabled: !g.pouring; NumberAnimation { duration: 200 } }
+                    }
+                }
+
+                // collo della bottiglia
+                Rectangle {
+                    width: 40; height: 44
+                    radius: 8
+                    anchors { horizontalCenter: parent.horizontalCenter; bottom: bottleBody.top }
+                    color: "#55FFFFFF"
+                    border.color: Theme.boardLine
+                    border.width: 4
+                }
+
             }
 
             MouseArea {
@@ -198,6 +298,8 @@ MiniGame {
                 drag.minimumY: 0
                 drag.maximumY: playArea.height - bottle.height
 
+                onPressed: snd.tap()
+                onClicked: if (!drag.active) { wobble.restart() }
                 onReleased: bottle.goHome()
             }
         }
@@ -205,7 +307,7 @@ MiniGame {
         Timer {
             interval: 90
             repeat: true
-            running: g.pouring
+            running: g.pouring && tilt.rotation > 30
             onTriggered: g.pourStep()
         }
     }

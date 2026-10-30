@@ -4,7 +4,7 @@ import Orme
 
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Elenco dei 29 giochi, usato dal menu (Launcher) e dalla pagina Info.
+// Elenco dei 47 giochi, usato dal menu (Launcher) e dalla pagina Info.
 // Campi: id, title, age, c (colore), e (emoji) o icon ("path"), desc.
 QtObject {
     readonly property var games: [
@@ -51,7 +51,7 @@ QtObject {
         { cat: "infanzia", id: "emotions", title: qsTr("Le emozioni"), age: qsTr("3-4 anni"), c: Theme.dirDown, e: "😀",
           desc: qsTr("In alto una faccia con un'emozione, sotto quattro facce diverse: tocca quella con la stessa emozione.") },
         { cat: "infanzia", id: "recycle", title: qsTr("La raccolta differenziata"), age: qsTr("3-5 anni"), c: Theme.dirRight, e: "♻️",
-          desc: qsTr("Trascina l'oggetto nel bidone giusto: plastica, carta o vetro.") },
+          desc: qsTr("Trascina ogni oggetto nel bidone giusto: plastica, carta, vetro o umido. Il coperchio si apre quando ci passi sopra.") },
         { cat: "infanzia", id: "shapes", title: qsTr("Il percorso delle forme"), age: qsTr("3-5 anni"), c: Theme.dirLeft, e: "🔺",
           desc: qsTr("Sagome colorate sul pavimento in 5 file: in alto una forma o un colore indica la regola, tocca solo quelle giuste per attraversare l'aula.") },
         { cat: "infanzia", id: "snake", title: qsTr("Il serpente"), age: qsTr("4-5 anni"), c: Theme.accent, e: "🐍",
@@ -65,7 +65,9 @@ QtObject {
         { cat: "infanzia", id: "tower", title: qsTr("Costruisci la torre"), age: qsTr("3-4 anni"), c: Theme.dirRight, e: "🧱",
           desc: qsTr("Trascina i blocchi colorati dal vassoio nella torre, dal basso verso l'alto, seguendo il modellino. Spazio e pazienza.") },
         { cat: "infanzia", id: "beans", title: qsTr("Travasi e infilo"), age: qsTr("3-4 anni"), c: Theme.accent, e: "🧃",
-          desc: qsTr("Trascina la bottiglia sopra il bicchiere vuoto e tienila li': il liquido si travasa piano piano (acqua, succo, limonata...). La coordinazione occhio-mano.") },
+          desc: qsTr("Trascina la bottiglia sopra il bicchiere vuoto e tienila li': si inclina e il liquido si travasa piano piano (acqua, succo, limonata...). La coordinazione occhio-mano.") },
+        { cat: "infanzia", id: "train", title: qsTr("Il trenino"), age: qsTr("3-4 anni"), c: Theme.dirDown, e: "🚂",
+          desc: qsTr("Prima costruisci il treno trascinando la locomotiva e i vagoni sul binario, poi tocca START e tocca il treno per farlo correre fino alla prossima stazione. Spazio e pazienza.") },
 
         // --- Primaria ---
         { cat: "primaria", id: "add", title: qsTr("Addizioni"), age: qsTr("6-7 anni"), c: Theme.dirUp, e: "➕",

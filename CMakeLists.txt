@@ -99,6 +99,7 @@ qt_add_qml_module(Orme-app
         qml/games/kitchen/KitchenGame.qml
         qml/games/tower/TowerGame.qml
         qml/games/beans/BeansGame.qml
+        qml/games/train/TrainGame.qml
         qml/games/arithmetic/ArithmeticGame.qml
         qml/games/fractions/FractionsGame.qml
         qml/games/tables/TablesGame.qml

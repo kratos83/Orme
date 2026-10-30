@@ -1,7 +1,7 @@
 # Orme
 
-Raccolta di 46 giochi touch per bambini della scuola dell'infanzia (3-5 anni,
-29 giochi ispirati ai concetti del coding) e della scuola primaria (6-10 anni,
+Raccolta di 47 giochi touch per bambini della scuola dell'infanzia (3-5 anni,
+30 giochi ispirati ai concetti del coding) e della scuola primaria (6-10 anni,
 17 giochi di matematica, italiano e geografia). All'avvio si sceglie la
 categoria (Infanzia o Primaria) e si vede solo la griglia di quella categoria.
 
@@ -38,8 +38,8 @@ macOS: vedi [packaging/README.md](packaging/README.md).
 
 ## I giochi
 
-**46 giochi** in due categorie, scelte in una schermata iniziale
-(`CategoryPicker.qml`): **Infanzia** (29 giochi, 3-5 anni) e **Primaria**
+**47 giochi** in due categorie, scelte in una schermata iniziale
+(`CategoryPicker.qml`): **Infanzia** (30 giochi, 3-5 anni) e **Primaria**
 (17 giochi, 6-10 anni). Ogni categoria ha la sua griglia, che si adatta alla
 larghezza (3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a
 capo. L'età consigliata è scritta su ogni riquadro e nell'intestazione del
@@ -51,7 +51,7 @@ specie senza servizi Google, con il risultato di icone invisibili o
 del font di default all'avvio (`src/main.cpp`), cosi' le emoji si vedono
 uguali su ogni dispositivo.
 
-### Infanzia (29 giochi, 3-5 anni)
+### Infanzia (30 giochi, 3-5 anni)
 
 | # | Riquadro | Età | Cartella | Idea |
 |---|---|---|---|---|
@@ -76,7 +76,7 @@ uguali su ogni dispositivo.
 | 19 | **Palloncini in fila** | 3-5 | `games/balloons/` | tocca i palloncini dal più piccolo al più grande |
 | 20 | **Scopri chi è** | 3-4 | `games/reveal/` | togli le mattonelle e scopri l'animale |
 | 21 | **Le emozioni** | 3-4 | `games/emotions/` | tocca la faccia con la stessa emozione |
-| 22 | **La raccolta differenziata** | 3-5 | `games/recycle/` | trascina l'oggetto nel bidone giusto (plastica/carta/vetro) |
+| 22 | **La raccolta differenziata** | 3-5 | `games/recycle/` | tre oggetti sul tavolo da trascinare nel bidone giusto (plastica/carta/vetro/umido): coperchio che si apre, scintille |
 | 23 | **Il percorso delle forme** | 3-5 | `games/shapes/` | salta di fila in fila sulla sagoma giusta (forma o colore indicato) |
 | 24 | **Il serpente** | 4-5 | `games/snake/` | avanza da solo su una griglia, le frecce sterzano, mangia le mele e cresce |
 | 25 | **Un, due, tre, stella!** | 3-4 | `games/stopgo/` | il semaforo cambia da solo: avanza verso la stella solo col verde, controllo del corpo e stop |
@@ -84,6 +84,7 @@ uguali su ogni dispositivo.
 | 27 | **Cuciniamo insieme** | 3-4 | `games/kitchen/` | ruolo in cucina: tocca gli oggetti nell'ordine giusto per completare l'azione |
 | 28 | **Costruisci la torre** | 3-4 | `games/tower/` | trascina i blocchi colorati nella torre, dal basso verso l'alto, come il modellino |
 | 29 | **Travasi e infilo** | 3-4 | `games/beans/` | trascina la bottiglia sopra il bicchiere e travasa il liquido (acqua, succo, limonata...): coordinazione occhio-mano |
+| 30 | **Il trenino** | 3-4 | `games/train/` | prima si monta il treno trascinando locomotiva e vagoni sul binario (dal livello 3 copiando il modellino), poi si tocca START e si tocca il treno per farlo correre fino alla stazione |
 
 Regole comuni pensate per 3-5 anni: niente testo da leggere (icone + colore +
 suono), bersagli touch grandi, nessuna schermata di sconfitta, festa e "Ops!
@@ -98,29 +99,29 @@ cartelle "tabellina_N" -> un solo gioco con selettore 2-10).
 
 | # | Riquadro | Età | Cartella | Idea |
 |---|---|---|---|---|
-| 30 | **Addizioni** | 6-7 | `games/arithmetic/` | risolvi l'addizione col tastierino numerico |
-| 31 | **Sottrazioni** | 6-7 | `games/arithmetic/` | risolvi la sottrazione col tastierino numerico |
-| 32 | **Moltiplicazioni** | 8-9 | `games/arithmetic/` | risolvi la moltiplicazione col tastierino numerico |
-| 33 | **Divisioni** | 8-9 | `games/arithmetic/` | risolvi la divisione, anche col resto, col tastierino numerico |
-| 34 | **Frazioni** | 9-10 | `games/fractions/` | frazione di un intero, frazione di un numero, frazioni equivalenti |
-| 35 | **Tabelline** | 8-9 | `games/tables/` | scegli la tabellina (2-10) e tocca i multipli in ordine: ogni pesce pescato vola nella conchiglia |
-| 36 | **La linea dei numeri** | 6-8 | `games/numberline/` | scegli lunghezza (5/10/20) e modalità (conta/addizione/sottrazione), tocca il numero giusto sulla linea |
-| 37 | **Regioni d'Italia** | 8-10 | `games/regions/` | leggi il nome della regione o del capoluogo e toccala sulla vera mappa d'Italia (confini reali, dati ISTAT) |
-| 38 | **Sillabe** | 6-7 | `games/syllables/` | le sillabe di una parola sono mescolate: toccale in ordine per ricomporla |
-| 39 | **Le doppie** | 7-8 | `games/doubles/` | frase con spazio vuoto, tocca la parola scritta giusta (doppia o singola) |
-| 40 | **Ortografia** | 7-9 | `games/spelling/` | trabocchetti comuni (a/ha, e/è, o/ho, qu/cu...): tocca la parola giusta |
-| 41 | **Conta le lettere** | 6-7 | `games/lettercount/` | guarda la parola, scrivi col tastierino quante lettere ha |
-| 42 | **Indovina la parola** | 6-8 | `games/guessword/` | leggi l'indovinello, tocca la parola giusta fra quattro |
-| 43 | **Riordina la frase** | 7-9 | `games/reorder/` | le parole di una frase sono mescolate: toccale in ordine per ricomporla |
-| 44 | **Soggetto e predicato** | 8-9 | `games/subjectverb/` | una frase in due pezzi: tocca il soggetto o il predicato richiesto |
-| 45 | **Pronomi** | 9-10 | `games/pronouns/` | scegli il tipo (personali/possessivi/dimostrativi/indefiniti/relativi), completa la frase |
-| 46 | **L'alfabeto** | 6-8 | `games/alphabet/` | un'emoji e la sua parola: tocca la lettera giusta fra due carte, in posizione casuale |
+| 31 | **Addizioni** | 6-7 | `games/arithmetic/` | risolvi l'addizione col tastierino numerico |
+| 32 | **Sottrazioni** | 6-7 | `games/arithmetic/` | risolvi la sottrazione col tastierino numerico |
+| 33 | **Moltiplicazioni** | 8-9 | `games/arithmetic/` | risolvi la moltiplicazione col tastierino numerico |
+| 34 | **Divisioni** | 8-9 | `games/arithmetic/` | risolvi la divisione, anche col resto, col tastierino numerico |
+| 35 | **Frazioni** | 9-10 | `games/fractions/` | frazione di un intero, frazione di un numero, frazioni equivalenti |
+| 36 | **Tabelline** | 8-9 | `games/tables/` | scegli la tabellina (2-10) e tocca i multipli in ordine: ogni pesce pescato vola nella conchiglia |
+| 37 | **La linea dei numeri** | 6-8 | `games/numberline/` | scegli lunghezza (5/10/20) e modalità (conta/addizione/sottrazione), tocca il numero giusto sulla linea |
+| 38 | **Regioni d'Italia** | 8-10 | `games/regions/` | leggi il nome della regione o del capoluogo e toccala sulla vera mappa d'Italia (confini reali, dati ISTAT) |
+| 39 | **Sillabe** | 6-7 | `games/syllables/` | le sillabe di una parola sono mescolate: toccale in ordine per ricomporla |
+| 40 | **Le doppie** | 7-8 | `games/doubles/` | frase con spazio vuoto, tocca la parola scritta giusta (doppia o singola) |
+| 41 | **Ortografia** | 7-9 | `games/spelling/` | trabocchetti comuni (a/ha, e/è, o/ho, qu/cu...): tocca la parola giusta |
+| 42 | **Conta le lettere** | 6-7 | `games/lettercount/` | guarda la parola, scrivi col tastierino quante lettere ha |
+| 43 | **Indovina la parola** | 6-8 | `games/guessword/` | leggi l'indovinello, tocca la parola giusta fra quattro |
+| 44 | **Riordina la frase** | 7-9 | `games/reorder/` | le parole di una frase sono mescolate: toccale in ordine per ricomporla |
+| 45 | **Soggetto e predicato** | 8-9 | `games/subjectverb/` | una frase in due pezzi: tocca il soggetto o il predicato richiesto |
+| 46 | **Pronomi** | 9-10 | `games/pronouns/` | scegli il tipo (personali/possessivi/dimostrativi/indefiniti/relativi), completa la frase |
+| 47 | **L'alfabeto** | 6-8 | `games/alphabet/` | un'emoji e la sua parola: tocca la lettera giusta fra due carte, in posizione casuale |
 
 Meccanica comune: tastierino numerico touch (`common/NumberPad.qml`) per le
 risposte numeriche, tocco su carte/riquadri per le scelte multiple; stessa
 cornice (`MiniGame`/`GameScaffold`) e stelle di punteggio dei giochi Infanzia.
 
-**Nome del bambino (in tutti i 46 giochi).** All'ingresso di ogni gioco compare
+**Nome del bambino (in tutti i 47 giochi).** All'ingresso di ogni gioco compare
 la schermata "Come ti chiami?" (`NamePrompt.qml`, dentro `GameScaffold` quindi
 ereditata anche da `MiniGame` e da tutti i giochi): campo di testo + "Gioca" o
 "Salta". Il nome resta scritto nell'intestazione e si può **cambiare in
@@ -130,7 +131,7 @@ bambino successivo.
 
 **Menu Info.** In alto a destra nel menu c'è il tasto **i**: apre `InfoPage.qml`
 con la presentazione del programma (scopo, versione, © e email) e **l'elenco di
-tutti i 46 giochi**, divisi per categoria, con concetto ed età; toccando una
+tutti i 47 giochi**, divisi per categoria, con concetto ed età; toccando una
 riga si apre quel gioco.
 L'elenco dei giochi (id, titolo, età, colore, emoji, descrizione) è il singleton
 `Catalog.qml`, usato sia dal menu sia dalla pagina Info.
@@ -157,7 +158,7 @@ qml/
   Main.qml            finestra + Loader; sceglie CategoryPicker o Launcher,
                       mappa id-gioco -> Component (+ InfoPage)
   Theme.qml           singleton: colori e misure condivise
-  Catalog.qml         singleton: elenco dei 46 giochi (id/cat/titolo/età/colore/emoji/desc)
+  Catalog.qml         singleton: elenco dei 47 giochi (id/cat/titolo/età/colore/emoji/desc)
   CategoryPicker.qml  schermata iniziale: scegli Infanzia o Primaria
   Launcher.qml        menu scorrevole (griglia 3-6 col.), filtrato per categoria,
                       + tasto "◀" (torna alla scelta) e "i" -> Info
@@ -187,10 +188,10 @@ qml/
                                              giochi 6-24 (radice MiniGame,
                                              tranne recycle che usa GameScaffold)
   games/stopgo|kitchen/                     giochi 25 e 27 (radice GameScaffold)
-  games/poses|tower|beans/                  giochi 26, 28 e 29 (radice MiniGame)
+  games/poses|tower|beans|train/             giochi 26, 28, 29 e 30 (radice MiniGame)
   games/arithmetic|fractions|tables|numberline|regions|syllables|doubles|
         spelling|lettercount|guessword|reorder|subjectverb|pronouns|alphabet/
-                                             giochi Primaria 30-46 (radice MiniGame)
+                                             giochi Primaria 31-47 (radice MiniGame)
 assets/sounds/         effetti WAV (rigenerabili con scripts/make_sounds.py)
 assets/fonts/          font FluentEmojiColor (Windows)-NotoColorEmoji (Linux-MacOS-Android)
 scripts/               make_sounds.py, check_levels.py, clean.sh
@@ -284,10 +285,12 @@ script allineata a quella C++).
   un'emozione (6 possibili), sotto quattro facce diverse, tocca quella con la
   stessa emozione. Solo riconoscimento visivo, nessuna parola da leggere.
 - **La raccolta differenziata** (`games/recycle/RecycleGame.qml`) - drag come
-  "Metti a posto" ma con 3 bidoni fissi (plastica/giallo, carta/blu,
-  vetro/verde, i colori reali della differenziata) invece di regole che
-  cambiano a turno: si trascinano 9 oggetti (bottiglie, carta, vetro) nel
-  bidone giusto.
+  "Metti a posto" ma con 4 bidoni fissi (plastica/giallo, carta/blu,
+  vetro/verde, umido/arancione, i colori reali della differenziata) invece di
+  regole che cambiano a turno. Tre oggetti sul tavolo insieme (ondeggiano,
+  si sollevano quando li si prende, 9 in tutto): il coperchio del bidone si
+  apre quando ci si passa sopra; quello giusto "ingoia" l'oggetto con una
+  pioggia di scintille, quello sbagliato si scuote e l'oggetto torna a casa.
 - **Il percorso delle forme** (`games/shapes/ShapesGame.qml`) - 5 file di
   sagome colorate (cerchio/quadrato/triangolo/stella); in alto una forma o un
   colore indica la regola del livello. Si tocca solo la casella giusta della
@@ -329,7 +332,19 @@ script allineata a quella C++).
   con un rivolo colorato fra i due). Ogni livello ha un liquido diverso
   (acqua, succo d'arancia, succo d'uva, limonata). Nessuna risposta
   sbagliata possibile (sempre 3 faccine), solo la coordinazione occhio-mano.
-  4 livelli.
+  4 livelli. La bottiglia si inclina verso il bicchiere, il getto cade sul
+  pelo del liquido con schizzi; un tocco la fa dondolare.
+- **Il trenino** (`games/train/TrainGame.qml`) - prima si costruisce, poi si
+  parte: si trascinano la locomotiva (davanti, a destra) e i vagoni dal
+  vassoio nelle caselle del binario. Dal livello 3 in alto compare il
+  modellino e i vagoni vanno messi con i suoi colori. A treno completo
+  compare il pulsante START: il treno parte con fumo e ruote che girano e
+  viaggia verso la prossima stazione. Lo scenario (case, alberi, traversine)
+  scorre e una barra in alto mostra la strada fatta; toccando il treno lo si
+  fa correre più forte ("CIUF!", ciuf-ciuf più veloce, fumo), poi frena da
+  solo e si ferma in stazione: i passeggeri (omini interi, con gambe e braccia che camminano) scendono da ogni vagone sulla banchina e seguono la strada pedonale (strisce pedonali, marciapiede davanti alla facciata) fino alla porta della stazione, che sta in primo piano sotto i binari. Case, alberi e stazione sono interattivi: toccando una casa si accendono luci e porta e sale il fumo dal comignolo, l'albero si scuote e perde una foglia, la stazione suona la campanella (DING DONG!, cartello e porte si illuminano; suona anche all'arrivo). 6 livelli, da 3 a
+  5 pezzi (locomotiva compresa), strada più lunga a ogni livello. Ogni vagone
+  ha 4 ruote, la locomotiva 6.
 
 ## Aggiungere un nuovo gioco
 

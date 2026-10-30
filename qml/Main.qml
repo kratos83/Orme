@@ -45,7 +45,7 @@ Window {
             "bubbles": bubblesC, "dots": dotsC, "wake": wakeC, "cups": cupsC,
             "puzzle": puzzleC, "harvest": harvestC, "balloons": balloonsC, "reveal": revealC,
             "emotions": emotionsC, "recycle": recycleC, "shapes": shapesC, "snake": snakeC,
-            "stopgo": stopgoC, "poses": posesC, "kitchen": kitchenC, "tower": towerC, "beans": beansC,
+            "stopgo": stopgoC, "poses": posesC, "kitchen": kitchenC, "tower": towerC, "beans": beansC, "train": trainC,
             "add": addC, "sub": subC, "mul": mulC, "div": divC,
             "fractions": fractionsC, "tables": tablesC, "numberline": numberlineC,
             "regions": regionsC,
@@ -115,6 +115,7 @@ Window {
     Component { id: kitchenC;  KitchenGame  { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: towerC;    TowerGame    { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: beansC;    BeansGame    { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: trainC;    TrainGame    { onExitRequested: view.sourceComponent = launcherComponent } }
 
     Component { id: addC;        ArithmeticGame { opMode: "add"; onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: subC;        ArithmeticGame { opMode: "sub"; onExitRequested: view.sourceComponent = launcherComponent } }

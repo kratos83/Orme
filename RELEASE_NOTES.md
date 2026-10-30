@@ -1,6 +1,6 @@
 ## Novità
 
-Raccolta di 46 giochi touch per bambini della scuola dell'infanzia (3-5 anni)
+Raccolta di 47 giochi touch per bambini della scuola dell'infanzia (3-5 anni)
 e della scuola primaria (6-10 anni), ispirati ai concetti del coding e ai
 programmi scolastici.
 
