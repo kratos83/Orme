@@ -24,7 +24,7 @@ COPY --chown=root:root assets/  /build/orme/assets/
 COPY --chown=root:root images/  /build/orme/images/
 COPY --chown=root:root debian/  /build/orme/debian/
 # Referenziato da debian/orme.install (repo apt abilitato all'installazione)
-COPY --chown=root:root packaging/repo/orme.list /build/orme/packaging/repo/orme.list
+COPY --chown=root:root packaging/repo/orme.list /build/orme/debian/orme.list
 # Referenziato da CMakeLists.txt (install(FILES packaging/linux/debian/orme.desktop ...))
 COPY --chown=root:root packaging/linux/debian/orme.desktop /build/orme/packaging/linux/debian/orme.desktop
 
