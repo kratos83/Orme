@@ -23,6 +23,7 @@ COPY --chown=root:root qml/     /build/orme/qml/
 COPY --chown=root:root assets/  /build/orme/assets/
 COPY --chown=root:root images/  /build/orme/images/
 COPY --chown=root:root debian/  /build/orme/debian/
+COPY --chown=root:root packaging/linux/repo /build/orme/packaging/repo
 # Referenziato da CMakeLists.txt (install(FILES packaging/linux/debian/orme.desktop ...))
 COPY --chown=root:root packaging/linux/debian/orme.desktop /build/orme/packaging/linux/debian/orme.desktop
 
