@@ -103,13 +103,11 @@ jobs:
           echo "GPG_KEY_ID=$GPG_KEY_ID" >> "$GITHUB_ENV"
           # rpm deve firmare senza terminale interattivo (nessuna passphrase
           # sulla chiave: e' protetta solo dall'essere un secret della CI).
-          # Il comando va scritto SENZA il secondo "gpg" (argv[0]) che c'era nelle
-          # rpm vecchie: le rpm recenti (Ubuntu 24.04) lo passano a gpg come file e
-          # tutte le opzioni dopo risultano "not considered an option".
-          cat > ~/.rpmmacros <<EOF
-          %_gpg_name $GPG_KEY_ID
-          %__gpg_sign_cmd %{__gpg} --batch --no-tty --pinentry-mode loopback --passphrase '' --no-verbose --no-armor --digest-algo sha256 -u $GPG_KEY_ID --sign --detach-sign --output %{__signature_filename} %{__plaintext_filename}
-          EOF
+          # NON ridefinire %__gpg_sign_cmd: il suo formato cambia tra versioni di
+          # rpm (argv[0] duplicato, nomi dei file) e ogni versione personalizzata
+          # si e' rotta. Basta indicare la chiave: il comando predefinito di rpm
+          # funziona senza terminale perche' la chiave non ha passphrase.
+          printf '%%_gpg_name %s\n' "$GPG_KEY_ID" > ~/.rpmmacros
 
       - name: Genera il repository apt (Debian/Ubuntu)
         run: |
