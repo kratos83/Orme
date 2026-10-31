@@ -1,2 +1,2 @@
-orme.list etc/apt/sources.list.d
+debian/orme.list etc/apt/sources.list.d
 packaging/repo/orme-archive-keyring.gpg etc/apt/keyrings
