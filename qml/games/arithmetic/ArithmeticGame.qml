@@ -22,6 +22,7 @@ MiniGame {
     readonly property var _symbols: ({ add: "+", sub: "−", mul: "×", div: ":" })
 
     title: _titles[opMode]
+    scenery: "scuola"
     age: _ages[opMode]
 
     property int numA: 0
@@ -119,6 +120,7 @@ MiniGame {
                 Text { text: "="; font.pixelSize: 58; font.bold: true; color: Theme.text }
 
                 Rectangle {
+                    Candy {}
                     width: 110; height: 76; radius: 16
                     color: Theme.panel
                     border.width: 3
@@ -138,6 +140,7 @@ MiniGame {
                 }
 
                 Rectangle {
+                    Candy {}
                     visible: g.isDiv
                     width: 90; height: 76; radius: 16
                     color: Theme.panel

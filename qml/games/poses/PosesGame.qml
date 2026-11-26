@@ -10,10 +10,10 @@ MiniGame {
     age: qsTr("3-4 anni")
     levelCount: 10
 
-    readonly property var poses: ["🐸", "🦁", "🦅", "🐻", "🦸", "🥷", "🤸", "🕺"]
+    readonly property var poses: ["frog", "lion", "eagle", "bear", "superhero", "ninja", "gymnast", "dancer"]
 
-    property string command: "🐸"
-    property var choices: ["🐸", "🦁", "🦅"]
+    property string command: "frog"
+    property var choices: ["frog", "lion", "eagle"]
 
     SoundBank { id: snd }
 
@@ -56,21 +56,21 @@ MiniGame {
         // ===== comando =====
         Rectangle {
             id: commandCard
+            Candy {}
             anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 12 }
             width: 190; height: 190
             radius: 32
             color: Theme.panel
             border.color: Theme.accent
             border.width: 5
-            Text { anchors.centerIn: parent; text: g.command; font.pixelSize: 120 }
+            AppIcon { anchors.centerIn: parent; name: g.command; size: 138 }
         }
 
-        Text {
+        AppIcon {
             anchors.horizontalCenter: parent.horizontalCenter
             y: commandCard.y + commandCard.height + 10
-            text: "▼"
-            font.pixelSize: 34
-            color: Theme.text
+            name: "ui/down"
+            size: 42
             opacity: 0.5
         }
 
@@ -91,6 +91,7 @@ MiniGame {
                 model: g.choices
                 Rectangle {
                     id: card
+                    Candy {}
                     width: 150; height: 150
                     radius: 26
                     color: Theme.panel
@@ -102,7 +103,7 @@ MiniGame {
                     scale: cardMa.pressed && !g.won ? 0.93 : 1
                     Behavior on scale { NumberAnimation { duration: 80 } }
 
-                    Text { anchors.centerIn: parent; text: card.modelData; font.pixelSize: 90 }
+                    AppIcon { anchors.centerIn: parent; name: card.modelData; size: 103 }
 
                     MouseArea {
                         id: cardMa

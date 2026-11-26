@@ -3,7 +3,7 @@
 import QtQuick
 import Orme
 
-// "Acchiappa i conigli" - tocca solo i conigli 🐰 (gli altri animali no).
+// "Acchiappa i conigli" - tocca solo i conigli (gli altri animali no).
 // Concetto: condizione "se è un coniglio -> prendilo".
 MiniGame {
     id: g
@@ -12,10 +12,13 @@ MiniGame {
     levelCount: 4
 
     readonly property int need: 6
-    readonly property var distract: ["🐭", "🐹", "🐦", "🐷", "🐮", "🐔"]
+    readonly property int total: 5        // animali in campo
+    readonly property int minRabbits: 2   // conigli sempre presenti
+    readonly property int spots: 12       // posti in cui puo' comparire un animale
+    readonly property var distract: ["mouse", "hamster", "bird", "pig", "cow", "chicken"]
 
     property int done: 0
-    property var slots: []
+    property var slots: []                // { icon, rabbit, spot, fx, fy }
 
     SoundBank { id: snd }
 
@@ -27,23 +30,31 @@ MiniGame {
         mistakes = 0
         done = 0
         var a = []
-        for (var k = 0; k < 5; k++) a.push(makeSlot())
+        for (var k = 0; k < total; k++)
+            a.push(makeSlot(a, k < minRabbits || Math.random() < 0.5))
         slots = a
     }
 
-    function makeSlot() {
-        var rabbit = Math.random() < 0.6
+    // un animale nuovo in un posto libero: due animali non si coprono mai
+    function makeSlot(others, rabbit, avoid) {
+        var free = []
+        for (var s = 0; s < spots; s++)
+            if (s !== avoid && !others.some((o) => o.spot === s)) free.push(s)
         return {
-            emoji: rabbit ? "🐰" : distract[Math.floor(Math.random() * distract.length)],
+            icon: rabbit ? "rabbit" : distract[Math.floor(Math.random() * distract.length)],
             rabbit: rabbit,
+            spot: free[Math.floor(Math.random() * free.length)],
             fx: Math.random(),
             fy: Math.random()
         }
     }
 
+    // sostituisce l'animale i; se i conigli rimasti sono pochi ne arriva uno
     function respawn(i) {
         var a = slots.slice()
-        a[i] = makeSlot()
+        var others = a.filter((o, k) => k !== i)
+        var rabbits = others.filter((o) => o.rabbit).length
+        a[i] = makeSlot(others, rabbits < minRabbits || Math.random() < 0.6, a[i].spot)
         slots = a
     }
 
@@ -53,7 +64,15 @@ MiniGame {
             snd.ok()
             done += 1
             if (done >= need) { snd.win(); win() }
-            else respawn(i)
+            else {
+                respawn(i)
+                // cambia anche uno degli altri animali: il campo resta vivo
+                var others = []
+                for (var k = 0; k < slots.length; k++)
+                    if (k !== i && !slots[k].rabbit) others.push(k)
+                if (others.length > 0 && Math.random() < 0.5)
+                    respawn(others[Math.floor(Math.random() * others.length)])
+            }
         } else {
             snd.nope()
             wrong()
@@ -70,25 +89,24 @@ MiniGame {
             id: hud
             anchors { top: parent.top; horizontalCenter: parent.horizontalCenter }
             spacing: 18
-            Text { text: "🐰"; font.pixelSize: 56; anchors.verticalCenter: parent.verticalCenter }
+            AppIcon { name: "rabbit"; size: 64; anchors.verticalCenter: parent.verticalCenter }
             Row {
                 spacing: 8
                 anchors.verticalCenter: parent.verticalCenter
                 Repeater {
                     model: g.need
-                    Rectangle {
-                        width: 18; height: 18; radius: 9
-                        color: index < g.done ? Theme.accent : Theme.boardLine
+                    ProgressStar {
+                        filled: index < g.done
                     }
                 }
             }
         }
 
-        Text {   // cesto
+        AppIcon {   // cesto
             id: basket
             anchors { bottom: parent.bottom; horizontalCenter: parent.horizontalCenter }
-            text: "🧺"
-            font.pixelSize: 80
+            name: "basket"
+            size: 92
         }
 
         // campo di gioco: sta fra HUD e cesto, i conigli non escono da qui
@@ -100,25 +118,42 @@ MiniGame {
                 bottom: basket.top; bottomMargin: 8
             }
 
+            // il campo e' una griglia: ogni animale sta nel suo riquadro
+            readonly property int cols: width >= height ? (height < 390 ? 6 : 4) : 3
+            readonly property int rows: g.spots / cols
+            readonly property real cellW: width / cols
+            readonly property real cellH: height / rows
+
             Repeater {
-                model: g.slots
+                model: g.total
 
                 Item {
                     id: cell
                     required property int index
-                    required property var modelData
-                    width: 128; height: 128
-                    x: modelData.fx * Math.max(1, field.width  - width)
-                    y: modelData.fy * Math.max(1, field.height - height)
+                    readonly property var info: g.slots[index] || null
+                    readonly property int spot: info ? info.spot : -1
 
-                    Behavior on x { NumberAnimation { duration: 300 } }
-                    Behavior on y { NumberAnimation { duration: 300 } }
+                    visible: info !== null
+                    // un po' di margine, cosi' anche ondeggiando non si toccano
+                    width: Math.max(40, Math.min(128, field.cellW / 1.1, field.cellH / 1.1))
+                    height: width
+                    x: info ? (spot % field.cols) * field.cellW
+                              + info.fx * Math.max(0, field.cellW - width) : 0
+                    y: info ? Math.floor(spot / field.cols) * field.cellH
+                              + info.fy * Math.max(0, field.cellH - height) : 0
+                    onSpotChanged: appear.restart()
 
-                    Text {
+                    AppIcon {
                         id: face
                         anchors.centerIn: parent
-                        text: cell.modelData.emoji
-                        font.pixelSize: 96
+                        name: cell.info ? cell.info.icon : ""
+                        size: cell.width * 0.86
+                    }
+                    NumberAnimation {   // spunta con un saltino
+                        id: appear
+                        target: face; property: "scale"
+                        from: 0; to: 1; duration: 260
+                        easing.type: Easing.OutBack
                     }
 
                     SequentialAnimation on scale {
@@ -137,10 +172,9 @@ MiniGame {
 
                     MouseArea {
                         anchors.fill: parent
-                        anchors.margins: -10
                         enabled: !g.won
                         onClicked: {
-                            if (!cell.modelData.rabbit) nono.restart()
+                            if (!cell.info.rabbit) nono.restart()
                             g.tapSlot(cell.index)
                         }
                     }

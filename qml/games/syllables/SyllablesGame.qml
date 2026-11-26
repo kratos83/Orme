@@ -8,6 +8,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Sillabe")
+    scenery: "scuola"
     age: qsTr("6-7 anni")
     levelCount: 10
 
@@ -74,6 +75,7 @@ MiniGame {
             width: parent.width
 
             Rectangle {
+                Candy {}
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.max(220, builtText.implicitWidth + 40)
                 height: 90
@@ -91,6 +93,7 @@ MiniGame {
                     model: g.chips
                     Rectangle {
                         id: chip
+                        Candy {}
                         required property var modelData
                         width: 90; height: 90; radius: 20
                         color: Theme.dirRight

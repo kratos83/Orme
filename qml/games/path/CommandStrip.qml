@@ -5,6 +5,7 @@ import Orme
 // Durante l'esecuzione la freccia in corso viene evidenziata.
 Rectangle {
     id: root
+    Candy {}
     property var engine
 
     radius: 20
@@ -33,6 +34,7 @@ Rectangle {
                 model: root.engine ? root.engine.commands : []
 
                 Rectangle {
+                    Candy {}
                     width: Theme.touch
                     height: Theme.touch
                     radius: 16

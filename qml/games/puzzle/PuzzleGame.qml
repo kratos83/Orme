@@ -8,18 +8,19 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Puzzle")
+    scenery: "cameretta"
     age: qsTr("3-5 anni")
     levelCount: 5
 
     readonly property var scenes: [
-        ["🌳", "🏠", "☀️", "☁️"],
-        ["🐶", "🦴", "🐱", "🧶"],
-        ["🚗", "🛣️", "🌈", "⛽"],
-        ["🐝", "🌼", "🦋", "🍀"],
-        ["🐟", "🌊", "🐚", "⛵"]
+        ["tree", "house", "sun", "cloud"],
+        ["dog", "bone", "cat", "yarn"],
+        ["car", "road", "rainbow", "fuel-pump"],
+        ["bee", "blossom", "butterfly", "clover"],
+        ["fish", "water-wave", "shell", "sailboat"]
     ]
 
-    property var pieces: ["🌳", "🏠", "☀️", "☁️"]
+    property var pieces: ["tree", "house", "sun", "cloud"]
     property var placed: [false, false, false, false]
     property var order: [0, 1, 2, 3]   // ordine sparso dei pezzi in basso
 
@@ -81,10 +82,10 @@ MiniGame {
                     y: Math.floor(index / 2) * 170 + 10
                     width: 150; height: 150; radius: 16
                     color: Theme.boardFill
-                    Text {
+                    AppIcon {
                         anchors.centerIn: parent
-                        text: g.pieces[parent.index]
-                        font.pixelSize: 96
+                        name: g.pieces[parent.index]
+                        size: 110
                         opacity: g.placed[parent.index] ? 0 : 0.25
                     }
                 }
@@ -94,11 +95,11 @@ MiniGame {
         // pezzi già sistemati (fermi nella cornice)
         Repeater {
             model: 4
-            Text {
+            AppIcon {
                 required property int index
                 visible: g.placed[index]
-                text: g.pieces[index]
-                font.pixelSize: 96
+                name: g.pieces[index]
+                size: 110
                 x: g.slotX(index) + 75 - width / 2
                 y: g.slotY(index) + 75 - height / 2
             }
@@ -126,12 +127,13 @@ MiniGame {
                 Behavior on y { enabled: !dragMA.drag.active; NumberAnimation { duration: 180 } }
 
                 Rectangle {
+                    Candy {}
                     anchors.fill: parent
                     radius: 16
                     color: Theme.panel
                     border.color: Theme.boardLine
                     border.width: 3
-                    Text { anchors.centerIn: parent; text: g.pieces[piece.pid]; font.pixelSize: 96 }
+                    AppIcon { anchors.centerIn: parent; name: g.pieces[piece.pid]; size: 110 }
                 }
 
                 MouseArea {

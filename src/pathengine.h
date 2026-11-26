@@ -94,7 +94,7 @@ private:
         int startRow;
         int goalCol;
         int goalRow;
-        QString goal;              // emoji dell'oggetto da raggiungere
+        QString goal;              // nome dell'icona da raggiungere
         QVector<QPoint> rocks;
     };
 

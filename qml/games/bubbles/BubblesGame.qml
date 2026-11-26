@@ -8,6 +8,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Bolle")
+    scenery: "mare"
     age: qsTr("3-5 anni")
     levelCount: 3
 
@@ -42,9 +43,8 @@ MiniGame {
             spacing: 8
             Repeater {
                 model: g.need
-                Rectangle {
-                    width: 16; height: 16; radius: 8
-                    color: index < g.done ? Theme.accent : Theme.boardLine
+                ProgressStar {
+                    filled: index < g.done
                 }
             }
         }
@@ -70,6 +70,7 @@ MiniGame {
 
                 Rectangle {
                     id: skin
+                    Candy { depth: 4 }
                     anchors.fill: parent
                     radius: width / 2
                     color: Theme.playColors[bubble.tint]

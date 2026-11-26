@@ -12,52 +12,66 @@ Rectangle {
     property color  baseColor: Theme.dirUp
     property bool   locked: false
     property string iconKind: ""       // "path" = disegna le frecce
-    property string emoji: ""          // altrimenti mostra questa emoji
+    property string image: ""          // altrimenti mostra questa icona
     signal clicked()
 
     width: 196
     height: 196
-    radius: 26
+    radius: 34
     color: locked ? "#EFE7D3" : baseColor
+    gradient: Gradient {
+        GradientStop { position: 0.0; color: Qt.lighter(tile.color, 1.22) }
+        GradientStop { position: 0.7; color: tile.color }
+    }
+    border.color: "white"
+    border.width: 4
     opacity: locked ? 0.55 : 1
+
+    // entrata "a saltello", un riquadro dopo l'altro
+    property int order: 0
+    property real pop: 0.6
+    transform: Scale { origin.x: tile.width / 2; origin.y: tile.height / 2; xScale: tile.pop; yScale: tile.pop }
+    SequentialAnimation on pop {
+        PauseAnimation { duration: Math.min(tile.order, 18) * 30 }
+        NumberAnimation { to: 1; duration: 320; easing.type: Easing.OutBack }
+    }
 
     scale: ma.pressed ? 0.94 : 1
     Behavior on scale { NumberAnimation { duration: 90 } }
 
+    Candy { depth: 7 }
+
     Column {
         anchors.fill: parent
-        anchors.margins: 12
-        spacing: 6
+        anchors.margins: 9
+        spacing: 3
 
         Item {   // icona
             width: parent.width
-            height: 86
+            height: 96
+
+            Rectangle {   // disco chiaro: fa risaltare la figura
+                anchors.centerIn: parent
+                width: 96; height: 96; radius: 48
+                color: "#F5FFFFFF"
+            }
 
             Row {
                 anchors.centerIn: parent
-                spacing: 6
+                spacing: 2
                 visible: tile.iconKind === "path" && !tile.locked
-                Arrow { width: 30; height: 30; direction: 3; color: "white" }
-                Arrow { width: 30; height: 30; direction: 3; color: "white" }
-                Arrow { width: 30; height: 30; direction: 1; color: "white" }
+                Arrow { width: 26; height: 26; direction: 3; color: tile.baseColor }
+                Arrow { width: 26; height: 26; direction: 3; color: tile.baseColor }
+                Arrow { width: 26; height: 26; direction: 1; color: tile.baseColor }
             }
 
-            Text {
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                visible: tile.emoji !== "" && tile.iconKind !== "path" && !tile.locked
-                text: tile.emoji
-                fontSizeMode: Text.Fit
-                font.pixelSize: 68
-                minimumPixelSize: 20
-            }
-
-            Text {
+            AppIcon {
                 anchors.centerIn: parent
-                visible: tile.locked
-                text: "🔒"
-                font.pixelSize: 52
+                visible: tile.locked || tile.iconKind !== "path"
+                name: tile.locked ? "lock" : tile.image
+                size: 78
+                scale: ma.pressed ? 1.18 : 1
+                Behavior on scale { NumberAnimation { duration: 160; easing.type: Easing.OutBack } }
             }
         }
 
@@ -69,7 +83,7 @@ Rectangle {
             maximumLineCount: 2
             elide: Text.ElideRight
             fontSizeMode: Text.Fit
-            font.pixelSize: 21
+            font.pixelSize: 22
             minimumPixelSize: 12
             font.bold: true
             color: tile.locked ? Theme.text : "white"

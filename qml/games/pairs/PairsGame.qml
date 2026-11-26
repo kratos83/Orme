@@ -9,10 +9,11 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Le coppie")
+    scenery: "tramonto"
     age: qsTr("4-5 anni")
     levelCount: 6
 
-    readonly property var pool: ["🐶", "🐱", "🐰", "🦊", "🐸", "🐵", "🐷", "🐨", "🦁", "🐼"]
+    readonly property var pool: ["dog", "cat", "rabbit", "fox", "frog", "monkey", "pig", "koala", "lion", "panda"]
 
     property var   deck: []                 // le 6 figure (identita' della carta)
     property var   slot: [0, 1, 2, 3, 4, 5]  // carta -> casella dove si trova ora
@@ -129,10 +130,10 @@ MiniGame {
         id: area
         anchors.fill: parent
 
-        Text {
+        AppIcon {
             anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 4 }
-            text: g.phase === "peek" ? "👀" : (g.phase === "shuffle" ? "🔀" : "👆")
-            font.pixelSize: 40
+            name: g.phase === "peek" ? "eyes" : (g.phase === "shuffle" ? "shuffle" : "point-up")
+            size: 46
         }
 
         Repeater {
@@ -140,6 +141,7 @@ MiniGame {
 
             Rectangle {
                 id: card
+                Candy {}
                 required property int index
                 required property var modelData
                 width: g.cardW
@@ -156,11 +158,10 @@ MiniGame {
                 scale: g.matched[index] ? 1.0 : (pma.pressed ? 0.95 : 1)
                 Behavior on scale { NumberAnimation { duration: 90 } }
 
-                Text {
+                AppIcon {
                     anchors.centerIn: parent
-                    text: g.faceUp(card.index) ? card.modelData : "❓"
-                    font.pixelSize: g.faceUp(card.index) ? 96 : 60
-                    color: g.faceUp(card.index) ? Theme.text : "white"
+                    name: g.faceUp(card.index) ? card.modelData : "question-white"
+                    size: g.faceUp(card.index) ? 110 : 69
                 }
 
                 MouseArea {

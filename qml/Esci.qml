@@ -1,64 +1,74 @@
+// Orme - Copyright (c) 2026 Angelo Scarnà
+// SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import QtQuick.Window
-import QtQuick.Controls
-import QtQuick.Layouts
 import Orme
 
-Rectangle {
+// Chiede conferma prima di uscire dall'applicazione. Viene mostrato sopra la
+// schermata corrente quando si tocca "Esci", si preme il tasto "indietro" di
+// Android o si chiude la finestra; "Annulla" torna dove si era.
+Item {
     id: root
-    width: parent.width
-    height: parent.height
-    color: Theme.background
+    anchors.fill: parent
     signal exitRequested()
-    // Layout che chiede conferma per uscire dall'applicazione.
-    //Viene mostrato quando si preme il tasto back di Android o il tasto ESC di Windows/Linux.
-    GridLayout {
+
+    Scenery { theme: "tramonto" }
+    MouseArea { anchors.fill: parent }   // assorbe i tocchi sulla schermata sotto
+    Component.onCompleted: forceActiveFocus()
+
+    Rectangle {
         anchors.centerIn: parent
-        width: Math.min(400, root.width - 40)
-        rowSpacing: 20
-        columns: 1
-        rows: 4
+        width: Math.min(520, root.width - 40)
+        height: content.implicitHeight + 64
+        radius: 48
+        color: "white"
+        border.color: "#FFCA28"
+        border.width: 6
 
-        Image {
-            width: 100
-            height: 100
-            Layout.alignment: Qt.AlignHCenter
-            source: "qrc:/qt/qml/Orme/images/exit.png"
-        }
+        Candy { depth: 10 }
 
-        Text {
-            text: qsTr("Vuoi uscire veramente?")
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            font.pixelSize: 40
-            color: Theme.text
-        }
+        Column {
+            id: content
+            anchors.centerIn: parent
+            spacing: 24
+            width: parent.width - 56
 
-        Button {
-            id: exitButton
-            Layout.fillWidth: true
-            height: 60
-            icon.source: "qrc:/qt/qml/Orme/images/exit.png"
-            icon.width: 32
-            icon.height: 32
-            text: qsTr("Esci")
-            font.pixelSize: 30
-            onClicked: Qt.exit(0)
-        }
+            AppIcon {
+                anchors.horizontalCenter: parent.horizontalCenter
+                name: "wave-hand"
+                size: 150
+                transformOrigin: Item.Bottom
+                SequentialAnimation on rotation {
+                    running: true
+                    loops: Animation.Infinite
+                    NumberAnimation { from: -12; to: 14; duration: 450; easing.type: Easing.InOutSine }
+                    NumberAnimation { from: 14; to: -12; duration: 450; easing.type: Easing.InOutSine }
+                }
+            }
 
-        Button {
-            id: cancelButton
-            Layout.fillWidth: true
-            icon.source: "qrc:/qt/qml/Orme/images/annulla.png"
-            icon.width: 32
-            icon.height: 32
-            height: 60
-            text: qsTr("Annulla")
-            font.pixelSize: 30
-            onClicked: root.exitRequested()
+            Text {
+                width: parent.width
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                text: qsTr("Vuoi uscire veramente?")
+                font.pixelSize: 38
+                font.bold: true
+                color: Theme.title
+            }
+
+            CandyButton {   // resta a giocare
+                width: parent.width; height: 90
+                text: qsTr("Annulla")
+                icon: "ui/play"
+                onClicked: root.exitRequested()
+            }
+            CandyButton {
+                width: parent.width; height: 74
+                text: qsTr("Esci")
+                icon: "door"
+                textSize: 28
+                color: Theme.danger
+                onClicked: Qt.exit(0)
+            }
         }
     }
-    
 }

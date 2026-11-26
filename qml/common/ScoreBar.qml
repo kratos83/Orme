@@ -3,8 +3,8 @@
 import QtQuick
 import Orme
 
-// Il punteggio del bambino, mostrato con una faccina e il numero.
-// Anche se si guadagnano piu' faccine insieme, il numero sale SEMPRE
+// Il punteggio del bambino, mostrato con una stella e il numero.
+// Anche se si guadagnano piu' stelle insieme, il numero sale SEMPRE
 // una unita' alla volta (mai a scatti di 2 o 3), con un saltino a ogni unita'.
 Item {
     id: root
@@ -19,15 +19,17 @@ Item {
         width: row.implicitWidth + 36
         height: 64
         radius: 32
-        color: Theme.panel
-        border.color: Theme.boardLine
+        color: "white"
+        border.color: "#FFD54F"
         border.width: 3
+
+        Candy { depth: 5 }
 
         Row {
             id: row
             anchors.centerIn: parent
             spacing: 8
-            Text { text: "😊"; font.pixelSize: 34; anchors.verticalCenter: parent.verticalCenter }
+            AppIcon { name: "star"; size: 39; anchors.verticalCenter: parent.verticalCenter }
             Text {
                 text: root.displayValue
                 font.pixelSize: 34

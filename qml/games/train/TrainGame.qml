@@ -1,7 +1,6 @@
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
-import QtQuick.Shapes
 import Orme
 
 // "Il trenino" - prima si costruisce il treno, poi lo si fa partire.
@@ -16,6 +15,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Il trenino")
+    contentMargins: 0
     age: qsTr("3-4 anni")
     levelCount: 6
 
@@ -128,285 +128,108 @@ MiniGame {
         chuff.restart()
     }
 
-    // ---------- il vagone (disegnato con rettangoli) ----------
-    // Tutte le misure sono frazioni di width/height: lo stesso componente serve
-    // per il treno, il vassoio e il modellino in miniatura.
+    // cartella delle illustrazioni (disegnate da scripts/make_art.py)
+    readonly property string art: "qrc:/qt/qml/Orme/assets/art/"
+    // chi viaggia sul treno
+    readonly property var riders: ["rabbit", "cat", "dog", "panda", "frog", "fox", "koala", "pig"]
+
+    // ---------- il vagone ----------
+    // Il disegno e' largo 200 unita' e alto 140 (u = una unita' in px), con un
+    // margine attorno per tetto, ciminiera e ganci. Le ruote sono a parte
+    // perche' girano. Lo stesso componente serve per il treno, il vassoio e il
+    // modellino in miniatura.
     component Car: Item {
         id: car
         property bool loco: false
         property color body: "red"
         property real spin: 0
         property bool smoking: false
+        property string art: ""
+        property string rider: ""       // animale al primo finestrino
+        property string rider2: ""      // animale al secondo finestrino
         height: width * 0.7
 
-        readonly property color dark: Qt.darker(body, 1.45)
-        readonly property color gold: "#FFCA28"
-
-        // collegamento al vagone dietro
-        Rectangle { visible: !car.loco; x: car.width - 3; y: car.height * 0.38; width: 22; height: car.height * 0.07; radius: 2; color: "#37474F" }
-        Rectangle { visible: !car.loco; x: car.width + 4; y: car.height * 0.355; width: car.height * 0.12; height: car.height * 0.12; radius: car.height * 0.06; color: "#78909C" }
-
-        // ruote: 4 per vagone (due carrelli da 2), 6 per la locomotiva, su
-        // entrambe le rotaie: la fila davanti poggia sulla rotaia vicina, quella
-        // dietro (piu' scura e un po' piu' in alto, nascosta dal corpo) sull'altra
-        Repeater {
-            model: (car.loco ? 6 : 4) * 2
-            Rectangle {
-                required property int index
-                readonly property int perSide: car.loco ? 6 : 4
-                readonly property bool back: index >= perSide
-                readonly property int pos: index % perSide
-                readonly property real d: car.height * 0.2
-                width: d; height: d; radius: d / 2
-                x: car.loco ? car.width * (0.06 + pos * 0.15)
-                            : car.width * [0.08, 0.24, 0.62, 0.78][pos]
-                y: car.height - d - (back ? car.height * 0.2 : 0)
-                z: back ? -1 : 0
-                color: back ? "#546E7A" : "#37474F"
-                border.color: back ? "#78909C" : "#B0BEC5"
-                border.width: 2
-                Rectangle {   // raggi: si vedono girare
-                    anchors.centerIn: parent
-                    width: parent.width * 0.78; height: 3; radius: 1.5
-                    color: "#CFD8DC"
-                    rotation: car.spin
-                }
-                Rectangle {
-                    anchors.centerIn: parent
-                    width: parent.width * 0.78; height: 3; radius: 1.5
-                    color: "#CFD8DC"
-                    rotation: car.spin + 90
-                }
-                Rectangle {   // mozzo dorato
-                    anchors.centerIn: parent
-                    width: parent.width * 0.3; height: width; radius: width / 2
-                    color: car.gold
-                }
-            }
+        readonly property real u: width / 200
+        readonly property string paint: {
+            var names = ["red", "blue", "yellow", "green", "purple", "orange"]
+            for (var i = 0; i < names.length; i++)
+                if (Qt.colorEqual(car.body, Theme.playColors[i])) return names[i]
+            return "grey"
         }
 
-        // ----- vagone -----
-        Item {
-            visible: !car.loco
-            anchors.fill: parent
-
-            Rectangle {   // telaio sotto la cassa
-                x: 2; y: car.height * 0.54
-                width: car.width - 7; height: car.height * 0.07
-                radius: 3; color: "#455A64"
-            }
-            Repeater {   // respingenti
-                model: 2
-                Rectangle {
-                    required property int index
-                    x: index === 0 ? -4 : car.width - 5
-                    y: car.height * 0.34
-                    width: 6; height: car.height * 0.13; radius: 2
-                    color: "#B0BEC5"
-                }
-            }
-            Rectangle {   // cassa
-                id: wagonBody
-                x: 0; y: car.height * 0.02
-                width: car.width - 3; height: car.height * 0.54
-                radius: car.height * 0.09
-                gradient: Gradient {
-                    GradientStop { position: 0.0; color: Qt.lighter(car.body, 1.25) }
-                    GradientStop { position: 1.0; color: car.body }
-                }
-                border.color: car.dark
-                border.width: 3
-
-                Rectangle {   // tetto
-                    x: 3; y: 3
-                    width: parent.width - 6; height: parent.height * 0.14
-                    radius: height / 2
-                    color: Qt.darker(car.body, 1.25)
-                }
-                Rectangle {   // fascia dorata
-                    x: 3; y: parent.height * 0.76
-                    width: parent.width - 6; height: parent.height * 0.08
-                    color: car.gold
-                }
-                Row {   // finestrini con tendina
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    y: parent.height * 0.26
-                    spacing: car.width * 0.06
-                    Repeater {
-                        model: 3
-                        Rectangle {
-                            width: car.width * 0.2; height: car.height * 0.2
-                            radius: 4; color: "#E1F5FE"
-                            border.color: car.dark; border.width: 2
-                            Rectangle {   // tendina
-                                x: 2; y: 2; width: parent.width - 4; height: parent.height * 0.32
-                                radius: 2; color: "#FFF59D"
-                            }
-                            Rectangle {   // riflesso
-                                x: parent.width * 0.62; y: parent.height * 0.4
-                                width: 3; height: parent.height * 0.4
-                                radius: 1.5; color: "white"; opacity: 0.8
-                            }
-                        }
-                    }
-                }
-            }
+        Image {   // carrozzeria
+            x: -12 * car.u; y: -30 * car.u
+            width: 224 * car.u; height: 172 * car.u
+            source: car.art + (car.loco ? "loco" : "wagon-" + car.paint) + ".png"
+            mipmap: car.width < 90
         }
 
-        // ----- locomotiva: cabina a sinistra, caldaia a destra, ciminiera -----
-        Item {
+        // chi si affaccia: il macchinista orsetto o i due passeggeri
+        AppIcon {
             visible: car.loco
-            anchors.fill: parent
+            name: "bear"
+            size: 40 * car.u
+            x: 37 * car.u - width / 2; y: 45 * car.u - height / 2
+        }
+        AppIcon {
+            visible: !car.loco && car.rider !== ""
+            name: car.rider
+            size: 46 * car.u
+            x: 53 * car.u - width / 2; y: 53 * car.u - height / 2
+        }
+        AppIcon {
+            visible: !car.loco && car.rider2 !== ""
+            name: car.rider2
+            size: 46 * car.u
+            x: 145 * car.u - width / 2; y: 53 * car.u - height / 2
+        }
 
-            Rectangle {   // telaio
-                x: 2; y: car.height * 0.56
-                width: car.width - 5; height: car.height * 0.08
-                radius: 3; color: "#37474F"
-            }
-            Shape {   // cacciapietre davanti
-                x: car.width - 4; y: car.height * 0.38
-                width: car.width * 0.1; height: car.height * 0.28
-                preferredRendererType: Shape.CurveRenderer
-                ShapePath {
-                    fillColor: "#546E7A"; strokeColor: "#263238"; strokeWidth: 2
-                    startX: 0; startY: 0
-                    PathLine { x: car.width * 0.09; y: car.height * 0.26 }
-                    PathLine { x: 0; y: car.height * 0.26 }
-                    PathLine { x: 0; y: 0 }
-                }
-            }
-
-            Rectangle {   // caldaia
-                x: car.width * 0.36; y: car.height * 0.16
-                width: car.width * 0.64 - 3; height: car.height * 0.42
-                radius: car.height * 0.12
-                gradient: Gradient {
-                    GradientStop { position: 0.0; color: Qt.lighter(car.body, 1.3) }
-                    GradientStop { position: 1.0; color: car.body }
-                }
-                border.color: car.dark; border.width: 3
-
-                Repeater {   // fasce dorate
-                    model: 2
-                    Rectangle {
-                        required property int index
-                        x: parent.width * (0.3 + index * 0.32); y: 0
-                        width: parent.width * 0.07; height: parent.height
-                        color: car.gold; opacity: 0.95
-                    }
-                }
-                // il visetto sorridente
-                Row {
-                    x: parent.width * 0.58; y: parent.height * 0.22
-                    spacing: parent.width * 0.06
-                    Repeater {
-                        model: 2
-                        Rectangle {
-                            width: car.height * 0.13; height: width; radius: width / 2
-                            color: "white"; border.color: car.dark; border.width: 1
-                            Rectangle { x: parent.width * 0.38; y: parent.height * 0.3; width: parent.width * 0.4; height: width; radius: width / 2; color: "#263238" }
-                        }
-                    }
-                }
-                Rectangle {   // bocca
-                    x: parent.width * 0.62; y: parent.height * 0.64
-                    width: parent.width * 0.22; height: car.height * 0.06
-                    radius: height / 2; color: "#5D1A1A"
-                }
-            }
-
-            Rectangle {   // duomo del vapore
-                x: car.width * 0.5; y: car.height * 0.08
-                width: car.width * 0.11; height: car.height * 0.1
-                radius: car.height * 0.04; color: car.gold
-                border.color: "#F9A825"; border.width: 2
-            }
-
-            Rectangle {   // cabina
-                x: 0; y: car.height * 0.02
-                width: car.width * 0.4; height: car.height * 0.56
-                radius: car.height * 0.07
-                gradient: Gradient {
-                    GradientStop { position: 0.0; color: Qt.lighter(car.body, 1.1) }
-                    GradientStop { position: 1.0; color: Qt.darker(car.body, 1.15) }
-                }
-                border.color: car.dark; border.width: 3
-                Rectangle {   // finestra
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    y: parent.height * 0.24
-                    width: parent.width * 0.56; height: parent.height * 0.32
-                    radius: 5; color: "#E1F5FE"
-                    border.color: car.dark; border.width: 2
-                    Rectangle { x: parent.width * 0.6; y: parent.height * 0.25; width: 3; height: parent.height * 0.5; radius: 1.5; color: "white"; opacity: 0.8 }
-                }
-                Rectangle {   // targhetta col numero
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    y: parent.height * 0.72
-                    width: parent.width * 0.4; height: parent.height * 0.14
-                    radius: 3; color: car.gold
-                }
-            }
-            Rectangle {   // tetto della cabina, sporgente
-                x: -car.width * 0.02; y: -car.height * 0.04
-                width: car.width * 0.44; height: car.height * 0.08
-                radius: height / 2; color: car.dark
-            }
-
-            Rectangle {   // ciminiera con bordo svasato
-                x: car.width * 0.75; y: -car.height * 0.02
-                width: car.width * 0.12; height: car.height * 0.2
-                color: "#37474F"
-            }
-            Rectangle {
-                x: car.width * 0.725; y: -car.height * 0.08
-                width: car.width * 0.17; height: car.height * 0.07
-                radius: 3; color: "#263238"
-            }
-
-            Rectangle {   // alone del fanale
-                x: car.width - 3 - car.height * 0.12; y: car.height * 0.265
-                width: car.height * 0.2; height: width; radius: width / 2
-                color: "#FFF59D"; opacity: 0.55
-            }
-            Rectangle {   // fanale
-                x: car.width - 3 - car.height * 0.09; y: car.height * 0.295
-                width: car.height * 0.14; height: width; radius: width / 2
-                color: "#FFEB3B"
-                border.color: "#F9A825"; border.width: 2
-            }
-
-            // biella laterale fra le ruote davanti: va avanti e indietro mentre girano
-            Rectangle {
-                x: car.width * 0.06 + car.height * 0.1
-                y: car.height - car.height * 0.1 - 2 + Math.sin(car.spin * Math.PI / 180) * car.height * 0.04
-                width: car.width * 0.15 * 5; height: 4; radius: 2
-                color: car.gold
-                z: 1
+        Repeater {   // ruote: [centro x, diametro], poggiano sul fondo
+            model: car.loco ? [[34, 52], [88, 40], [131, 40], [167, 28]]
+                            : [[30, 36], [64, 36], [134, 36], [168, 36]]
+            Image {
+                required property var modelData
+                width: modelData[1] * car.u; height: width
+                x: modelData[0] * car.u - width / 2
+                y: car.height - height
+                source: car.art + "wheel.png"
+                rotation: car.spin
+                mipmap: true
             }
         }
 
-        // fumo dalla ciminiera
+        // biella dorata della locomotiva: va su e giu' mentre le ruote girano
+        Rectangle {
+            visible: car.loco
+            x: 34 * car.u + Math.cos(car.spin * Math.PI / 180) * 8 * car.u
+            y: 117 * car.u + Math.sin(car.spin * Math.PI / 180) * 8 * car.u
+            width: 97 * car.u; height: Math.max(2, 8 * car.u); radius: height / 2
+            color: "#FFCA28"
+            border.color: "#8D5F00"; border.width: Math.max(0.5, car.u)
+        }
+
+        // sbuffi di fumo dalla ciminiera
         Repeater {
-            model: car.loco ? 3 : 0
-            Rectangle {
+            model: car.loco ? 4 : 0
+            Image {
                 id: puff
                 required property int index
-                width: car.height * 0.2; height: width; radius: width / 2
-                color: "white"
-                x: car.width * 0.81 - width / 2
-                y: -car.height * 0.1
+                width: 46 * car.u; height: width
+                x: 153 * car.u - width / 2
+                y: -34 * car.u
+                source: car.art + "puff.png"
                 opacity: 0
                 SequentialAnimation {
                     running: car.smoking
                     loops: Animation.Infinite
-                    PauseAnimation { duration: puff.index * 330 }
+                    PauseAnimation { duration: puff.index * 260 }
                     ParallelAnimation {
-                        NumberAnimation { target: puff; property: "y"; from: -car.height * 0.1; to: -car.height * 0.85; duration: 1000 }
-                        NumberAnimation { target: puff; property: "x"; from: car.width * 0.81 - puff.width / 2; to: car.width * 0.81 - puff.width / 2 - car.width * 0.25; duration: 1000 }
-                        NumberAnimation { target: puff; property: "scale"; from: 0.5; to: 1.8; duration: 1000 }
+                        NumberAnimation { target: puff; property: "y"; from: -34 * car.u; to: -150 * car.u; duration: 1040 }
+                        NumberAnimation { target: puff; property: "x"; from: 153 * car.u - puff.width / 2; to: 153 * car.u - puff.width / 2 - 70 * car.u; duration: 1040 }
+                        NumberAnimation { target: puff; property: "scale"; from: 0.5; to: 2.0; duration: 1040 }
                         SequentialAnimation {
-                            NumberAnimation { target: puff; property: "opacity"; to: 0.85; duration: 150 }
-                            NumberAnimation { target: puff; property: "opacity"; to: 0; duration: 850 }
+                            NumberAnimation { target: puff; property: "opacity"; to: 0.95; duration: 150 }
+                            NumberAnimation { target: puff; property: "opacity"; to: 0; duration: 890 }
                         }
                     }
                 }
@@ -414,78 +237,47 @@ MiniGame {
         }
     }
 
-    // ---------- un passeggero in piedi, intero (testa, busto, braccia, gambe) ----------
+    // ---------- un passeggero che scende e cammina saltellando ----------
     component Person: Item {
         id: person
-        property color shirt: "#42A5F5"
-        property color hair: "#5D4037"
-        property bool girl: false
+        property string animal: "rabbit"
         property bool walking: false
-        property real swing: 0
+        property real bob: 0
         width: 40; height: 90
 
-        SequentialAnimation on swing {
+        SequentialAnimation on bob {
             running: person.walking
             loops: Animation.Infinite
-            onRunningChanged: if (!running) person.swing = 0
-            NumberAnimation { to: 28; duration: 190; easing.type: Easing.InOutSine }
-            NumberAnimation { to: -28; duration: 380; easing.type: Easing.InOutSine }
-            NumberAnimation { to: 0; duration: 190; easing.type: Easing.InOutSine }
+            onRunningChanged: if (!running) person.bob = 0
+            NumberAnimation { to: -12; duration: 170; easing.type: Easing.OutQuad }
+            NumberAnimation { to: 0; duration: 170; easing.type: Easing.InQuad }
         }
 
-        Repeater {   // gambe
-            model: 2
-            Rectangle {
-                required property int index
-                x: 9 + index * 14; y: 60; width: 9; height: 28; radius: 4
-                color: "#37474F"
-                transformOrigin: Item.Top
-                rotation: index === 0 ? person.swing : -person.swing
-                Rectangle { x: -2; y: parent.height - 7; width: 14; height: 8; radius: 4; color: "#263238" }   // scarpa
-            }
+        Rectangle {   // ombra
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height - 8
+            width: 40 + person.bob; height: 10; radius: 5
+            color: "#40000000"
         }
-        Rectangle {   // gonna per le bambine
-            visible: person.girl
-            x: 2; y: 48; width: 36; height: 22; radius: 8
-            color: Qt.darker(person.shirt, 1.2)
-        }
-        Repeater {   // braccia
-            model: 2
-            Rectangle {
-                required property int index
-                x: index === 0 ? -4 : 33; y: 28; width: 8; height: 28; radius: 4
-                color: person.shirt
-                transformOrigin: Item.Top
-                rotation: index === 0 ? -person.swing : person.swing
-                Rectangle { y: parent.height - 5; width: 8; height: 8; radius: 4; color: "#FFCCBC" }   // mano
-            }
-        }
-        Rectangle {   // busto
-            x: 5; y: 25; width: 30; height: 38; radius: 10
-            color: person.shirt
-        }
-        Rectangle {   // testa
-            x: 8; y: 0; width: 24; height: 24; radius: 12
-            color: "#FFCCBC"
-            Rectangle {   // capelli
-                x: -1; y: -2; width: parent.width + 2; height: 13; radius: 8
-                color: person.hair
-            }
-            Rectangle { x: 6; y: 11; width: 3; height: 3; radius: 1.5; color: "#263238" }
-            Rectangle { x: 15; y: 11; width: 3; height: 3; radius: 1.5; color: "#263238" }
-            Rectangle { x: 8; y: 17; width: 8; height: 3; radius: 1.5; color: "#C62828" }
+        AppIcon {
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height - height + person.bob
+            name: person.animal
+            size: 62
+            rotation: person.bob * 0.7
         }
     }
 
-    // ---------- scenario: casetta e albero (proporzionali alla larghezza) ----------
+    // ---------- scenario: casetta, stazione e albero ----------
     component House: Item {
         id: house
-        property color wall: "#FFCC80"
-        property color roof: "#E57373"
+        property string art: ""
+        property int  variant: 1
         property bool lit: false      // luci accese
         signal tapped()
-        height: width * 0.95
+        height: width
         transformOrigin: Item.Bottom
+        readonly property real u: width / 200
 
         // un tocco: accende/spegne le luci, la casetta saltella, esce il fumo
         signal poked()
@@ -502,43 +294,30 @@ MiniGame {
             onClicked: { house.poke(); house.tapped() }
         }
 
-        Rectangle {   // muro
-            anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-            height: house.height * 0.62
-            color: house.wall
-            border.color: Qt.darker(house.wall, 1.25); border.width: 2
+        Image {
+            anchors.fill: parent
+            source: house.art + "house-" + house.variant + ".png"
+            mipmap: true
         }
-        Shape {   // tetto
-            anchors { left: parent.left; right: parent.right; top: parent.top }
-            height: house.height * 0.42
-            preferredRendererType: Shape.CurveRenderer
-            ShapePath {
-                fillColor: house.roof
-                strokeColor: Qt.darker(house.roof, 1.3); strokeWidth: 2
-                startX: -4; startY: house.height * 0.42
-                PathLine { x: house.width / 2; y: 0 }
-                PathLine { x: house.width + 4; y: house.height * 0.42 }
-                PathLine { x: -4; y: house.height * 0.42 }
+        Repeater {   // finestre illuminate
+            model: house.lit ? [[36, 116, 36, 34], [130, 116, 36, 34], [86, 52, 28, 28]] : []
+            Rectangle {
+                required property var modelData
+                x: modelData[0] * house.u; y: modelData[1] * house.u
+                width: modelData[2] * house.u; height: modelData[3] * house.u
+                radius: 8 * house.u
+                color: "#B3FFD600"
             }
-        }
-        Rectangle {   // comignolo
-            x: house.width * 0.72; y: house.height * 0.06
-            width: house.width * 0.12; height: house.height * 0.18
-            color: Qt.darker(house.roof, 1.4)
-        }
-        Rectangle {   // porta
-            x: house.width * 0.40; y: house.height * 0.72
-            width: house.width * 0.2; height: house.height * 0.28
-            radius: 3; color: house.lit ? "#FFB74D" : "#8D6E63"
         }
         Repeater {   // fumo dal comignolo quando si tocca
             model: 3
-            Rectangle {
+            Image {
                 id: hpuff
                 required property int index
-                width: house.width * 0.1; height: width; radius: width / 2
-                color: "white"; opacity: 0
-                x: house.width * 0.78 - width / 2; y: house.height * 0.04
+                width: 34 * house.u; height: width
+                x: 154 * house.u - width / 2; y: 0
+                source: house.art + "puff.png"
+                opacity: 0
                 Connections {
                     target: house
                     function onPoked() { hp.restart() }
@@ -547,36 +326,27 @@ MiniGame {
                     id: hp
                     PauseAnimation { duration: hpuff.index * 160 }
                     ParallelAnimation {
-                        NumberAnimation { target: hpuff; property: "y"; from: house.height * 0.04; to: -house.height * 0.5; duration: 900 }
-                        NumberAnimation { target: hpuff; property: "x"; from: house.width * 0.78 - hpuff.width / 2; to: house.width * 0.78 - hpuff.width / 2 - house.width * 0.2; duration: 900 }
+                        NumberAnimation { target: hpuff; property: "y"; from: 0; to: -house.height * 0.55; duration: 900 }
+                        NumberAnimation { target: hpuff; property: "x"; from: 154 * house.u - hpuff.width / 2; to: 120 * house.u - hpuff.width / 2; duration: 900 }
                         NumberAnimation { target: hpuff; property: "scale"; from: 0.6; to: 1.8; duration: 900 }
                         SequentialAnimation {
-                            NumberAnimation { target: hpuff; property: "opacity"; to: 0.85; duration: 120 }
+                            NumberAnimation { target: hpuff; property: "opacity"; to: 0.95; duration: 120 }
                             NumberAnimation { target: hpuff; property: "opacity"; to: 0; duration: 780 }
                         }
                     }
                 }
             }
         }
-        Repeater {   // finestre
-            model: 2
-            Rectangle {
-                required property int index
-                x: house.width * (index === 0 ? 0.12 : 0.68)
-                y: house.height * 0.5
-                width: house.width * 0.2; height: house.width * 0.2
-                color: house.lit ? "#FFF176" : "#E1F5FE"
-                border.color: house.lit ? "#FFB300" : "#8D6E63"; border.width: 2
-            }
-        }
     }
 
     component Station: Item {
         id: st
+        property string art: ""
         height: width * 0.62
-        property bool ringing: false     // campanella: cartello e porte si illuminano
+        property bool ringing: false     // campanella: insegna e porte si illuminano
         signal tapped()
         transformOrigin: Item.Bottom
+        readonly property real u: width / 520
 
         function poke() { ringing = true; ringOff.restart(); bump.restart(); ding.restart() }
         Timer { id: ringOff; interval: 1600; onTriggered: st.ringing = false }
@@ -591,13 +361,18 @@ MiniGame {
             z: 10
             onClicked: { st.poke(); st.tapped() }
         }
-        Text {
+        Row {
             id: dingText
             x: st.width * 0.5 - width / 2; y: -st.height * 0.1
-            text: "🔔 " + qsTr("DING DONG!")
-            font.pixelSize: st.height * 0.2; font.bold: true
-            color: "white"; style: Text.Outline; styleColor: "#1565C0"
+            spacing: 6
             opacity: 0; z: 11
+            AppIcon { name: "bell"; size: st.height * 0.24; anchors.verticalCenter: parent.verticalCenter }
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: qsTr("DING DONG!")
+                font.pixelSize: st.height * 0.2; font.bold: true
+                color: "white"; style: Text.Outline; styleColor: "#1565C0"
+            }
             ParallelAnimation {
                 id: ding
                 NumberAnimation { target: dingText; property: "y"; from: -st.height * 0.05; to: -st.height * 0.3; duration: 900 }
@@ -609,58 +384,39 @@ MiniGame {
             }
         }
 
-        Rectangle {   // edificio
-            anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-            height: st.height * 0.62
-            color: "#FFE0B2"
-            border.color: "#BCAAA4"; border.width: 3
+        Image {
+            x: -4 * st.u; y: -4 * st.u
+            width: 528 * st.u; height: 330 * st.u
+            source: st.art + "station.png"
         }
-        Rectangle {   // tettoia lunga
-            x: -8; y: st.height * 0.34
-            width: st.width + 16; height: st.height * 0.1
-            radius: 4; color: "#C62828"
-        }
-        Rectangle {   // torre dell'orologio
-            x: st.width * 0.4; y: 0
-            width: st.width * 0.2; height: st.height * 0.4
-            color: "#FFCC80"; border.color: "#BCAAA4"; border.width: 3
-            Rectangle {
-                anchors.horizontalCenter: parent.horizontalCenter
-                y: parent.height * 0.12
-                width: parent.width * 0.7; height: width; radius: width / 2
-                color: "white"; border.color: "#5D4037"; border.width: 2
-                Rectangle { x: parent.width / 2 - 1; y: parent.height * 0.18; width: 2; height: parent.height * 0.34; color: "#5D4037" }
-                Rectangle { x: parent.width / 2 - 1; y: parent.height / 2 - 1; width: parent.width * 0.26; height: 2; color: "#5D4037" }
-            }
-        }
-        Rectangle {   // cartello
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: st.height * 0.47
-            width: st.width * 0.56; height: st.height * 0.16
-            radius: 5; color: st.ringing ? "#FFB300" : "#1565C0"
+        Rectangle {   // l'insegna si illumina quando suona
+            x: 112 * st.u; y: 149 * st.u
+            width: 296 * st.u; height: 44 * st.u; radius: 13 * st.u
+            color: st.ringing ? "#FF8F00" : "transparent"
             Text {
                 anchors.centerIn: parent
                 text: qsTr("STAZIONE")
                 color: "white"; font.bold: true
-                font.pixelSize: parent.height * 0.62
+                font.pixelSize: parent.height * 0.72
             }
         }
-        Repeater {   // porte ad arco
-            model: 3
+        Repeater {   // porte illuminate quando suona
+            model: st.ringing ? 3 : 0
             Rectangle {
                 required property int index
-                x: st.width * (0.12 + index * 0.3); y: st.height * 0.7
-                width: st.width * 0.16; height: st.height * 0.3
+                x: st.width * (0.12 + index * 0.3); y: st.height * 0.69
+                width: st.width * 0.16; height: st.height * 0.285
                 radius: width / 2
-                color: st.ringing ? "#FFE082" : "#8D6E63"
+                color: "#B3FFE082"
             }
         }
     }
 
     component Tree: Item {
         id: tree
-        property color leaf: "#43A047"
-        height: width * 1.5
+        property string art: ""
+        property int variant: 1
+        height: width * 1.25
         transformOrigin: Item.Bottom
         signal tapped()
         // un tocco scuote l'albero e fa cadere una foglia
@@ -671,9 +427,14 @@ MiniGame {
             NumberAnimation { target: tree; property: "rotation"; to: -3; duration: 100 }
             NumberAnimation { target: tree; property: "rotation"; to: 0; duration: 80 }
         }
-        Text {
+        Image {
+            anchors.fill: parent
+            source: tree.art + "tree-" + tree.variant + ".png"
+            mipmap: true
+        }
+        AppIcon {
             id: leafText
-            text: "🍃"; font.pixelSize: tree.width * 0.3
+            name: "leaf-wind"; size: tree.width * 0.34
             x: tree.width * 0.5; y: tree.width * 0.5; opacity: 0; z: 5
             ParallelAnimation {
                 id: leafFall
@@ -688,23 +449,6 @@ MiniGame {
             }
         }
         MouseArea { anchors.fill: parent; z: 10; onClicked: { shakeTree.restart(); leafFall.restart(); tree.tapped() } }
-        Rectangle {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            width: tree.width * 0.18; height: tree.height * 0.4
-            color: "#8D6E63"
-        }
-        Rectangle {
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 0
-            width: tree.width; height: tree.width; radius: tree.width / 2
-            color: tree.leaf
-        }
-        Rectangle {
-            x: tree.width * 0.1; y: tree.width * 0.45
-            width: tree.width * 0.8; height: tree.width * 0.8; radius: tree.width * 0.4
-            color: Qt.darker(tree.leaf, 1.1)
-        }
     }
 
     // ---------- contenuto ----------
@@ -724,14 +468,14 @@ MiniGame {
             Rectangle {   // cielo
                 x: 0; y: 0; width: parent.width; height: scene.horizonY + 2
                 gradient: Gradient {
-                    GradientStop { position: 0.0; color: "#8FD3FF" }
-                    GradientStop { position: 1.0; color: "#E3F6FF" }
+                    GradientStop { position: 0.0; color: "#6EC6FF" }
+                    GradientStop { position: 1.0; color: "#E8F8FF" }
                 }
             }
-            Rectangle {   // sole
-                x: parent.width - 150; y: 18
-                width: 64; height: 64; radius: 32
-                color: "#FFE066"; border.color: "#FFD23F"; border.width: 4
+            AppIcon {   // sole
+                x: parent.width - 150; y: 8
+                name: "sun-face"
+                size: 96
             }
             Repeater {   // nuvole che scorrono piano
                 model: 3
@@ -740,32 +484,49 @@ MiniGame {
                     required property int index
                     y: 24 + index * 34
                     x: 0
-                    width: 110; height: 44
+                    width: 130; height: 58
                     NumberAnimation on x {
-                        from: -140; to: area.width + 40
+                        from: -150; to: area.width + 40
                         duration: 52000 + cloud.index * 17000
                         loops: Animation.Infinite
                     }
-                    Rectangle { x: 0; y: 14; width: 70; height: 30; radius: 15; color: "white"; opacity: 0.9 }
-                    Rectangle { x: 28; y: 0; width: 56; height: 40; radius: 20; color: "white"; opacity: 0.9 }
-                    Rectangle { x: 52; y: 14; width: 58; height: 30; radius: 15; color: "white"; opacity: 0.9 }
+                    Rectangle { x: 0; y: 24; width: 130; height: 34; radius: 17; color: "white" }
+                    Rectangle { x: 20; y: 8; width: 48; height: 48; radius: 24; color: "white" }
+                    Rectangle { x: 54; y: 0; width: 56; height: 56; radius: 28; color: "white" }
                 }
             }
-            Rectangle {   // colline lontane
-                x: -80; y: scene.horizonY - 44; width: parent.width * 0.55; height: 140; radius: 70
-                color: "#A5D6A7"
-            }
-            Rectangle {
-                x: parent.width * 0.4; y: scene.horizonY - 30; width: parent.width * 0.7; height: 140; radius: 70
-                color: "#9CCC65"
+            Repeater {   // colline lontane, tonde, in due tinte
+                model: Math.ceil(area.width / 300) + 2
+                Rectangle {
+                    required property int index
+                    width: 420; height: width; radius: width / 2
+                    x: index * 300 - 180
+                    y: scene.horizonY - 70 - (index % 2) * 34
+                    gradient: Gradient {
+                        GradientStop { position: 0.0; color: index % 2 ? "#9FDCB4" : "#B8E58C" }
+                        GradientStop { position: 0.35; color: index % 2 ? "#7FCB9C" : "#9BD56F" }
+                    }
+                }
             }
 
             // il prato davanti
             Rectangle {
                 x: 0; y: scene.horizonY; width: parent.width; height: parent.height - scene.horizonY
                 gradient: Gradient {
-                    GradientStop { position: 0.0; color: "#8BC34A" }
-                    GradientStop { position: 1.0; color: "#AED581" }
+                    GradientStop { position: 0.0; color: "#74C043" }
+                    GradientStop { position: 1.0; color: "#B5E36E" }
+                }
+            }
+            Repeater {   // fiori nel prato: scorrono insieme alla strada
+                model: 18
+                AppIcon {
+                    required property int index
+                    readonly property real span: area.width + 120
+                    name: ["blossom", "tulip", "clover", "cherry-blossom", "mushroom"][index % 5]
+                    size: 28 + (index % 3) * 8
+                    x: (((index * 197 - g.scroll) % span) + span) % span - 60
+                    y: g.trackY + g.ch + 56 + ((index * 71) % 100) / 100
+                       * Math.max(0, area.height - g.trackY - g.ch - 110)
                 }
             }
 
@@ -775,28 +536,27 @@ MiniGame {
                 Item {
                     id: slot
                     required property int index
-                    readonly property var wallColors: ["#FFCC80", "#FFF59D", "#F8BBD0", "#B3E5FC", "#C5E1A5", "#FFAB91"]
-                    readonly property var roofColors: ["#E57373", "#8D6E63", "#7986CB", "#EF5350", "#BA68C8", "#FF8A65"]
                     readonly property bool isTree: index % 3 === 1
-                    readonly property real hh: Math.max(46, Math.min(96, g.trackY - 72))
-                    x: index * 120 + 6 + (((index % 6) * 37) % 23) - (g.scroll % 720)
+                    readonly property real hh: Math.max(56, Math.min(116, g.trackY - 56))
+                    x: index * 120 + 4 + (((index % 6) * 37) % 17) - (g.scroll % 720)
                     y: scene.horizonY
                     width: 110; height: 0
 
                     House {
+                        art: g.art
                         visible: !slot.isTree
-                        width: slot.hh * (0.9 + (slot.index % 3) * 0.1)
-                        wall: slot.wallColors[slot.index % slot.wallColors.length]
-                        roof: slot.roofColors[(slot.index * 5) % slot.roofColors.length]
-                        y: -height + 4
+                        width: slot.hh * (0.9 + (slot.index % 3) * 0.08)
+                        variant: 1 + slot.index % 3
+                        y: -height + 8
                         onTapped: snd.tap()
                     }
                     Tree {
+                        art: g.art
                         visible: slot.isTree
-                        width: slot.hh * 0.62
-                        x: 20
-                        leaf: slot.index % 2 ? "#388E3C" : "#4CAF50"
-                        y: -height + 4
+                        width: slot.hh * 0.78
+                        x: 12
+                        variant: 1 + slot.index % 2
+                        y: -height + 8
                         onTapped: snd.tap()
                     }
                 }
@@ -809,13 +569,13 @@ MiniGame {
                 x: station.x - 76; width: 64
                 y: g.trackY + g.ch + 46
                 height: station.y + station.height + 34 - y
-                color: "#B0BEC5"
-                border.color: "#90A4AE"; border.width: 2
+                color: "#EFDDB5"
+                border.color: "#C9A86A"; border.width: 3
                 Repeater {
                     model: 5
                     Rectangle {
                         required property int index
-                        x: 8; y: 10 + index * 13; width: parent.width - 16; height: 7
+                        x: 8; y: 10 + index * 13; width: parent.width - 16; height: 7; radius: 3
                         color: "white"
                     }
                 }
@@ -824,12 +584,12 @@ MiniGame {
                 id: walkAcross
                 x: station.x - 76; width: station.width + 76 + 30
                 y: station.y + station.height
-                height: 34
-                color: "#B0BEC5"
-                border.color: "#90A4AE"; border.width: 2
-                Repeater {   // tratteggio centrale
+                height: 34; radius: 8
+                color: "#EFDDB5"
+                border.color: "#C9A86A"; border.width: 3
+                Repeater {   // ciottoli
                     model: Math.floor((parent.width - 30) / 40)
-                    Rectangle { required property int index; x: 8 + index * 40; y: 16; width: 22; height: 3; color: "white" }
+                    Rectangle { required property int index; x: 8 + index * 40; y: 12 + (index % 2) * 7; width: 20; height: 8; radius: 4; color: "#DCC391" }
                 }
             }
             // lampione davanti alla strada
@@ -847,7 +607,8 @@ MiniGame {
             // la stazione: arriva da destra e si ferma davanti ai vagoni, sotto i binari
             Station {
                 id: station
-                width: Math.min(260, g.trainW * 0.5)
+                art: g.art
+                width: Math.max(220, Math.min(340, g.trainW * 0.6))
                 x: Math.max(10, g.trainX + g.trainW - width - 24) + (g.goal - g.scroll)
                 y: Math.min(g.trackY + g.ch + 100, area.height - height - 44)
                 onTapped: snd.ok()
@@ -871,6 +632,7 @@ MiniGame {
                 model: g.carCount
                 Car {
                     required property int index
+                    art: g.art
                     width: 54
                     loco: index === g.carCount - 1
                     body: g.order[index] || "#bbbbbb"
@@ -883,16 +645,20 @@ MiniGame {
             x: 0; width: parent.width
             y: g.trackY + g.ch - 32
             height: 48
-            color: "#BCAAA4"
-            border.color: "#A1887F"; border.width: 2
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "#D7C7BC" }
+                GradientStop { position: 1.0; color: "#A89080" }
+            }
+            border.color: "#8D7466"; border.width: 2
         }
         Repeater {   // traversine
             model: Math.ceil(area.width / 26) + 2
             Rectangle {
                 required property int index
                 x: index * 26 + 4 - (g.scroll % 26); y: g.trackY + g.ch - 29
-                width: 12; height: 42; radius: 2
-                color: "#8D6E63"
+                width: 13; height: 42; radius: 4
+                color: "#9C6B43"
+                border.color: "#6D4527"; border.width: 2
             }
         }
         Rectangle {   // rotaia dietro (le ruote poggiano su quella davanti)
@@ -916,16 +682,16 @@ MiniGame {
                 x: g.trainX + index * (g.cw + g.gap)
                 y: g.trackY
                 width: g.cw; height: g.ch
-                radius: 14
-                color: "#66FFFFFF"
+                radius: 18
+                color: "#59FFFFFF"
                 border.color: "white"
                 border.width: 4
                 visible: !g.filled[index] && g.phase === "build"
-                Text {
-                    anchors.centerIn: parent
-                    visible: index === g.carCount - 1
-                    text: "🚂"
-                    font.pixelSize: g.ch * 0.5
+                Image {
+                    readonly property real u: parent.width / 224
+                    x: 0; y: parent.height - height
+                    width: parent.width; height: 172 * u
+                    source: g.art + (index === g.carCount - 1 ? "loco-grey" : "wagon-grey") + ".png"
                     opacity: 0.5
                 }
             }
@@ -964,8 +730,12 @@ MiniGame {
                     required property int index
                     readonly property bool full: g.filled[index] === true
                     x: index * (g.cw + g.gap)
+                    art: g.art
                     width: g.cw
                     visible: full
+                    // all'arrivo il primo passeggero scende dal vagone
+                    rider: g.phase === "arrived" ? "" : g.riders[index % g.riders.length]
+                    rider2: g.riders[(index + 4) % g.riders.length]
                     loco: index === g.carCount - 1
                     body: g.placedColor[index] || "#bbbbbb"
                     spin: g.wheelAngle
@@ -1032,7 +802,9 @@ MiniGame {
         Item {
             id: journey
             visible: g.phase === "running" || g.phase === "arrived"
-            x: 290; y: 10
+            // al centro, ma sempre a destra del modellino da copiare
+            x: Math.max(g.matchModel ? modelRow.x + modelRow.width + 18 : 12, (parent.width - width) / 2)
+            y: 10
             width: 280; height: 44
             Rectangle {
                 x: 12; y: 21; width: parent.width - 24; height: 10; radius: 5
@@ -1042,21 +814,26 @@ MiniGame {
                     radius: 5; color: "#43A047"
                 }
             }
-            Text {
+            AppIcon {
                 x: 12 + (journey.width - 24) * Math.min(1, g.scroll / g.goal) - width / 2
-                y: 0; text: "🚂"; font.pixelSize: 30
+                y: 0; name: "locomotive"; size: 34
             }
-            Text { x: parent.width - 28; y: 0; text: "🚉"; font.pixelSize: 30 }
+            AppIcon { x: parent.width - 28; y: 0; name: "station"; size: 34 }
         }
 
         // invito a toccare il treno
-        Text {
+        Row {
             visible: g.phase === "running" && g.scroll < g.goal - 1100
             anchors.horizontalCenter: parent.horizontalCenter
             y: g.trackY + g.ch + 52
-            text: "👆 " + qsTr("Tocca il treno!")
-            font.pixelSize: 38; font.bold: true
-            color: "white"; style: Text.Outline; styleColor: "#2E7D32"
+            spacing: 10
+            AppIcon { name: "point-up"; size: 48; anchors.verticalCenter: parent.verticalCenter }
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: qsTr("Tocca il treno!")
+                font.pixelSize: 38; font.bold: true
+                color: "white"; style: Text.Outline; styleColor: "#2E7D32"
+            }
             SequentialAnimation on scale {
                 running: g.phase === "running"
                 loops: Animation.Infinite
@@ -1085,9 +862,7 @@ MiniGame {
                 x: startX; y: doorY
                 opacity: 0
                 z: 8
-                shirt: ["#42A5F5", "#EF5350", "#66BB6A", "#AB47BC"][index % 4]
-                hair: ["#5D4037", "#FDD835", "#212121", "#BDBDBD"][index % 4]
-                girl: index % 2 === 0
+                animal: g.riders[index % g.riders.length]
                 walking: g.phase === "arrived"
 
                 SequentialAnimation {
@@ -1126,8 +901,9 @@ MiniGame {
             y: g.trackY + g.ch + 44
             width: 220; height: 84; radius: 42
             color: "#43A047"
-            border.color: "#2E7D32"; border.width: 5
+            border.color: "white"; border.width: 5
             scale: startMa.pressed ? 0.94 : 1
+            Candy { depth: 8 }
 
             SequentialAnimation on scale {
                 running: startBtn.visible && !startMa.pressed
@@ -1139,7 +915,7 @@ MiniGame {
             Row {
                 anchors.centerIn: parent
                 spacing: 12
-                Text { text: "▶"; font.pixelSize: 40; color: "white"; anchors.verticalCenter: parent.verticalCenter }
+                AppIcon { name: "ui/play"; size: 46; anchors.verticalCenter: parent.verticalCenter }
                 Text { text: qsTr("START"); font.pixelSize: 40; font.bold: true; color: "white"; anchors.verticalCenter: parent.verticalCenter }
             }
             MouseArea { id: startMa; anchors.fill: parent; onClicked: g.start() }
@@ -1154,6 +930,7 @@ MiniGame {
                 required property int index
                 required property var modelData
 
+                art: g.art
                 width: g.cw
                 loco: modelData.loco
                 body: modelData.color

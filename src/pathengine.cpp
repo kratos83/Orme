@@ -13,43 +13,43 @@ PathEngine::PathEngine(QObject *parent)
     connect(&m_timer, &QTimer::timeout, this, &PathEngine::playStep);
 
     // I livelli. Campi: colonne, righe, partenza(col,riga), traguardo(col,riga),
-    // emoji dell'oggetto da prendere, elenco delle rocce.
+    // icona dell'oggetto da prendere, elenco delle rocce.
     // Coordinate (colonna, riga) con origine in alto a sinistra.
     //
     // --- 1..14: scuola dell'infanzia. Griglie piccole, 1-6 passi, nessuna roccia.
     m_levels = {
-        {  3, 3,  0, 1,   1, 1,  "🍎", {} },   //  1  un passo a destra
-        {  3, 3,  0, 1,   2, 1,  "⚽", {} },   //  2  due passi a destra
-        {  3, 3,  1, 2,   1, 0,  "⭐", {} },   //  3  due passi in su
-        {  3, 3,  0, 2,   2, 2,  "🍌", {} },   //  4  due passi a destra
-        {  3, 3,  2, 0,   0, 0,  "🌸", {} },   //  5  due passi a sinistra
-        {  4, 3,  0, 1,   3, 1,  "🐟", {} },   //  6  tre passi a destra
-        {  3, 3,  0, 2,   2, 0,  "🎈", {} },   //  7  una L: su e destra
-        {  3, 3,  0, 0,   2, 2,  "🍪", {} },   //  8  una L: destra e giu'
-        {  4, 3,  0, 2,   3, 0,  "🐢", {} },   //  9  su e poi a destra
-        {  4, 4,  0, 3,   3, 3,  "🚗", {} },   // 10  tre passi a destra
-        {  4, 4,  0, 0,   0, 3,  "🦋", {} },   // 11  tre passi in giu'
-        {  4, 4,  0, 3,   3, 0,  "🍓", {} },   // 12  su e a destra
-        {  4, 4,  3, 3,   0, 0,  "🍇", {} },   // 13  su e a sinistra
-        {  5, 4,  0, 2,   4, 2,  "🐝", {} },   // 14  quattro passi a destra
+        {  3, 3,  0, 1,   1, 1,  "apple", {} },   //  1  un passo a destra
+        {  3, 3,  0, 1,   2, 1,  "ball", {} },   //  2  due passi a destra
+        {  3, 3,  1, 2,   1, 0,  "star", {} },   //  3  due passi in su
+        {  3, 3,  0, 2,   2, 2,  "banana", {} },   //  4  due passi a destra
+        {  3, 3,  2, 0,   0, 0,  "cherry-blossom", {} },   //  5  due passi a sinistra
+        {  4, 3,  0, 1,   3, 1,  "fish", {} },   //  6  tre passi a destra
+        {  3, 3,  0, 2,   2, 0,  "balloon", {} },   //  7  una L: su e destra
+        {  3, 3,  0, 0,   2, 2,  "cookie", {} },   //  8  una L: destra e giu'
+        {  4, 3,  0, 2,   3, 0,  "turtle", {} },   //  9  su e poi a destra
+        {  4, 4,  0, 3,   3, 3,  "car", {} },   // 10  tre passi a destra
+        {  4, 4,  0, 0,   0, 3,  "butterfly", {} },   // 11  tre passi in giu'
+        {  4, 4,  0, 3,   3, 0,  "strawberry", {} },   // 12  su e a destra
+        {  4, 4,  3, 3,   0, 0,  "grapes", {} },   // 13  su e a sinistra
+        {  5, 4,  0, 2,   4, 2,  "bee", {} },   // 14  quattro passi a destra
 
         // --- 15..24: piu' difficili. Griglie grandi, rocce, percorsi a serpentina.
-        {  5, 4,  0, 2,   4, 2,  "🔑", { {2,1}, {2,2} } },                       // 15
-        {  5, 5,  0, 0,   4, 4,  "🎁", { {2,0}, {2,1}, {2,2} } },                // 16
-        {  5, 5,  0, 4,   4, 0,  "🍉", { {2,2}, {2,3}, {2,4} } },                // 17
-        {  6, 5,  0, 4,   5, 0,  "🌙", { {2,3}, {2,4}, {4,1}, {4,2} } },         // 18
-        {  6, 6,  0, 0,   5, 5,  "🐬", { {1,1},{2,1},{3,1},{4,1},{5,1},
+        {  5, 4,  0, 2,   4, 2,  "key", { {2,1}, {2,2} } },                       // 15
+        {  5, 5,  0, 0,   4, 4,  "gift", { {2,0}, {2,1}, {2,2} } },                // 16
+        {  5, 5,  0, 4,   4, 0,  "watermelon", { {2,2}, {2,3}, {2,4} } },                // 17
+        {  6, 5,  0, 4,   5, 0,  "moon", { {2,3}, {2,4}, {4,1}, {4,2} } },         // 18
+        {  6, 6,  0, 0,   5, 5,  "dolphin", { {1,1},{2,1},{3,1},{4,1},{5,1},
                                         {0,3},{1,3},{2,3},{3,3},{4,3} } },       // 19
-        {  6, 6,  0, 5,   5, 0,  "🦊", { {1,4},{2,4},{3,4},{4,4},{5,4},
+        {  6, 6,  0, 5,   5, 0,  "fox", { {1,4},{2,4},{3,4},{4,4},{5,4},
                                         {0,2},{1,2},{2,2},{3,2},{4,2} } },       // 20
-        {  7, 6,  0, 0,   6, 5,  "🚀", { {1,1},{2,1},{3,1},{4,1},{5,1},{6,1},
+        {  7, 6,  0, 0,   6, 5,  "rocket", { {1,1},{2,1},{3,1},{4,1},{5,1},{6,1},
                                         {0,3},{1,3},{2,3},{3,3},{4,3},{5,3} } }, // 21
-        {  7, 6,  0, 5,   6, 0,  "🍄", { {1,4},{2,4},{3,4},{4,4},{5,4},{6,4},
+        {  7, 6,  0, 5,   6, 0,  "mushroom", { {1,4},{2,4},{3,4},{4,4},{5,4},{6,4},
                                         {0,2},{1,2},{2,2},{3,2},{4,2},{5,2} } }, // 22
-        {  7, 7,  0, 0,   6, 6,  "👑", { {1,1},{2,1},{3,1},{4,1},{5,1},{6,1},
+        {  7, 7,  0, 0,   6, 6,  "crown", { {1,1},{2,1},{3,1},{4,1},{5,1},{6,1},
                                         {0,3},{1,3},{2,3},{3,3},{4,3},{5,3},
                                         {1,5},{2,5},{3,5},{4,5},{5,5},{6,5} } }, // 23
-        {  7, 7,  0, 6,   6, 0,  "🌈", { {1,5},{2,5},{3,5},{4,5},{5,5},{6,5},
+        {  7, 7,  0, 6,   6, 0,  "rainbow", { {1,5},{2,5},{3,5},{4,5},{5,5},{6,5},
                                         {0,3},{1,3},{2,3},{3,3},{4,3},{5,3},
                                         {1,1},{2,1},{3,1},{4,1},{5,1},{6,1} } }, // 24
     };

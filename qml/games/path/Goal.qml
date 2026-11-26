@@ -1,14 +1,15 @@
 import QtQuick
+import Orme
 
-// L'oggetto da raggiungere: cambia a ogni livello (una emoji).
+// L'oggetto da raggiungere: cambia a ogni livello (il nome di un'icona).
 Item {
     id: root
-    property string kind: "🍎"
+    property string kind: "apple"
 
-    Text {
+    AppIcon {
         anchors.centerIn: parent
-        text: root.kind
-        font.pixelSize: Math.min(root.width, root.height) * 0.6
+        name: root.kind
+        size: Math.min(root.width, root.height) * 0.69
     }
 
     // pulsazione leggera per attirare lo sguardo del bambino

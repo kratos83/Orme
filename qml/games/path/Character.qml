@@ -1,11 +1,13 @@
 import QtQuick
+import Orme
 
 // Il personaggio: un robottino simpatico. Disegnato con forme, niente immagini.
 Item {
     id: root
 
-    Rectangle {                       // corpo
+    Rectangle {   // corpo
         id: body
+        Candy { depth: 4 }
         anchors.fill: parent
         anchors.margins: parent.width * 0.14
         radius: width * 0.32

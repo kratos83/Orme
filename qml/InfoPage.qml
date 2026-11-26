@@ -10,33 +10,25 @@ Item {
     signal exitRequested()
     signal gameSelected(string id)
 
-    Rectangle { anchors.fill: parent; color: Theme.background }
+    Scenery { theme: "scuola" }
 
     Item {
         id: header
         anchors { top: parent.top; left: parent.left; right: parent.right }
         height: 92
 
-        Rectangle {
+        CircleButton {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 20
-            width: 64; height: 64; radius: 32
-            color: Theme.panel
-            border.color: Theme.boardLine
-            border.width: 3
-            scale: backMa.pressed ? 0.9 : 1
-            Behavior on scale { NumberAnimation { duration: 80 } }
-            Text { anchors.centerIn: parent; text: "←"; font.pixelSize: 30; color: Theme.text }
-            MouseArea { id: backMa; anchors.fill: parent; onClicked: root.exitRequested() }
+            icon: "ui/back"
+            color: Theme.dirLeft
+            onClicked: root.exitRequested()
         }
 
-        Text {
+        TitlePill {
             anchors.centerIn: parent
-            text: qsTr("Info")
-            font.pixelSize: 28
-            font.bold: true
-            color: Theme.text
+            title: qsTr("Info")
         }
     }
 
@@ -66,6 +58,8 @@ Item {
                 border.width: 3
                 height: about.height + 36
 
+                Candy {}
+
                 Column {
                     id: about
                     x: 22; y: 18
@@ -80,7 +74,7 @@ Item {
                         font.pixelSize: 17
                         color: Theme.text
                         opacity: 0.85
-                        text: qsTr("47 giochi touch per bambini della scuola dell'infanzia e della primaria: dai concetti del coding (sequenze, cicli, pattern, classificazione, ordine) fino a numeri, operazioni, tabelline, grammatica e geografia. Bersagli grandi, nessuna schermata di sconfitta.")
+                        text: qsTr("48 giochi touch per bambini della scuola dell'infanzia e della primaria: dai concetti del coding (sequenze, cicli, pattern, classificazione, ordine) fino a numeri, operazioni, tabelline, grammatica e geografia. Bersagli grandi, nessuna schermata di sconfitta.")
                     }
                     Text {
                         width: parent.width
@@ -88,7 +82,15 @@ Item {
                         font.pixelSize: 17
                         color: Theme.text
                         opacity: 0.85
-                        text: qsTr("All'inizio di ogni gioco si può scrivere il nome del bambino oppure premere \"Salta\"; il nome si può cambiare durante il gioco con il tasto 👤. Ogni livello vinto dà da 1 a 3 faccine 😊 e si passa da soli al livello dopo.")
+                        text: qsTr("All'inizio di ogni gioco si può scrivere il nome del bambino oppure premere \"Salta\"; il nome si può cambiare durante il gioco con il tasto a forma di persona. Ogni livello vinto dà da 1 a 3 stelle e si passa da soli al livello dopo.")
+                    }
+                    Text {
+                        width: parent.width
+                        wrapMode: Text.WordWrap
+                        font.pixelSize: 14
+                        color: Theme.text
+                        opacity: 0.6
+                        text: qsTr("Icone: Fluent Emoji e Fluent UI System Icons, © Microsoft Corporation, licenza MIT.")
                     }
                     Row {
                         spacing: 14
@@ -153,11 +155,9 @@ Item {
                 }
             }
 
-            Text {
-                text: qsTr("Giochi per l'infanzia")
-                font.pixelSize: 24
-                font.bold: true
-                color: Theme.text
+            TitlePill {
+                title: qsTr("Giochi per l'infanzia")
+                titleSize: 24
             }
 
             // ----- elenco giochi Infanzia -----
@@ -166,6 +166,7 @@ Item {
 
                 Rectangle {
                     id: card
+                    Candy { depth: 5 }
                     required property var modelData
                     width: col.width
                     height: Math.max(100, body.implicitHeight + 26)
@@ -182,12 +183,16 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         width: 74; height: 74; radius: 18
                         color: card.modelData.c
-                        Text {
-                            anchors.centerIn: parent
-                            text: card.modelData.e ? card.modelData.e : "▶"
-                            font.pixelSize: 40
-                            color: "white"
-                        }
+                        Rectangle {
+                                anchors.centerIn: parent
+                                width: 62; height: 62; radius: 31
+                                color: "#E6FFFFFF"
+                            }
+                            AppIcon {
+                                anchors.centerIn: parent
+                                name: card.modelData.img
+                                size: 50
+                            }
                     }
 
                     Rectangle {
@@ -240,11 +245,9 @@ Item {
                 }
             }
 
-            Text {
-                text: qsTr("Giochi per la primaria")
-                font.pixelSize: 24
-                font.bold: true
-                color: Theme.text
+            TitlePill {
+                title: qsTr("Giochi per la primaria")
+                titleSize: 24
             }
 
             // ----- elenco giochi Primaria -----
@@ -253,6 +256,7 @@ Item {
 
                 Rectangle {
                     id: card2
+                    Candy { depth: 5 }
                     required property var modelData
                     width: col.width
                     height: Math.max(100, body2.implicitHeight + 26)
@@ -269,12 +273,16 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         width: 74; height: 74; radius: 18
                         color: card2.modelData.c
-                        Text {
-                            anchors.centerIn: parent
-                            text: card2.modelData.e ? card2.modelData.e : "▶"
-                            font.pixelSize: 40
-                            color: "white"
-                        }
+                        Rectangle {
+                                anchors.centerIn: parent
+                                width: 62; height: 62; radius: 31
+                                color: "#E6FFFFFF"
+                            }
+                            AppIcon {
+                                anchors.centerIn: parent
+                                name: card2.modelData.img
+                                size: 50
+                            }
                     }
 
                     Rectangle {

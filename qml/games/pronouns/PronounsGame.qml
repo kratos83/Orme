@@ -8,6 +8,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Pronomi")
+    scenery: "scuola"
     age: qsTr("9-10 anni")
     levelCount: 8
 
@@ -126,13 +127,14 @@ MiniGame {
                     model: g.options
                     Rectangle {
                         id: opt
+                        Candy {}
                         required property string modelData
                         width: 220; height: 90; radius: 20
                         color: Theme.accent
                         opacity: g.answered && opt.modelData !== g.current.correct ? 0.4 : 1
                         scale: optMa.pressed ? 0.94 : 1
                         Behavior on scale { NumberAnimation { duration: 80 } }
-                        Text { anchors.centerIn: parent; text: opt.modelData; font.pixelSize: 26; font.bold: true; color: "white" }
+                        Text { anchors.centerIn: parent; text: opt.modelData; font.pixelSize: 32; font.bold: true; color: "white" }
                         MouseArea { id: optMa; anchors.fill: parent; enabled: !g.won; onClicked: g.pick(opt.modelData) }
                     }
                 }
@@ -143,7 +145,7 @@ MiniGame {
     // ---------- schermata di scelta del tipo di pronome ----------
     Rectangle {
         anchors.fill: parent
-        color: Theme.background
+        color: "transparent"
         visible: !g.started
 
         Column {
@@ -165,6 +167,7 @@ MiniGame {
                     model: g.categories
                     Rectangle {
                         id: catChip
+                        Candy {}
                         required property var modelData
                         width: 260; height: 64; radius: 20
                         color: g.category === modelData.key ? Theme.accent : Theme.panel
@@ -185,6 +188,7 @@ MiniGame {
             }
 
             Rectangle {
+                Candy {}
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 200; height: 76; radius: 22
                 color: Theme.dirUp

@@ -74,10 +74,10 @@ MiniGame {
                     anchors.bottom: parent.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: 0
-                    Text {
+                    AppIcon {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: "🎈"
-                        font.pixelSize: bal.modelData
+                        name: "balloon"
+                        size: (bal.modelData) * 1.15
                         opacity: g.taken[bal.index] ? 0.25 : 1
                     }
                     Rectangle {

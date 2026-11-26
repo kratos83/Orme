@@ -10,10 +10,10 @@ MiniGame {
     age: qsTr("4-5 anni")
     levelCount: 10
 
-    readonly property var critters: ["🐶", "🐱", "🐰", "🐤", "🐸", "🐷", "🐨", "🦊"]
+    readonly property var critters: ["dog", "cat", "rabbit", "chick", "frog", "pig", "koala", "fox"]
 
     property int  count: 3
-    property string critter: "🐶"
+    property string critter: "dog"
     property var  options: [2, 3, 4]
     property bool answered: false
 
@@ -69,7 +69,7 @@ MiniGame {
             spacing: 24
             Repeater {
                 model: g.count
-                Text { text: g.critter; font.pixelSize: 110 }
+                AppIcon { name: g.critter; size: 126 }
             }
         }
 
@@ -79,6 +79,7 @@ MiniGame {
             Repeater {
                 model: g.options
                 Rectangle {
+                    Candy {}
                     required property var modelData
                     width: 128; height: 128; radius: 26
                     color: g.answered ? Theme.boardLine : Theme.dirUp

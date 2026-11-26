@@ -8,6 +8,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Riordina la frase")
+    scenery: "scuola"
     age: qsTr("7-9 anni")
     levelCount: 8
 
@@ -83,6 +84,7 @@ MiniGame {
             width: parent.width
 
             Rectangle {
+                Candy {}
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.min(parent.width - 60, Math.max(260, builtText.implicitWidth + 40))
                 height: 90
@@ -112,12 +114,13 @@ MiniGame {
                     model: g.chips
                     Rectangle {
                         id: chip
+                        Candy {}
                         required property var modelData
                         width: Math.max(80, chipText.implicitWidth + 28); height: 70; radius: 18
                         color: Theme.dirRight
                         scale: chipMa.pressed ? 0.92 : 1
                         Behavior on scale { NumberAnimation { duration: 80 } }
-                        Text { id: chipText; anchors.centerIn: parent; text: chip.modelData.text; font.pixelSize: 22; font.bold: true; color: "white" }
+                        Text { id: chipText; anchors.centerIn: parent; text: chip.modelData.text; font.pixelSize: 28; font.bold: true; color: "white" }
                         MouseArea { id: chipMa; anchors.fill: parent; onClicked: g.tapChip(chip.modelData) }
                     }
                 }

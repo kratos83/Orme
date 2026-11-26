@@ -8,6 +8,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Le doppie")
+    scenery: "scuola"
     age: qsTr("7-8 anni")
     levelCount: 10
 
@@ -92,7 +93,7 @@ MiniGame {
                 wrapMode: Text.WordWrap
                 textFormat: Text.RichText
                 text: g.clueHtml()
-                font.pixelSize: 28
+                font.pixelSize: 34
                 font.bold: true
                 color: Theme.text
             }
@@ -104,13 +105,14 @@ MiniGame {
                     model: g.options
                     Rectangle {
                         id: opt
+                        Candy {}
                         required property string modelData
                         width: 220; height: 90; radius: 20
                         color: Theme.dirUp
                         opacity: g.answered && opt.modelData !== g.current.correct ? 0.4 : 1
                         scale: optMa.pressed ? 0.94 : 1
                         Behavior on scale { NumberAnimation { duration: 80 } }
-                        Text { anchors.centerIn: parent; text: opt.modelData; font.pixelSize: 30; font.bold: true; color: "white" }
+                        Text { anchors.centerIn: parent; text: opt.modelData; font.pixelSize: 38; font.bold: true; color: "white" }
                         MouseArea { id: optMa; anchors.fill: parent; enabled: !g.won; onClicked: g.pick(opt.modelData) }
                     }
                 }

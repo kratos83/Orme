@@ -20,17 +20,20 @@ Grid {
     component PadBtn: Rectangle {
         id: btn
         property alias glyph: t.text
+        property string icon: ""
         property color bg: Theme.panel
         signal clicked()
         width: 84; height: 66
-        radius: 16
+        radius: 22
         color: bg
         border.color: Theme.boardLine
         border.width: 3
         opacity: pad.enabled ? 1 : 0.5
         scale: ma.pressed && pad.enabled ? 0.92 : 1
         Behavior on scale { NumberAnimation { duration: 80 } }
-        Text { id: t; anchors.centerIn: parent; font.pixelSize: 28; font.bold: true; color: Theme.text }
+        Candy { depth: 5 }
+        Text { id: t; anchors.centerIn: parent; font.pixelSize: 32; font.bold: true; color: Theme.text }
+        AppIcon { anchors.centerIn: parent; visible: btn.icon !== ""; name: btn.icon; size: 38 }
         MouseArea { id: ma; anchors.fill: parent; enabled: pad.enabled; onClicked: btn.clicked() }
     }
 
@@ -44,7 +47,7 @@ Grid {
     }
 
     PadBtn {
-        glyph: "⌫"
+        icon: "ui/backspace"
         bg: Theme.dirLeft
         onClicked: pad.backspacePressed()
     }
@@ -53,7 +56,7 @@ Grid {
         onClicked: pad.keyPressed("0")
     }
     PadBtn {
-        glyph: "✓"
+        icon: "ui/check"
         bg: Theme.accent
         onClicked: pad.enterPressed()
     }

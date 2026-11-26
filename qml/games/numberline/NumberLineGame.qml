@@ -9,6 +9,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("La linea dei numeri")
+    scenery: "scuola"
     age: qsTr("6-8 anni")
     levelCount: 8
 
@@ -89,6 +90,7 @@ MiniGame {
                     model: g.maxN + 1
                     Rectangle {
                         id: cell
+                        Candy {}
                         required property int index
                         width: 64; height: 64; radius: 32
                         color: Theme.playColors[index % Theme.playColors.length]
@@ -108,7 +110,7 @@ MiniGame {
     // ---------- schermata di scelta lunghezza e modalità ----------
     Rectangle {
         anchors.fill: parent
-        color: Theme.background
+        color: "transparent"
         visible: !g.started
 
         Column {
@@ -129,6 +131,7 @@ MiniGame {
                     model: [5, 10, 20]
                     Rectangle {
                         id: lenChip
+                        Candy {}
                         required property int modelData
                         width: 84; height: 74; radius: 20
                         color: g.maxN === modelData ? Theme.accent : Theme.panel
@@ -154,12 +157,13 @@ MiniGame {
                 spacing: 14
                 Repeater {
                     model: [
-                        { m: "count", label: qsTr("Conta"), icon: "🔢" },
-                        { m: "add", label: qsTr("Addizione"), icon: "➕" },
-                        { m: "sub", label: qsTr("Sottrazione"), icon: "➖" }
+                        { m: "count", label: qsTr("Conta"), icon: "numbers" },
+                        { m: "add", label: qsTr("Addizione"), icon: "plus" },
+                        { m: "sub", label: qsTr("Sottrazione"), icon: "minus" }
                     ]
                     Rectangle {
                         id: modeChip
+                        Candy {}
                         required property var modelData
                         width: 130; height: 100; radius: 20
                         color: g.mode === modelData.m ? Theme.accent : Theme.panel
@@ -170,7 +174,7 @@ MiniGame {
                         Column {
                             anchors.centerIn: parent
                             spacing: 4
-                            Text { anchors.horizontalCenter: parent.horizontalCenter; text: modeChip.modelData.icon; font.pixelSize: 34 }
+                            AppIcon { anchors.horizontalCenter: parent.horizontalCenter; name: modeChip.modelData.icon; size: 39 }
                             Text { anchors.horizontalCenter: parent.horizontalCenter; text: modeChip.modelData.label; font.pixelSize: 16; font.bold: true; color: g.mode === modeChip.modelData.m ? "white" : Theme.text }
                         }
                         MouseArea { id: modeMa; anchors.fill: parent; onClicked: g.mode = modeChip.modelData.m }
@@ -179,6 +183,7 @@ MiniGame {
             }
 
             Rectangle {
+                Candy {}
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 200; height: 76; radius: 22
                 color: Theme.dirUp

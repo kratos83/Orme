@@ -9,6 +9,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Regioni d'Italia")
+    scenery: "mare"
     age: qsTr("8-10 anni")
     levelCount: 12
 

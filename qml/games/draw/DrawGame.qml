@@ -15,14 +15,14 @@ MiniGame {
 
     // ogni livello: partenza, arrivo (in frazioni 0..1 dell'area) e oggetto
     readonly property var levels: [
-        { sx: 0.15, sy: 0.5,  tx: 0.85, ty: 0.5,  goal: "🌷" },
-        { sx: 0.15, sy: 0.8,  tx: 0.85, ty: 0.2,  goal: "🧸" },
-        { sx: 0.5,  sy: 0.85, tx: 0.5,  ty: 0.15, goal: "🍎" },
-        { sx: 0.12, sy: 0.2,  tx: 0.88, ty: 0.8,  goal: "⚽" },
-        { sx: 0.85, sy: 0.5,  tx: 0.15, ty: 0.5,  goal: "🐶" },
-        { sx: 0.2,  sy: 0.75, tx: 0.8,  ty: 0.75, goal: "🌼" },
-        { sx: 0.15, sy: 0.15, tx: 0.85, ty: 0.15, goal: "🎈" },
-        { sx: 0.5,  sy: 0.2,  tx: 0.2,  ty: 0.85, goal: "🐱" }
+        { sx: 0.15, sy: 0.5,  tx: 0.85, ty: 0.5,  goal: "tulip" },
+        { sx: 0.15, sy: 0.8,  tx: 0.85, ty: 0.2,  goal: "teddy" },
+        { sx: 0.5,  sy: 0.85, tx: 0.5,  ty: 0.15, goal: "apple" },
+        { sx: 0.12, sy: 0.2,  tx: 0.88, ty: 0.8,  goal: "ball" },
+        { sx: 0.85, sy: 0.5,  tx: 0.15, ty: 0.5,  goal: "dog" },
+        { sx: 0.2,  sy: 0.75, tx: 0.8,  ty: 0.75, goal: "blossom" },
+        { sx: 0.15, sy: 0.15, tx: 0.85, ty: 0.15, goal: "balloon" },
+        { sx: 0.5,  sy: 0.2,  tx: 0.2,  ty: 0.85, goal: "cat" }
     ]
 
     property var  pts: []           // punti del tracciato disegnato
@@ -104,27 +104,40 @@ MiniGame {
 
         // griglia leggera di sfondo, solo per orientarsi meglio
         readonly property real gridCell: 80
-        Row {
-            Repeater {
-                model: Math.ceil(area.width / area.gridCell) + 1
-                Rectangle {
-                    width: area.gridCell; height: area.height
-                    color: "transparent"
-                    border.color: Theme.boardLine
-                    border.width: 1
-                    opacity: 0.5
+        Rectangle {   // foglio da disegno
+            anchors.fill: parent
+            radius: 28
+            color: "#E6FFFFFF"
+            border.color: "#FFCA28"
+            border.width: 5
+        }
+
+        Item {   // la quadrettatura resta dentro il foglio
+            anchors { fill: parent; margins: 5 }
+            clip: true
+
+            Row {
+                Repeater {
+                    model: Math.ceil(area.width / area.gridCell) + 1
+                    Rectangle {
+                        width: area.gridCell; height: area.height
+                        color: "transparent"
+                        border.color: Theme.boardLine
+                        border.width: 1
+                        opacity: 0.5
+                    }
                 }
             }
-        }
-        Column {
-            Repeater {
-                model: Math.ceil(area.height / area.gridCell) + 1
-                Rectangle {
-                    width: area.width; height: area.gridCell
-                    color: "transparent"
-                    border.color: Theme.boardLine
-                    border.width: 1
-                    opacity: 0.5
+            Column {
+                Repeater {
+                    model: Math.ceil(area.height / area.gridCell) + 1
+                    Rectangle {
+                        width: area.width; height: area.gridCell
+                        color: "transparent"
+                        border.color: Theme.boardLine
+                        border.width: 1
+                        opacity: 0.5
+                    }
                 }
             }
         }
@@ -143,18 +156,18 @@ MiniGame {
         }
 
         // oggetto da raggiungere
-        Text {
-            text: g.levels[g.levelIndex].goal
-            font.pixelSize: 92
+        AppIcon {
+            name: g.levels[g.levelIndex].goal
+            size: 106
             x: g.goalX() - width / 2
             y: g.goalY() - height / 2
         }
 
         // personaggio
-        Text {
+        AppIcon {
             id: hero
-            text: "🐢"
-            font.pixelSize: 76
+            name: "turtle"
+            size: 87
             x: g.heroX - width / 2
             y: g.heroY - height / 2
         }
@@ -173,11 +186,12 @@ MiniGame {
 
         // pulsante "cancella" quando c'è un tracciato e non sta camminando
         Rectangle {
+            Candy {}
             visible: g.pts.length > 1 && !g.walking && !g.won
             anchors { right: parent.right; top: parent.top }
             width: 76; height: 76; radius: 38
             color: Theme.danger
-            Text { anchors.centerIn: parent; text: "🗑"; font.pixelSize: 34 }
+            AppIcon { anchors.centerIn: parent; name: "ui/trash"; size: 42 }
             MouseArea { anchors.fill: parent; onClicked: { snd.tap(); g.pts = [] } }
         }
     }

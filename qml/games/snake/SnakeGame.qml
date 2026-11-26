@@ -133,9 +133,9 @@ MiniGame {
                 height: field.cell * g.rows
                 anchors.centerIn: parent
                 radius: 24
-                color: Theme.boardFill
-                border.color: Theme.boardLine
-                border.width: 4
+                color: "#E4F6C4"
+                border.color: "#8BC34A"
+                border.width: 5
                 clip: true
 
                 // linee verticali della griglia
@@ -145,7 +145,7 @@ MiniGame {
                         Rectangle {
                             width: field.cell; height: floor.height
                             color: "transparent"
-                            border.color: Theme.boardLine
+                            border.color: "#C5E39A"
                             border.width: 1
                         }
                     }
@@ -157,7 +157,7 @@ MiniGame {
                         Rectangle {
                             width: floor.width; height: field.cell
                             color: "transparent"
-                            border.color: Theme.boardLine
+                            border.color: "#C5E39A"
                             border.width: 1
                         }
                     }
@@ -179,21 +179,21 @@ MiniGame {
 
                 Repeater {   // mele
                     model: g.apples
-                    Text {
+                    AppIcon {
                         required property var modelData
                         x: modelData.c * field.cell
                         y: modelData.r * field.cell
                         width: field.cell; height: field.cell
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        text: "🍎"
-                        font.pixelSize: field.cell * 0.6
+                        size: field.cell
+                        scale: 0.8
+                        name: "apple"
                     }
                 }
 
                 Repeater {   // corpo (senza la testa)
                     model: g.snake.length > 1 ? g.snake.slice(1) : []
                     Rectangle {
+                        Candy { depth: 3 }
                         required property var modelData
                         width: field.cell * 0.8; height: width
                         radius: width * 0.35
@@ -207,6 +207,7 @@ MiniGame {
 
                 Rectangle {   // testa
                     id: head
+                    Candy { depth: 3 }
                     width: field.cell * 0.9; height: width
                     radius: width * 0.35
                     x: (g.snake.length ? g.snake[0].c : 0) * field.cell + (field.cell - width) / 2

@@ -24,17 +24,19 @@ Item {
 
     property string title: ""
     property string age: ""          // fascia d'eta', es. "3-5 anni"
+    property string scenery: "prato" // sfondo, vedi Scenery.qml
     property string playerName: ""   // nome del bambino (inserito all'inizio)
     property bool showNext: false
     property bool showRestart: true
-    property int  score: 0        // faccine totali in questa sessione di gioco
+    property int  contentMargins: 16 // 0 = il gioco arriva fino ai bordi
+    property int  score: 0        // stelle totali in questa sessione di gioco
 
     signal exitRequested()
     signal restartRequested()
     signal nextRequested()
     signal winFinished()          // la festa e' finita (utile per auto-avanzare)
 
-    // vittoria di un livello: assegna le faccine (1-3) e fa partire la festa,
+    // vittoria di un livello: assegna le stelle (1-3) e fa partire la festa,
     // con un messaggio tipo "Sei al livello 5".
     function reward(stars, message) {
         var s = Math.max(1, Math.min(3, stars || 1))
@@ -44,69 +46,45 @@ Item {
     function celebrate() { winOverlay.celebrate(0, "") }
     function oops()      { oopsOverlay.show() }
 
-    Rectangle { anchors.fill: parent; color: Theme.background }
-
-    component RoundBtn: Rectangle {
-        property alias glyph: t.text
-        signal clicked()
-        width: 66; height: 66; radius: 33
-        color: Theme.panel
-        border.color: Theme.boardLine
-        border.width: 3
-        scale: rbma.pressed ? 0.9 : 1
-        Behavior on scale { NumberAnimation { duration: 80 } }
-        Text { id: t; anchors.centerIn: parent; font.pixelSize: 30; color: Theme.text }
-        MouseArea { id: rbma; anchors.fill: parent; onClicked: parent.clicked() }
-    }
+    Scenery { theme: root.scenery }
 
     Item {
         id: header
         anchors { top: parent.top; left: parent.left; right: parent.right }
         height: 96
 
-        RoundBtn {
+        CircleButton {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 20
-            glyph: "←"
+            icon: "ui/back"
+            color: Theme.dirLeft
             onClicked: root.exitRequested()
         }
 
-        Column {
+        TitlePill {
             anchors.centerIn: parent
-            spacing: 2
-
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: root.title
-                font.pixelSize: 26
-                font.bold: true
-                color: Theme.text
-                opacity: 0.6
-            }
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: text !== ""
-                text: [root.age, root.playerName].filter(function (s) { return s !== "" }).join("   •   ")
-                font.pixelSize: 18
-                color: Theme.text
-                opacity: 0.55
-            }
+            maxWidth: header.width - 360
+            title: root.title
+            titleSize: 28
+            subtitle: [root.age, root.playerName].filter(function (s) { return s !== "" }).join("   •   ")
         }
 
-        RoundBtn {   // cambia / inserisci il nome del bambino
+        CircleButton {   // cambia / inserisci il nome del bambino
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: root.showRestart ? 98 : 20
-            glyph: "👤"
+            icon: "ui/person"
+            color: "#AB47BC"
             onClicked: namePrompt.visible = true
         }
 
-        RoundBtn {
+        CircleButton {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 20
-            glyph: "🔄"
+            icon: "ui/restart"
+            color: Theme.dirUp
             visible: root.showRestart
             onClicked: root.restartRequested()
         }
@@ -119,7 +97,7 @@ Item {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            margins: 16
+            margins: root.contentMargins
         }
     }
 
@@ -128,8 +106,10 @@ Item {
         id: nextBtn
         visible: root.showNext
         width: 122; height: 122
-        radius: 28
+        radius: width / 2
         color: Theme.accent
+        border.color: "white"
+        border.width: 5
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.margins: 28
@@ -141,11 +121,12 @@ Item {
             NumberAnimation { from: 1.08; to: 1.0;  duration: 600; easing.type: Easing.InOutSine }
         }
 
-        Text { anchors.centerIn: parent; text: "▶"; font.pixelSize: 56; color: "white" }
+        Candy { depth: 8 }
+        AppIcon { anchors.centerIn: parent; name: "ui/play"; size: 66 }
         MouseArea { anchors.fill: parent; onClicked: root.nextRequested() }
     }
 
-    // punteggio a faccine, in basso a sinistra
+    // punteggio a stelle, in basso a sinistra
     ScoreBar {
         value: root.score
         anchors.left: parent.left

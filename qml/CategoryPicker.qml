@@ -8,75 +8,147 @@ import Orme
 Item {
     id: root
     signal categorySelected(string category)
+    signal quitRequested()
 
-    Rectangle { anchors.fill: parent; color: Theme.background }
+    // lato dei due grandi riquadri, adattato alla finestra
+    readonly property real side: Math.max(180, Math.min(320, (width - 120) / 2, height - 300))
 
-    Rectangle {   // pulsante Esci, in alto a destra
+    Scenery { theme: "prato" }
+
+    CandyButton {   // Esci, in alto a destra
         anchors { top: parent.top; right: parent.right; margins: 18 }
-        width: 100; height: 60; radius: 30
-        color: Theme.panel
-        border.color: Theme.boardLine
-        border.width: 3
-        scale: m_esci.pressed ? 0.9 : 1
-        Behavior on scale { NumberAnimation { duration: 80 } }
-        Text { anchors.centerIn: parent; text: "Esci"; font.pixelSize: 30; font.bold: true; font.italic: true; color: Theme.text }
-        MouseArea { id: m_esci; anchors.fill: parent; onClicked: Qt.exit(0) }
+        height: 62
+        text: qsTr("Esci")
+        icon: "door"
+        textSize: 26
+        color: Theme.danger
+        onClicked: root.quitRequested()   // prima chiede conferma
     }
 
-    Text {
-        anchors { top: parent.top; topMargin: 34; horizontalCenter: parent.horizontalCenter }
-        text: qsTr("Orme")
-        font.pixelSize: 44
-        font.bold: true
-        color: Theme.text
+    Row {   // il nome dell'app, una lettera per colore, che saltella
+        id: logo
+        anchors { top: parent.top; topMargin: 20; horizontalCenter: parent.horizontalCenter }
+        spacing: 2
+        Repeater {
+            model: qsTr("Orme").split("")
+            Text {
+                id: letter
+                required property string modelData
+                required property int index
+                text: modelData
+                font.pixelSize: 88
+                font.bold: true
+                color: Theme.playColors[[0, 1, 5, 3, 4][index % 5]]
+                style: Text.Outline
+                styleColor: "white"
+                property real hop: 0
+                transform: Translate { y: letter.hop }
+                SequentialAnimation on hop {
+                    running: true
+                    loops: Animation.Infinite
+                    PauseAnimation { duration: letter.index * 160 }
+                    NumberAnimation { to: -14; duration: 260; easing.type: Easing.OutQuad }
+                    NumberAnimation { to: 0; duration: 420; easing.type: Easing.OutBounce }
+                    PauseAnimation { duration: 2600 - letter.index * 160 }
+                }
+            }
+        }
     }
 
-    Text {
-        id: sub
-        anchors { top: parent.top; topMargin: 92; horizontalCenter: parent.horizontalCenter }
-        text: qsTr("Per chi sono i giochi oggi?")
-        font.pixelSize: 24
-        color: Theme.text
+    TitlePill {
+        anchors { top: logo.bottom; topMargin: 4; horizontalCenter: parent.horizontalCenter }
+        title: qsTr("Per chi sono i giochi oggi?")
+        titleSize: 28
+    }
+
+    component CategoryCard: Rectangle {
+        id: cat
+        property string title: ""
+        property string age: ""
+        property string icon: ""
+        property color baseColor: Theme.dirRight
+        signal clicked()
+
+        width: root.side; height: root.side; radius: 48
+        color: baseColor
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: Qt.lighter(cat.baseColor, 1.25) }
+            GradientStop { position: 0.7; color: cat.baseColor }
+        }
+        border.color: "white"
+        border.width: 6
+        scale: ma.pressed ? 0.95 : 1
+        Behavior on scale { NumberAnimation { duration: 120; easing.type: Easing.OutBack } }
+
+        Candy { depth: 10 }
+
+        Column {
+            anchors.centerIn: parent
+            spacing: 6
+            Rectangle {
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: cat.width * 0.55; height: width; radius: width / 2
+                color: "#F5FFFFFF"
+                AppIcon {
+                    anchors.centerIn: parent
+                    name: cat.icon
+                    size: parent.width * 0.8
+                    SequentialAnimation on scale {
+                        running: true
+                        loops: Animation.Infinite
+                        NumberAnimation { to: 1.1; duration: 900; easing.type: Easing.InOutSine }
+                        NumberAnimation { to: 1.0; duration: 900; easing.type: Easing.InOutSine }
+                    }
+                }
+            }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: cat.title
+                font.pixelSize: cat.width * 0.13
+                font.bold: true
+                color: "white"
+            }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: cat.age
+                font.pixelSize: cat.width * 0.07
+                font.bold: true
+                color: "white"
+            }
+        }
+        MouseArea { id: ma; anchors.fill: parent; onClicked: cat.clicked() }
     }
 
     Row {
-        anchors.centerIn: parent
-        spacing: 40
+        anchors { centerIn: parent; verticalCenterOffset: 50 }
+        spacing: 48
 
-        Rectangle {
-            id: infanziaBtn
-            width: 300; height: 300; radius: 36
-            color: Theme.dirRight
-            scale: infanziaMa.pressed ? 0.95 : 1
-            Behavior on scale { NumberAnimation { duration: 90 } }
-            Column {
-                anchors.centerIn: parent
-                spacing: 12
-                Text { anchors.horizontalCenter: parent.horizontalCenter; text: "🧸"; font.pixelSize: 90 }
-                Text { anchors.horizontalCenter: parent.horizontalCenter; text: qsTr("Infanzia"); font.pixelSize: 32; font.bold: true; color: "white" }
-                Text { anchors.horizontalCenter: parent.horizontalCenter; text: qsTr("3-5 anni"); font.pixelSize: 18; color: "white" }
-            }
-            MouseArea { id: infanziaMa; anchors.fill: parent; onClicked: root.categorySelected("infanzia") }
+        CategoryCard {
+            title: qsTr("Infanzia")
+            age: qsTr("3-5 anni")
+            icon: "teddy"
+            baseColor: Theme.dirLeft
+            onClicked: root.categorySelected("infanzia")
         }
-
-        Rectangle {
-            id: primariaBtn
-            width: 300; height: 300; radius: 36
-            color: Theme.dirUp
-            scale: primariaMa.pressed ? 0.95 : 1
-            Behavior on scale { NumberAnimation { duration: 90 } }
-            Column {
-                anchors.centerIn: parent
-                spacing: 12
-                Text { anchors.horizontalCenter: parent.horizontalCenter; text: "🎒"; font.pixelSize: 90 }
-                Text { anchors.horizontalCenter: parent.horizontalCenter; text: qsTr("Primaria"); font.pixelSize: 32; font.bold: true; color: "white" }
-                Text { anchors.horizontalCenter: parent.horizontalCenter; text: qsTr("6-10 anni"); font.pixelSize: 18; color: "white" }
-            }
-            MouseArea { id: primariaMa; anchors.fill: parent; onClicked: root.categorySelected("primaria") }
+        CategoryCard {
+            title: qsTr("Primaria")
+            age: qsTr("6-10 anni")
+            icon: "backpack"
+            baseColor: Theme.dirUp
+            onClicked: root.categorySelected("primaria")
         }
     }
 
+    Rectangle {
+        anchors.centerIn: footer
+        width: Math.min(footer.width, footer.implicitWidth + 36)
+        height: footer.height + 8
+        radius: height / 2
+        color: "#E6FFFFFF"
+    }
+
     Text {
+        id: footer
         width: parent.width - 40
         anchors { bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
         horizontalAlignment: Text.AlignHCenter

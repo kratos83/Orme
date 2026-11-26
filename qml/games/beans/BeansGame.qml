@@ -5,6 +5,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Travasi e infilo")
+    scenery: "cameretta"
     age: qsTr("3-4 anni")
     levelCount: 4
 
@@ -15,6 +16,10 @@ MiniGame {
         "#FDD835"        // limonata
     ]
     readonly property color liquidColor: liquids[levelIndex % liquids.length]
+    // illustrazioni (scripts/make_art.py) e frutto sull'etichetta, stesso ordine
+    readonly property string art: "qrc:/qt/qml/Orme/assets/art/"
+    readonly property var liquidNames: ["water", "orange", "grape", "lemon"]
+    readonly property var labelIcons: ["droplet", "tangerine", "grapes", "lemon"]
 
     property real fromLevel: 1    // quanto e' piena la bottiglia (0-1)
     property real toLevel: 0      // quanto e' pieno il bicchiere (0-1)
@@ -63,8 +68,10 @@ MiniGame {
                 model: 5
                 Rectangle {
                     required property int index
-                    width: 16; height: 16; radius: 8
-                    color: (g.toLevel * 5) > index + 0.01 ? g.liquidColor : Theme.boardLine
+                    width: 26; height: 26; radius: 13
+                    color: (g.toLevel * 5) > index + 0.01 ? g.liquidColor : "white"
+                    border.color: g.liquidColor
+                    border.width: 3
                 }
             }
         }
@@ -75,8 +82,9 @@ MiniGame {
             z: 1
             readonly property real rad: tilt.rotation * Math.PI / 180
             // punta del collo (in alto nella bottiglia a riposo), ruotata con la bottiglia
-            readonly property real tipX: bottle.x + bottle.width / 2 + 97 * Math.sin(rad)
-            readonly property real tipY: bottle.y + 97 - 97 * Math.cos(rad)
+            readonly property real reach: bottle.height / 2 - 7   // dal centro alla bocca
+            readonly property real tipX: bottle.x + bottle.width / 2 + reach * Math.sin(rad)
+            readonly property real tipY: bottle.y + bottle.height / 2 - reach * Math.cos(rad)
             readonly property real surfaceY: cup.y + cup.height * (1 - g.toLevel)
             readonly property real sx: Math.max(cup.x + 14, Math.min(cup.x + cup.width - 14, tipX))
             visible: g.pouring && tilt.rotation > 25 && surfaceY > tipY
@@ -127,7 +135,7 @@ MiniGame {
         // ===== bicchiere (destra, fisso) - trapezio, largo sopra e stretto sotto =====
         Item {
             id: cup
-            width: 130; height: 170
+            width: 150; height: 196
             anchors { right: parent.right; rightMargin: 56; bottom: parent.bottom; bottomMargin: 30 }
 
             readonly property real botW: width * 0.72
@@ -152,7 +160,7 @@ MiniGame {
                 preferredRendererType: Shape.CurveRenderer
                 ShapePath {
                     fillColor: "#55FFFFFF"
-                    strokeColor: Theme.boardLine
+                    strokeColor: "#2F7FA8"
                     strokeWidth: 5
                     joinStyle: ShapePath.RoundJoin
                     startX: 0; startY: 0
@@ -203,12 +211,16 @@ MiniGame {
                 }
             }
 
+            // riflessi sul vetro
+            Rectangle { x: 18; y: 16; width: 9; height: cup.height * 0.66; radius: 5; rotation: -5; color: "#B3FFFFFF" }
+            Rectangle { x: cup.width - 32; y: 22; width: 5; height: cup.height * 0.4; radius: 3; rotation: 5; color: "#80FFFFFF" }
+
             // festa quando e' pieno
-            Text {
+            AppIcon {
                 anchors.horizontalCenter: parent.horizontalCenter
                 y: -70
-                text: "🎉"
-                font.pixelSize: 60
+                name: "party"
+                size: 69
                 scale: g.won ? 1 : 0
                 Behavior on scale { NumberAnimation { duration: 260; easing.type: Easing.OutBack } }
             }
@@ -217,7 +229,7 @@ MiniGame {
         // ===== bottiglia (draggabile) =====
         Item {
             id: bottle
-            width: 130; height: 194
+            width: 150; height: 224          // proporzioni del disegno (130x194)
 
             readonly property bool overTarget: bottle.x < cup.x + cup.width
                                                 && bottle.x + bottle.width > cup.x
@@ -256,36 +268,50 @@ MiniGame {
                 rotation: bottle.tiltTarget + bottle.wob
                 scale: dragArea.pressed ? 1.08 : 1
 
-                // corpo della bottiglia
-                Rectangle {
-                    id: bottleBody
-                    anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-                    height: 150
-                    radius: 16
-                    color: "#55FFFFFF"
-                    border.color: Theme.boardLine
-                    border.width: 5
-                    clip: true
+                readonly property real u: width / 130
 
-                    Rectangle {
-                        anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 4 }
-                        height: (parent.height - 8) * g.fromLevel
-                        radius: 10
-                        color: g.liquidColor
-                        Behavior on height { enabled: !g.pouring; NumberAnimation { duration: 200 } }
+                // il liquido, ritagliato all'altezza raggiunta
+                Item {
+                    id: level
+                    x: 0
+                    // pieno arriva alle spalle della bottiglia (y 58), vuoto al fondo (y 186)
+                    y: (186 - 128 * g.fromLevel) * tilt.u
+                    width: parent.width
+                    height: parent.height - y
+                    clip: true
+                    Behavior on y { enabled: !g.pouring; NumberAnimation { duration: 200 } }
+
+                    Image {
+                        y: -level.y
+                        width: tilt.width; height: tilt.height
+                        source: g.art + "liquid-" + g.liquidNames[g.levelIndex % 4] + ".png"
+                    }
+                    Rectangle {   // pelo del liquido
+                        visible: g.fromLevel > 0.01 && level.y > 88 * tilt.u
+                        x: 23 * tilt.u; width: 84 * tilt.u; height: 7
+                        radius: 4
+                        color: Qt.lighter(g.liquidColor, 1.35)
                     }
                 }
 
-                // collo della bottiglia
-                Rectangle {
-                    width: 40; height: 44
-                    radius: 8
-                    anchors { horizontalCenter: parent.horizontalCenter; bottom: bottleBody.top }
-                    color: "#55FFFFFF"
-                    border.color: Theme.boardLine
-                    border.width: 4
+                Image {   // vetro, bordo e riflessi
+                    anchors.fill: parent
+                    source: g.art + "bottle-glass.png"
                 }
 
+                Rectangle {   // etichetta con il frutto
+                    width: 50 * tilt.u; height: width; radius: width / 2
+                    x: parent.width / 2 - width / 2
+                    y: 146 * tilt.u - height / 2
+                    color: "white"
+                    border.color: g.liquidColor
+                    border.width: 5
+                    AppIcon {
+                        anchors.centerIn: parent
+                        name: g.labelIcons[g.levelIndex % 4]
+                        size: parent.width * 0.7
+                    }
+                }
             }
 
             MouseArea {

@@ -9,6 +9,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Frazioni")
+    scenery: "scuola"
     age: qsTr("9-10 anni")
     levelCount: 9
 
@@ -109,6 +110,7 @@ MiniGame {
                 Text { anchors.verticalCenter: parent.verticalCenter; text: "="; font.pixelSize: 46; font.bold: true; color: Theme.text }
 
                 Rectangle {
+                    Candy {}
                     anchors.verticalCenter: parent.verticalCenter
                     width: 100; height: 76; radius: 16
                     color: Theme.panel

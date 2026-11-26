@@ -13,8 +13,8 @@ Item {
 
     readonly property string age: qsTr("3-5 anni")
     property string playerName: ""   // inserito nella schermata iniziale
-    property int score: 0        // faccine totali in questa sessione (si azzera uscendo)
-    property int mistakes: 0     // errori nel livello in corso (per le faccine)
+    property int score: 0        // stelle totali in questa sessione (si azzera uscendo)
+    property int mistakes: 0     // errori nel livello in corso (per le stelle)
 
     function nextMsg() {
         return qsTr("Sei al livello ") + (((engine.levelIndex + 1) % engine.levelCount) + 1)
@@ -54,34 +54,24 @@ Item {
     // (clearCommands riporta anche il personaggio alla partenza)
     Timer { id: clearLater; interval: 1300; onTriggered: engine.clearCommands() }
 
-    Rectangle { anchors.fill: parent; color: Theme.background }
+    Scenery { theme: "prato" }
 
     // ---------- piccoli bottoni riutilizzabili ----------
-    component IconButton: Rectangle {
-        property alias text: lbl.text
-        signal clicked()
-        width: 66; height: 66; radius: 33
-        color: Theme.panel
-        border.color: Theme.boardLine
-        border.width: 3
-        scale: ibma.pressed ? 0.9 : 1
-        Behavior on scale { NumberAnimation { duration: 80 } }
-        Text { id: lbl; anchors.centerIn: parent; font.pixelSize: 30; color: Theme.text }
-        MouseArea { id: ibma; anchors.fill: parent; onClicked: parent.clicked() }
-    }
-
     component BigButton: Rectangle {
         property string symbol: ""
         property color  bg: Theme.accent
         property bool   on: true
         signal clicked()
-        implicitWidth: 116; implicitHeight: 116
-        radius: 28
+        implicitWidth: root.bigSize; implicitHeight: root.bigSize
+        radius: 32
         color: bg
+        border.color: "white"
+        border.width: 5
         opacity: on ? 1 : 0.28
         scale: bbma.pressed && on ? 0.92 : 1
         Behavior on scale { NumberAnimation { duration: 80 } }
-        Text { anchors.centerIn: parent; text: symbol; font.pixelSize: 50; color: "white" }
+        Candy { depth: 8 }
+        AppIcon { anchors.centerIn: parent; name: symbol; size: parent.width * 0.5 }
         MouseArea { id: bbma; anchors.fill: parent; enabled: parent.on; onClicked: parent.clicked() }
     }
 
@@ -91,130 +81,148 @@ Item {
         anchors { top: parent.top; left: parent.left; right: parent.right }
         height: 96
 
-        IconButton {
+        CircleButton {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 20
-            text: "←"
+            icon: "ui/back"
+            color: Theme.dirLeft
             onClicked: root.exitRequested()
         }
 
-        Column {
+        Rectangle {   // targa: livello, stelle, età e nome
             anchors.centerIn: parent
-            spacing: 2
+            width: titleCol.width + 56
+            height: titleCol.height + 10
+            radius: 30
+            color: "white"
+            Candy { depth: 5 }
 
-            Row {
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 20
+            Column {
+                id: titleCol
+                anchors.centerIn: parent
 
+                Row {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 20
+
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("Livello ") + (engine.levelIndex + 1)
+                        font.pixelSize: 28
+                        font.bold: true
+                        color: Theme.title
+                    }
+                    ScoreBar {
+                        anchors.verticalCenter: parent.verticalCenter
+                        value: root.score
+                        scale: 0.8
+                    }
+                }
                 Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Livello ") + (engine.levelIndex + 1)
-                    font.pixelSize: 28
-                    font.bold: true
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: text !== ""
+                    text: [root.age, root.playerName].filter(function (s) { return s !== "" }).join("   •   ")
+                    font.pixelSize: 16
                     color: Theme.text
                 }
-                ScoreBar {
-                    anchors.verticalCenter: parent.verticalCenter
-                    value: root.score
-                }
-            }
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: text !== ""
-                text: [root.age, root.playerName].filter(function (s) { return s !== "" }).join("   •   ")
-                font.pixelSize: 18
-                color: Theme.text
-                opacity: 0.55
             }
         }
 
-        IconButton {   // cambia / inserisci il nome del bambino
+        CircleButton {   // cambia / inserisci il nome del bambino
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 98
-            text: "👤"
+            icon: "ui/person"
+            color: "#AB47BC"
             onClicked: namePrompt.visible = true
         }
 
-        IconButton {
+        CircleButton {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 20
-            text: "🔄"
+            icon: "ui/restart"
+            color: Theme.dirUp
             onClicked: { sndTap.play(); engine.loadLevel(engine.levelIndex) }
         }
     }
+
+    // ---------- disposizione ----------
+    // Schermi larghi: tabellone grande a sinistra, frecce e pulsanti a destra,
+    // striscia dei comandi in basso. Schermi alti: tutto uno sotto l'altro.
+    readonly property bool wide: width > height * 1.1
+    // spazio verticale disponibile fra intestazione e striscia
+    readonly property real sideHeight: height - header.height - strip.height - 52
+    readonly property real bigSize: wide ? Math.max(72, Math.min(116, sideHeight * 0.24)) : 116
+    readonly property real padButton: wide
+        ? Math.max(44, Math.min(Theme.touch, (sideHeight - bigSize - 36) / 3))
+        : Theme.touch
+    readonly property real sideWidth: Math.max(padButton * 3 + 20, bigSize * 2 + 22)
 
     // ---------- tabellone ----------
     Board {
         id: board
         engine: engine
-        anchors {
-            top: header.bottom
-            left: parent.left
-            right: parent.right
-            bottom: controls.top
-            margins: 16
-        }
+        x: 16
+        y: header.height + 8
+        width: root.width - 32 - (root.wide ? root.sideWidth + 20 : 0)
+        height: Math.max(0, strip.y - y - 16)
     }
 
-    // ---------- controlli in basso ----------
-    Column {
-        id: controls
-        anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 20 }
-        spacing: 16
+    CommandStrip {
+        id: strip
+        engine: engine
+        x: 20
+        width: root.width - 40
+        height: implicitHeight
+        y: root.wide ? root.height - height - 20 : pad.y - height - 16
+    }
 
-        CommandStrip {
-            id: strip
-            engine: engine
-            width: parent.width
+    // ---------- comandi ----------
+    DirectionPad {
+        id: pad
+        btn: root.padButton
+        width: implicitWidth
+        height: implicitHeight
+        x: root.wide ? root.width - 20 - (root.sideWidth + width) / 2 : 20
+        y: root.wide
+           ? header.height + 8 + Math.max(0, (root.sideHeight - height - root.bigSize - 26) / 2)
+           : root.height - height - 24
+        active: engine.state === PathEngine.Editing
+        onMoved: (d) => { sndTap.play(); engine.addCommand(d) }
+    }
+
+    Row {
+        spacing: 22
+        x: root.wide ? root.width - 20 - (root.sideWidth + width) / 2 : root.width - 20 - width
+        y: root.wide ? pad.y + pad.height + 22 : pad.y + (pad.height - height) / 2
+
+        BigButton {          // cestino
+            symbol: "ui/trash"
+            bg: Theme.danger
+            visible: engine.commands.length > 0 && engine.state === PathEngine.Editing
+            onClicked: { sndTap.play(); engine.clearCommands() }
         }
 
-        Item {
-            width: parent.width
-            height: pad.implicitHeight
-
-            DirectionPad {
-                id: pad
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                active: engine.state === PathEngine.Editing
-                onMoved: (d) => { sndTap.play(); engine.addCommand(d) }
+        BigButton {          // vai / ferma
+            symbol: engine.state === PathEngine.Running ? "ui/stop" : "ui/play"
+            bg: Theme.accent
+            on: engine.commands.length > 0 && engine.state !== PathEngine.Mistake
+            onClicked: {
+                sndTap.play()
+                if (engine.state === PathEngine.Running)
+                    engine.stop()
+                else
+                    engine.run()
             }
+        }
 
-            Row {
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 22
-
-                BigButton {          // cestino
-                    symbol: "🗑"
-                    bg: Theme.danger
-                    visible: engine.commands.length > 0 && engine.state === PathEngine.Editing
-                    onClicked: { sndTap.play(); engine.clearCommands() }
-                }
-
-                BigButton {          // vai / ferma
-                    symbol: engine.state === PathEngine.Running ? "■" : "▶"
-                    bg: Theme.accent
-                    on: engine.commands.length > 0 && engine.state !== PathEngine.Mistake
-                    onClicked: {
-                        sndTap.play()
-                        if (engine.state === PathEngine.Running)
-                            engine.stop()
-                        else
-                            engine.run()
-                    }
-                }
-
-                BigButton {          // livello successivo (appare quando ha vinto)
-                    symbol: "➜"
-                    bg: Theme.dirUp
-                    visible: engine.state === PathEngine.Won
-                    onClicked: { sndTap.play(); root.goNext() }
-                }
-            }
+        BigButton {          // livello successivo (appare quando ha vinto)
+            symbol: "ui/next"
+            bg: Theme.dirUp
+            visible: engine.state === PathEngine.Won
+            onClicked: { sndTap.play(); root.goNext() }
         }
     }
 

@@ -10,6 +10,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Dov'è il coniglio?")
+    scenery: "cameretta"
     age: qsTr("4-5 anni")
     levelCount: 5
 
@@ -98,10 +99,10 @@ MiniGame {
         id: area
         anchors.fill: parent
 
-        Text {
+        AppIcon {
             anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 10 }
-            text: g.phase === "guess" ? "👆" : (g.phase === "shuffle" ? "🔀" : "👀")
-            font.pixelSize: 46
+            name: g.phase === "guess" ? "point-up" : (g.phase === "shuffle" ? "shuffle" : "eyes")
+            size: 53
         }
 
         Repeater {
@@ -120,11 +121,11 @@ MiniGame {
                     || (g.phase === "done" && index === g.hiddenCup)
                     || g.peekWrongCup === index
 
-                Text {   // il coniglio, seduto per terra; si vede solo se alzato
+                AppIcon {   // il coniglio, seduto per terra; si vede solo se alzato
                     anchors.horizontalCenter: parent.horizontalCenter
                     y: parent.height - 104
-                    text: "🐰"
-                    font.pixelSize: 92
+                    name: "rabbit"
+                    size: 106
                     visible: cup.index === g.hiddenCup && cup.up
                 }
 
@@ -137,14 +138,36 @@ MiniGame {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: 22
+                        radius: 30
+                        gradient: Gradient {
+                            orientation: Gradient.Horizontal
+                            GradientStop { position: 0.0; color: "#FFC95C" }
+                            GradientStop { position: 1.0; color: "#F57C00" }
+                        }
                         color: Theme.dirLeft
-                        border.color: Theme.boardLine
-                        border.width: 4
+                        border.color: "white"
+                        border.width: 5
+                        Candy { depth: 8 }
+                    }
+                    Repeater {   // due fasce bianche
+                        model: 2
+                        Rectangle {
+                            required property int index
+                            x: 5; width: body.width - 10; height: 12
+                            y: body.height * (index ? 0.76 : 0.26)
+                            color: "#D9FFFFFF"
+                        }
+                    }
+                    AppIcon {
+                        anchors.centerIn: parent
+                        name: "star"
+                        size: parent.width * 0.5
                     }
                     Rectangle {   // bordo superiore
-                        width: parent.width; height: 26; radius: 13
-                        color: Qt.darker(Theme.dirLeft, 1.15)
+                        x: -6; width: parent.width + 12; height: 30; radius: 15
+                        color: "#EF6C00"
+                        border.color: "white"
+                        border.width: 4
                     }
                 }
 

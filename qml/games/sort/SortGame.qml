@@ -10,6 +10,7 @@ import Orme
 GameScaffold {
     id: scaffold
     title: qsTr("Metti a posto")
+    scenery: "cameretta"
     age: qsTr("3-4 anni")
     showNext: won
 
@@ -20,8 +21,8 @@ GameScaffold {
     readonly property int roundCount: 3
     readonly property int perRound: 6
 
-    readonly property var animals: ["🐶", "🐱", "🐰", "🐻", "🦊", "🐸", "🐵", "🐷"]
-    readonly property var fruits:  ["🍎", "🍌", "🍓", "🍇", "🍊", "🍉", "🍐", "🍒"]
+    readonly property var animals: ["dog", "cat", "rabbit", "bear", "fox", "frog", "monkey", "pig"]
+    readonly property var fruits:  ["apple", "banana", "strawberry", "grapes", "tangerine", "watermelon", "pear", "cherries"]
 
     property int  roundIndex: 0
     property int  done: 0
@@ -73,8 +74,8 @@ GameScaffold {
         } else {
             var animal = Math.random() < 0.5
             var list = animal ? animals : fruits
-            item = { kind: "emoji",
-                     emoji: list[Math.floor(Math.random() * list.length)],
+            item = { kind: "icon",
+                     icon: list[Math.floor(Math.random() * list.length)],
                      size: 120,
                      key: animal ? "animal" : "fruit" }
         }
@@ -127,9 +128,8 @@ GameScaffold {
             spacing: 12
             Repeater {
                 model: scaffold.perRound
-                Rectangle {
-                    width: 18; height: 18; radius: 9
-                    color: index < scaffold.done ? Theme.accent : Theme.boardLine
+                ProgressStar {
+                    filled: index < scaffold.done
                 }
             }
         }
@@ -154,6 +154,7 @@ GameScaffold {
 
             // forma "cerchio"
             Rectangle {
+                Candy {}
                 anchors.centerIn: parent
                 visible: scaffold.item.kind === "circle"
                 width: scaffold.item.size
@@ -161,12 +162,12 @@ GameScaffold {
                 radius: width / 2
                 color: Theme.playColors[scaffold.item.colorIndex]
             }
-            // forma "emoji"
-            Text {
+            // forma "icona"
+            AppIcon {
                 anchors.centerIn: parent
-                visible: scaffold.item.kind === "emoji"
-                text: scaffold.item.emoji || ""
-                font.pixelSize: scaffold.item.size
+                visible: scaffold.item.kind === "icon"
+                name: scaffold.item.icon || ""
+                size: (scaffold.item.size) * 1.15
             }
 
             MouseArea {
@@ -228,6 +229,7 @@ GameScaffold {
 
                 Rectangle {
                     id: binRect
+                    Candy {}
                     width: 200; height: 200
                     radius: 28
                     color: Theme.panel
@@ -248,6 +250,7 @@ GameScaffold {
 
                     // etichetta del cesto secondo il turno (un po' in alto)
                     Rectangle {   // colore
+                        Candy {}
                         anchors.centerIn: parent
                         anchors.verticalCenterOffset: -20
                         visible: scaffold.roundIndex === 0
@@ -255,6 +258,7 @@ GameScaffold {
                         color: Theme.playColors[binRect.modelData === undefined ? 0 : binRect.modelData]
                     }
                     Rectangle {   // grandezza
+                        Candy {}
                         anchors.centerIn: parent
                         anchors.verticalCenterOffset: -20
                         visible: scaffold.roundIndex === 1
@@ -262,12 +266,12 @@ GameScaffold {
                         height: width; radius: width / 2
                         color: Theme.boardLine
                     }
-                    Text {        // tipo
+                    AppIcon {        // tipo
                         anchors.centerIn: parent
                         anchors.verticalCenterOffset: -14
                         visible: scaffold.roundIndex === 2
-                        text: binRect.modelData === "animal" ? "🐾" : "🍽️"
-                        font.pixelSize: 84
+                        name: binRect.modelData === "animal" ? "paws" : "plate"
+                        size: 97
                     }
 
                     // le palline raccolte, in basso nel cesto

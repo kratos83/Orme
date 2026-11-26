@@ -3,37 +3,38 @@
 import QtQuick
 import Orme
 
-// L'alfabeto: un'emoji con la parola sotto (es. 🐝 APE), tocca la lettera
+// L'alfabeto: una figura con la parola sotto (es. un'ape: APE), tocca la lettera
 // con cui inizia la parola fra due carte - la posizione di quella giusta
 // cambia ad ogni livello, non è mai sempre nella stessa.
 MiniGame {
     id: g
     title: qsTr("L'alfabeto")
+    scenery: "scuola"
     age: qsTr("6-8 anni")
     levelCount: 12
 
     readonly property var items: [
-        { word: qsTr("APE"), e: "🐝", letter: "A" },
-        { word: qsTr("BARCA"), e: "⛵", letter: "B" },
-        { word: qsTr("CASA"), e: "🏠", letter: "C" },
-        { word: qsTr("DADO"), e: "🎲", letter: "D" },
-        { word: qsTr("ELEFANTE"), e: "🐘", letter: "E" },
-        { word: qsTr("FUNGO"), e: "🍄", letter: "F" },
-        { word: qsTr("GATTO"), e: "🐱", letter: "G" },
-        { word: qsTr("HOTEL"), e: "🏨", letter: "H" },
-        { word: qsTr("ISOLA"), e: "🏝️", letter: "I" },
-        { word: qsTr("LUNA"), e: "🌙", letter: "L" },
-        { word: qsTr("MELA"), e: "🍎", letter: "M" },
-        { word: qsTr("NAVE"), e: "🚢", letter: "N" },
-        { word: qsTr("ORSO"), e: "🐻", letter: "O" },
-        { word: qsTr("PESCE"), e: "🐟", letter: "P" },
-        { word: qsTr("QUADRO"), e: "🖼️", letter: "Q" },
-        { word: qsTr("RANA"), e: "🐸", letter: "R" },
-        { word: qsTr("SOLE"), e: "☀️", letter: "S" },
-        { word: qsTr("TIGRE"), e: "🐯", letter: "T" },
-        { word: qsTr("UOVO"), e: "🥚", letter: "U" },
-        { word: qsTr("VOLPE"), e: "🦊", letter: "V" },
-        { word: qsTr("ZAINO"), e: "🎒", letter: "Z" }
+        { word: qsTr("APE"), img: "bee", letter: "A" },
+        { word: qsTr("BARCA"), img: "sailboat", letter: "B" },
+        { word: qsTr("CASA"), img: "house", letter: "C" },
+        { word: qsTr("DADO"), img: "die", letter: "D" },
+        { word: qsTr("ELEFANTE"), img: "elephant", letter: "E" },
+        { word: qsTr("FUNGO"), img: "mushroom", letter: "F" },
+        { word: qsTr("GATTO"), img: "cat", letter: "G" },
+        { word: qsTr("HOTEL"), img: "hotel", letter: "H" },
+        { word: qsTr("ISOLA"), img: "island", letter: "I" },
+        { word: qsTr("LUNA"), img: "moon", letter: "L" },
+        { word: qsTr("MELA"), img: "apple", letter: "M" },
+        { word: qsTr("NAVE"), img: "ship", letter: "N" },
+        { word: qsTr("ORSO"), img: "bear", letter: "O" },
+        { word: qsTr("PESCE"), img: "fish", letter: "P" },
+        { word: qsTr("QUADRO"), img: "picture", letter: "Q" },
+        { word: qsTr("RANA"), img: "frog", letter: "R" },
+        { word: qsTr("SOLE"), img: "sun", letter: "S" },
+        { word: qsTr("TIGRE"), img: "tiger", letter: "T" },
+        { word: qsTr("UOVO"), img: "egg", letter: "U" },
+        { word: qsTr("VOLPE"), img: "fox", letter: "V" },
+        { word: qsTr("ZAINO"), img: "backpack", letter: "Z" }
     ]
 
     property var current: items[0]
@@ -89,10 +90,10 @@ MiniGame {
             Column {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 8
-                Text {
+                AppIcon {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: g.current.e
-                    font.pixelSize: 110
+                    name: g.current.img
+                    size: 126
                 }
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -110,6 +111,7 @@ MiniGame {
                     model: g.options
                     Rectangle {
                         id: card
+                        Candy {}
                         required property string modelData
                         required property int index
                         width: 150; height: 190; radius: 22

@@ -7,6 +7,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Indovina la parola")
+    scenery: "scuola"
     age: qsTr("6-8 anni")
     levelCount: 12
 
@@ -83,7 +84,7 @@ MiniGame {
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WordWrap
                 text: g.entries[g.targetIndex].clue
-                font.pixelSize: 26
+                font.pixelSize: 32
                 font.bold: true
                 color: Theme.text
             }
@@ -97,6 +98,7 @@ MiniGame {
                     model: g.choices
                     Rectangle {
                         id: opt
+                        Candy {}
                         required property int modelData
                         required property int index
                         width: 260; height: 84; radius: 18
@@ -104,7 +106,7 @@ MiniGame {
                         opacity: g.answered && opt.modelData !== g.targetIndex ? 0.4 : 1
                         scale: optMa.pressed ? 0.95 : 1
                         Behavior on scale { NumberAnimation { duration: 80 } }
-                        Text { anchors.centerIn: parent; text: g.entries[opt.modelData].word; font.pixelSize: 24; font.bold: true; color: "white" }
+                        Text { anchors.centerIn: parent; text: g.entries[opt.modelData].word; font.pixelSize: 32; font.bold: true; color: "white" }
                         MouseArea { id: optMa; anchors.fill: parent; enabled: !g.won; onClicked: g.pick(opt.modelData) }
                     }
                 }

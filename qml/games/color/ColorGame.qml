@@ -53,6 +53,7 @@ MiniGame {
         anchors.fill: parent
 
         Rectangle {   // colore da cercare
+            Candy {}
             anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 24 }
             width: 150; height: 150; radius: 32
             color: Theme.playColors[g.target]
@@ -69,6 +70,7 @@ MiniGame {
             Repeater {
                 model: g.choices
                 Rectangle {
+                    Candy {}
                     required property var modelData
                     width: 150; height: 150; radius: 75
                     color: Theme.playColors[modelData]

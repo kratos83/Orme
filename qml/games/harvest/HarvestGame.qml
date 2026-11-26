@@ -12,7 +12,7 @@ MiniGame {
     levelCount: 3
 
     readonly property int need: 8
-    readonly property var fruits: ["🍎", "🍌", "🍓", "🍇", "🍊", "🍐", "🍑", "🍒"]
+    readonly property var fruits: ["apple", "banana", "strawberry", "grapes", "tangerine", "pear", "peach", "cherries"]
     property int done: 0
 
     SoundBank { id: snd }
@@ -37,23 +37,23 @@ MiniGame {
     Item {
         id: area
         anchors.fill: parent
+        clip: true     // i frutti spuntano sotto l'intestazione, non sopra i pulsanti
 
         Row {
             anchors { top: parent.top; topMargin: 6; horizontalCenter: parent.horizontalCenter }
             spacing: 8
             Repeater {
                 model: g.need
-                Rectangle {
-                    width: 16; height: 16; radius: 8
-                    color: index < g.done ? Theme.accent : Theme.boardLine
+                ProgressStar {
+                    filled: index < g.done
                 }
             }
         }
 
-        Text {
+        AppIcon {
             anchors { bottom: parent.bottom; horizontalCenter: parent.horizontalCenter }
-            text: "🧺"
-            font.pixelSize: 100
+            name: "basket"
+            size: 115
         }
 
         Repeater {
@@ -71,22 +71,23 @@ MiniGame {
                     x = Math.random() * Math.max(1, area.width - width)
                     y = -130
                     tint = Math.floor(Math.random() * 6)
-                    face.text = g.fruits[Math.floor(Math.random() * g.fruits.length)]
+                    face.name = g.fruits[Math.floor(Math.random() * g.fruits.length)]
                 }
 
                 Rectangle {
+                    Candy {}
                     anchors.centerIn: parent
                     width: 96; height: 96
                     radius: 48
-                    color: Theme.playColors[fruit.tint]
-                    border.color: "white"
-                    border.width: 4
+                    color: "#F2FFFFFF"   // fondo chiaro: il frutto risalta
+                    border.color: Theme.playColors[fruit.tint]
+                    border.width: 8
                 }
-                Text {
+                AppIcon {
                     id: face
                     anchors.centerIn: parent
-                    text: g.fruits[fruit.index % g.fruits.length]
-                    font.pixelSize: 60
+                    name: g.fruits[fruit.index % g.fruits.length]
+                    size: 69
                 }
 
                 Timer {

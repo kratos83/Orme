@@ -31,7 +31,6 @@ COPY --chown=builder:builder CMakeLists.txt COPYRIGHT LICENSE VERSION.txt /home/
 COPY --chown=builder:builder src/    /home/builder/orme-source/src/
 COPY --chown=builder:builder qml/    /home/builder/orme-source/qml/
 COPY --chown=builder:builder assets/ /home/builder/orme-source/assets/
-COPY --chown=builder:builder images/ /home/builder/orme-source/images/
 # Referenziato da CMakeLists.txt (install(FILES packaging/linux/debian/orme.desktop ...))
 COPY --chown=builder:builder packaging/linux/debian/orme.desktop /home/builder/orme-source/packaging/linux/debian/orme.desktop
 

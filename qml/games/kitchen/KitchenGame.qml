@@ -8,6 +8,7 @@ import Orme
 GameScaffold {
     id: scaffold
     title: qsTr("Cuciniamo insieme")
+    scenery: "cameretta"
     age: qsTr("3-4 anni")
     showNext: won
 
@@ -16,14 +17,14 @@ GameScaffold {
     onWinFinished: goNext()
 
     readonly property var sequences: [
-        ["🥣", "🥛"],
-        ["🫖", "☕"],
-        ["🥚", "🍳"],
-        ["🍞", "🧈"],
-        ["🛒", "🏠"],
-        ["🧺", "👕"],
-        ["🍽️", "🧽", "✨"],
-        ["🍎", "🔪", "🍽️"]
+        ["bowl", "milk"],
+        ["teapot", "coffee"],
+        ["egg", "cooking"],
+        ["bread", "butter"],
+        ["shopping-cart", "house"],
+        ["basket", "tshirt"],
+        ["plate", "sponge", "sparkles"],
+        ["apple", "knife", "plate"]
     ]
 
     property int  levelIndex: 0
@@ -94,6 +95,7 @@ GameScaffold {
 
                 Rectangle {
                     id: pick
+                    Candy {}
                     width: 150; height: 150
                     radius: 26
                     color: Theme.panel
@@ -101,10 +103,10 @@ GameScaffold {
                     border.width: 3
                     opacity: scaffold.used(modelData) ? 0.18 : 1
 
-                    Text {
+                    AppIcon {
                         anchors.centerIn: parent
-                        text: modelData
-                        font.pixelSize: 90
+                        name: modelData
+                        size: 103
                         visible: !scaffold.used(modelData)
                     }
 
@@ -137,12 +139,11 @@ GameScaffold {
         }
 
         // freccia "in ordine"
-        Text {
+        AppIcon {
             anchors.horizontalCenter: parent.horizontalCenter
             y: parent.height * 0.48
-            text: "▼"
-            font.pixelSize: 40
-            color: Theme.text
+            name: "ui/down"
+            size: 48
             opacity: 0.5
         }
 
@@ -156,6 +157,7 @@ GameScaffold {
                 model: scaffold.correct.length
 
                 Rectangle {
+                    Candy {}
                     width: 160; height: 160
                     radius: 26
                     color: Theme.boardFill

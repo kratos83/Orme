@@ -21,7 +21,6 @@ COPY --chown=root:root CMakeLists.txt COPYRIGHT LICENSE VERSION.txt /build/orme/
 COPY --chown=root:root src/     /build/orme/src/
 COPY --chown=root:root qml/     /build/orme/qml/
 COPY --chown=root:root assets/  /build/orme/assets/
-COPY --chown=root:root images/  /build/orme/images/
 COPY --chown=root:root debian/  /build/orme/debian/
 COPY --chown=root:root packaging/repo /build/orme/packaging/repo
 # Referenziato da CMakeLists.txt (install(FILES packaging/linux/debian/orme.desktop ...))

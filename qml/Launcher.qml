@@ -11,71 +11,59 @@ Item {
     signal gameSelected(string game)
     signal infoRequested()
     signal backRequested()
+    signal quitRequested()
 
-    Rectangle { anchors.fill: parent; color: Theme.background }
+    Scenery { theme: root.category === "primaria" ? "scuola" : "prato" }
 
-    Text {
+    TitlePill {
         id: heading
-        anchors { top: parent.top; topMargin: 20; horizontalCenter: parent.horizontalCenter }
-        text: root.category === "primaria" ? qsTr("Giochi per la primaria") : qsTr("Giochi per l'infanzia")
-        font.pixelSize: 38
-        font.bold: true
-        color: Theme.text
+        anchors { top: parent.top; topMargin: 14; horizontalCenter: parent.horizontalCenter }
+        maxWidth: root.width - 400
+        title: root.category === "primaria" ? qsTr("Giochi per la primaria") : qsTr("Giochi per l'infanzia")
+        titleSize: 38
     }
 
-    Rectangle {   // pulsante indietro (torna alla scelta Infanzia/Primaria), in alto a sinistra
-        id: backBtn
+    CircleButton {   // indietro (torna alla scelta Infanzia/Primaria), in alto a sinistra
         anchors { top: parent.top; left: parent.left; margins: 18 }
-        width: 60; height: 60; radius: 30
-        color: Theme.panel
-        border.color: Theme.boardLine
-        border.width: 3
-        scale: backMa.pressed ? 0.9 : 1
-        Behavior on scale { NumberAnimation { duration: 80 } }
-        Text { anchors.centerIn: parent; text: "◀"; font.pixelSize: 26; font.bold: true; color: Theme.text }
-        MouseArea { id: backMa; anchors.fill: parent; onClicked: root.backRequested() }
+        icon: "ui/back"
+        color: Theme.dirLeft
+        onClicked: root.backRequested()
     }
 
-    Rectangle {   // pulsante Info, in alto a destra
+    CircleButton {   // Info, in alto a destra
         id: infoBtn
         anchors { top: parent.top; right: parent.right; margins: 18 }
-        width: 60; height: 60; radius: 30
-        color: Theme.panel
-        border.color: Theme.boardLine
-        border.width: 3
-        scale: infoMa.pressed ? 0.9 : 1
-        Behavior on scale { NumberAnimation { duration: 80 } }
-        Text { anchors.centerIn: parent; text: "i"; font.pixelSize: 30; font.bold: true; font.italic: true; color: Theme.text }
-        MouseArea { id: infoMa; anchors.fill: parent; onClicked: root.infoRequested() }
+        label: "i"
+        color: Theme.dirUp
+        onClicked: root.infoRequested()
     }
 
-    Rectangle {   // pulsante Esci, in alto a destra, a sinistra di Info
-        anchors { top: infoBtn.top; right: infoBtn.left; rightMargin: 12 }
-        width: 100; height: 60; radius: 30
-        color: Theme.panel
-        border.color: Theme.boardLine
-        border.width: 3
-        scale: m_esci.pressed ? 0.9 : 1
-        Behavior on scale { NumberAnimation { duration: 80 } }
-        Text { anchors.centerIn: parent; text: "Esci"; font.pixelSize: 30; font.bold: true; font.italic: true; color: Theme.text }
-        MouseArea { id: m_esci; anchors.fill: parent; onClicked: Qt.exit(0) }
+    CandyButton {   // Esci, a sinistra di Info
+        anchors { verticalCenter: infoBtn.verticalCenter; right: infoBtn.left; rightMargin: 14 }
+        height: 62
+        text: qsTr("Esci")
+        icon: "door"
+        textSize: 26
+        color: Theme.danger
+        onClicked: root.quitRequested()   // prima chiede conferma
     }
 
     Flickable {
         id: flick
         anchors {
-            top: heading.bottom; topMargin: 14
+            top: heading.bottom; topMargin: 18
             left: parent.left; right: parent.right
             bottom: footer.top
         }
         contentWidth: width
-        contentHeight: grid.height + 24
+        contentHeight: grid.height + 30
         clip: true
         boundsBehavior: Flickable.StopAtBounds
 
         Grid {
             id: grid
             anchors.horizontalCenter: parent.horizontalCenter
+            y: 8
             columns: Math.max(3, Math.min(6, Math.floor((flick.width - 40) / 214)))
             rowSpacing: 18
             columnSpacing: 18
@@ -84,15 +72,25 @@ Item {
                 model: Catalog.games.filter((g) => g.cat === root.category)
                 GameTile {
                     required property var modelData
+                    required property int index
+                    order: index
                     title: modelData.title
                     age: modelData.age
                     baseColor: modelData.c
                     iconKind: modelData.icon ? modelData.icon : ""
-                    emoji: modelData.e ? modelData.e : ""
+                    image: modelData.img
                     onClicked: root.gameSelected(modelData.id)
                 }
             }
         }
+    }
+
+    Rectangle {   // fondo chiaro dietro la riga in basso
+        anchors.centerIn: footer
+        width: Math.min(footer.width, footer.implicitWidth + 36)
+        height: footer.height + 8
+        radius: height / 2
+        color: "#E6FFFFFF"
     }
 
     Text {

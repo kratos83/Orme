@@ -1,8 +1,8 @@
 # Orme
 
-Raccolta di 47 giochi touch per bambini della scuola dell'infanzia (3-5 anni,
+Raccolta di 48 giochi touch per bambini della scuola dell'infanzia (3-5 anni,
 30 giochi ispirati ai concetti del coding) e della scuola primaria (6-10 anni,
-17 giochi di matematica, italiano e geografia). All'avvio si sceglie la
+18 giochi di matematica, italiano e geografia). All'avvio si sceglie la
 categoria (Infanzia o Primaria) e si vede solo la griglia di quella categoria.
 
 Linguagio utilizzato: Qt 6 + C++ + QML.
@@ -38,18 +38,31 @@ macOS: vedi [packaging/README.md](packaging/README.md).
 
 ## I giochi
 
-**47 giochi** in due categorie, scelte in una schermata iniziale
+**48 giochi** in due categorie, scelte in una schermata iniziale
 (`CategoryPicker.qml`): **Infanzia** (30 giochi, 3-5 anni) e **Primaria**
-(17 giochi, 6-10 anni). Ogni categoria ha la sua griglia, che si adatta alla
+(18 giochi, 6-10 anni). Ogni categoria ha la sua griglia, che si adatta alla
 larghezza (3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a
 capo. L'età consigliata è scritta su ogni riquadro e nell'intestazione del
-gioco (proprietà `age`). Le icone (menu e giochi) sono emoji; per non
-dipendere dal font emoji di sistema - assente su molti tablet Android reali,
-specie senza servizi Google, con il risultato di icone invisibili o
-"quadratini vuoti" - l'app include Noto Color Emoji
-(`assets/fonts/NotoColorEmoji.ttf`, licenza OFL) e lo imposta come fallback
-del font di default all'avvio (`src/main.cpp`), cosi' le emoji si vedono
-uguali su ogni dispositivo.
+gioco (proprietà `age`). Le icone sono immagini PNG incluse
+nel programma (`assets/icons/`), quindi si vedono uguali su ogni dispositivo
+senza dipendere dai font di sistema: figure 3D di
+[Fluent Emoji](https://github.com/microsoft/fluentui-emoji) e simboli dei
+pulsanti di
+[Fluent UI System Icons](https://github.com/microsoft/fluentui-system-icons),
+entrambe © Microsoft, licenza MIT. Nel QML si usano con
+`AppIcon { name: "rabbit"; size: 96 }` (`qml/common/AppIcon.qml`), che
+decodifica ogni immagine solo a 64, 128 o 256 px secondo la grandezza a
+schermo, per consumare poca RAM. Per aggiungerne una: una riga in
+`scripts/fetch_icons.py`, poi `python3 scripts/fetch_icons.py`.
+
+**Grafica.** Lo stile è comune a tutti i giochi e fatto solo di forme QML
+(nessuna immagine a tutto schermo, nessuno shader), per restare leggero:
+`Scenery.qml` disegna lo sfondo (`scenery: "prato" | "mare" | "tramonto" |
+"cameretta" | "scuola"` in ogni gioco), `Candy.qml` dà rilievo e riflesso a
+qualsiasi `Rectangle`, `CircleButton`, `CandyButton`, `TitlePill` e
+`ProgressStar` sono pulsanti, targhe e tappe di avanzamento. Il font è
+[Fredoka](https://fonts.google.com/specimen/Fredoka) (`assets/fonts/`,
+licenza OFL), impostato in `src/main.cpp`.
 
 ### Infanzia (30 giochi, 3-5 anni)
 
@@ -90,7 +103,7 @@ Regole comuni pensate per 3-5 anni: niente testo da leggere (icone + colore +
 suono), bersagli touch grandi, nessuna schermata di sconfitta, festa e "Ops!
 Riprova" sempre uguali.
 
-### Primaria (17 giochi, 6-10 anni)
+### Primaria (18 giochi, 6-10 anni)
 
 Ispirati e derivati da una vecchia raccolta di giochi didattici Qt Widgets
 per la scuola primaria; riscritti da zero in QML, accorpando in un solo
@@ -104,7 +117,7 @@ cartelle "tabellina_N" -> un solo gioco con selettore 2-10).
 | 33 | **Moltiplicazioni** | 8-9 | `games/arithmetic/` | risolvi la moltiplicazione col tastierino numerico |
 | 34 | **Divisioni** | 8-9 | `games/arithmetic/` | risolvi la divisione, anche col resto, col tastierino numerico |
 | 35 | **Frazioni** | 9-10 | `games/fractions/` | frazione di un intero, frazione di un numero, frazioni equivalenti |
-| 36 | **Tabelline** | 8-9 | `games/tables/` | scegli la tabellina (2-10) e tocca i multipli in ordine: ogni pesce pescato vola nella conchiglia |
+| 36 | **Tabelline** | 8-9 | `games/tables/` | scegli la tabellina (2-10) e metti ogni multiplo nella sua conchiglia, trascinando i pesci o toccandoli in ordine |
 | 37 | **La linea dei numeri** | 6-8 | `games/numberline/` | scegli lunghezza (5/10/20) e modalità (conta/addizione/sottrazione), tocca il numero giusto sulla linea |
 | 38 | **Regioni d'Italia** | 8-10 | `games/regions/` | leggi il nome della regione o del capoluogo e toccala sulla vera mappa d'Italia (confini reali, dati ISTAT) |
 | 39 | **Sillabe** | 6-7 | `games/syllables/` | le sillabe di una parola sono mescolate: toccale in ordine per ricomporla |
@@ -115,36 +128,37 @@ cartelle "tabellina_N" -> un solo gioco con selettore 2-10).
 | 44 | **Riordina la frase** | 7-9 | `games/reorder/` | le parole di una frase sono mescolate: toccale in ordine per ricomporla |
 | 45 | **Soggetto e predicato** | 8-9 | `games/subjectverb/` | una frase in due pezzi: tocca il soggetto o il predicato richiesto |
 | 46 | **Pronomi** | 9-10 | `games/pronouns/` | scegli il tipo (personali/possessivi/dimostrativi/indefiniti/relativi), completa la frase |
-| 47 | **L'alfabeto** | 6-8 | `games/alphabet/` | un'emoji e la sua parola: tocca la lettera giusta fra due carte, in posizione casuale |
+| 47 | **L'alfabeto** | 6-8 | `games/alphabet/` | una figura e la sua parola: tocca la lettera giusta fra due carte, in posizione casuale |
+| 48 | **I numeri fino a 20** | 6-7 | `games/line20/` | classe prima, ispirato al metodo analogico di Bortolato: linea dei tasti a cinquine e decine; gioco libero, quanti sono, alza i tasti, amici del 10, aggiungi, togli |
 
 Meccanica comune: tastierino numerico touch (`common/NumberPad.qml`) per le
 risposte numeriche, tocco su carte/riquadri per le scelte multiple; stessa
 cornice (`MiniGame`/`GameScaffold`) e stelle di punteggio dei giochi Infanzia.
 
-**Nome del bambino (in tutti i 47 giochi).** All'ingresso di ogni gioco compare
+**Nome del bambino (in tutti i 48 giochi).** All'ingresso di ogni gioco compare
 la schermata "Come ti chiami?" (`NamePrompt.qml`, dentro `GameScaffold` quindi
 ereditata anche da `MiniGame` e da tutti i giochi): campo di testo + "Gioca" o
 "Salta". Il nome resta scritto nell'intestazione e si può **cambiare in
-qualunque momento** col tasto **👤** (accanto a 🔄). Uscendo con ← il gioco
+qualunque momento** col tasto **a forma di persona** (accanto a "ricomincia"). Uscendo con la freccia "indietro" il gioco
 viene distrutto e ricreato, quindi **nome e punteggio si azzerano** per il
 bambino successivo.
 
 **Menu Info.** In alto a destra nel menu c'è il tasto **i**: apre `InfoPage.qml`
 con la presentazione del programma (scopo, versione, © e email) e **l'elenco di
-tutti i 47 giochi**, divisi per categoria, con concetto ed età; toccando una
+tutti i 48 giochi**, divisi per categoria, con concetto ed età; toccando una
 riga si apre quel gioco.
-L'elenco dei giochi (id, titolo, età, colore, emoji, descrizione) è il singleton
+L'elenco dei giochi (id, titolo, età, colore, icona, descrizione) è il singleton
 `Catalog.qml`, usato sia dal menu sia dalla pagina Info.
 
-**Punteggio e passaggio di livello.** Ogni livello vinto dà da 1 a 3 faccine
-😊 (3 se nessun errore, poi -1 per errore, minimo 1). Il totale della sessione
-è sempre visibile in una targhetta con la faccina. Quando il bambino vince
-parte la festa ("BRAVO/A!", le faccine guadagnate, "Sei al livello N") e poi
+**Punteggio e passaggio di livello.** Ogni livello vinto dà da 1 a 3 stelle
+(3 se nessun errore, poi -1 per errore, minimo 1). Il totale della sessione
+è sempre visibile in una targhetta con la stella. Quando il bambino vince
+parte la festa ("BRAVO/A!", le stelle guadagnate, "Sei al livello N") e poi
 **si passa da soli al livello successivo**; la grande freccia "avanti" serve
 solo a saltare l'attesa. Il conteggio degli errori del livello sta in una
 proprietà `mistakes` per gioco; il totale in `GameScaffold.score`
 (in "Il percorso" è `PathGame.score`). Componenti: `ScoreBar.qml` per la
-targhetta, `Celebration.qml` per festa + faccine + messaggio.
+targhetta, `Celebration.qml` per festa + stelle + messaggio.
 
 ## Struttura
 
@@ -158,24 +172,28 @@ qml/
   Main.qml            finestra + Loader; sceglie CategoryPicker o Launcher,
                       mappa id-gioco -> Component (+ InfoPage)
   Theme.qml           singleton: colori e misure condivise
-  Catalog.qml         singleton: elenco dei 47 giochi (id/cat/titolo/età/colore/emoji/desc)
+  Catalog.qml         singleton: elenco dei 48 giochi (id/cat/titolo/età/colore/icona/desc)
   CategoryPicker.qml  schermata iniziale: scegli Infanzia o Primaria
   Launcher.qml        menu scorrevole (griglia 3-6 col.), filtrato per categoria,
                       + tasto "◀" (torna alla scelta) e "i" -> Info
   InfoPage.qml        presentazione del programma + elenco di tutti i giochi
                       (due sezioni: Infanzia e Primaria)
-  GameTile.qml        un riquadro del menu (title, age, emoji/icona)
+  GameTile.qml        un riquadro del menu (title, age, icona)
   common/
     GameScaffold.qml  cornice: nome bambino, sfondo, intestazione
                       (indietro/ricomincia/titolo/età/nome), area di gioco,
                       pulsante "avanti", overlay festa + errore, ScoreBar.
-                      Funzioni: reward(faccine,msg), celebrate(), oops()
+                      Funzioni: reward(stelle,msg), celebrate(), oops()
     MiniGame.qml       estende GameScaffold col giro standard livello+punteggio:
                       levelIndex/levelCount/mistakes/won, segnale buildLevel(i),
                       funzioni win() e wrong(); auto-avanza dopo la festa
+    AppIcon.qml       un'icona di assets/icons/ (name, size)
+    Scenery.qml       sfondo illustrato (theme)
+    Candy.qml         rilievo e riflesso, primo figlio di un Rectangle
+    CircleButton.qml, CandyButton.qml, TitlePill.qml, ProgressStar.qml
     NamePrompt.qml     schermata iniziale "Come ti chiami?"
     SoundBank.qml      i 4 effetti sonori: tap()/ok()/win()/nope()
-    ScoreBar.qml       targhetta 😊 + numero
+    ScoreBar.qml       targhetta con stella + numero
     NumberPad.qml      tastierino numerico touch (0-9/canc./conferma), usato
                       dai giochi di matematica e "Conta le lettere" (Primaria)
   games/path/          "Il percorso": PathGame + Board, DirectionPad,
@@ -192,9 +210,14 @@ qml/
   games/arithmetic|fractions|tables|numberline|regions|syllables|doubles|
         spelling|lettercount|guessword|reorder|subjectverb|pronouns|alphabet/
                                              giochi Primaria 31-47 (radice MiniGame)
+  games/line20/                             gioco 48: Line20Game + KeyLine (radice MiniGame)
 assets/sounds/         effetti WAV (rigenerabili con scripts/make_sounds.py)
-assets/fonts/          font FluentEmojiColor (Windows)-NotoColorEmoji (Linux-MacOS-Android)
-scripts/               make_sounds.py, check_levels.py, clean.sh
+assets/icons/          icone PNG (rigenerabili con scripts/fetch_icons.py)
+assets/fonts/          font Fredoka (OFL)
+assets/art/            illustrazioni originali: treno, scenario, bottiglia,
+                       conchiglie (rigenerabili con scripts/make_art.py)
+scripts/               make_sounds.py, fetch_icons.py, make_art.py,
+                       check_levels.py, clean.sh
 ```
 
 Tutti i file `.qml` del modulo sono referenziabili per nome (`GameScaffold`,
@@ -222,11 +245,11 @@ Nessuna schermata di sconfitta.
 da 1 a 6 passi, nessun ostacolo. Dal livello 15 in poi crescono: griglie fino a
 7x7, rocce da aggirare, percorsi a serpentina (fino a ~24 passi). Ogni livello
 ha un **oggetto diverso da raggiungere** (mela, palla, stella, chiave, regalo...),
-mostrato come emoji in `Goal.qml`.
+mostrato come icona in `Goal.qml`.
 
 I livelli sono definiti in `PathEngine::PathEngine()` in
 [src/pathengine.cpp](src/pathengine.cpp): un elenco di
-`{colonne, righe, partenza, traguardo, emoji, rocce}`. Per aggiungerne o
+`{colonne, righe, partenza, traguardo, icona, rocce}`. Per aggiungerne o
 modificarli basta toccare quella lista. `python3 scripts/check_levels.py` rifa'
 il BFS di ogni livello per verificare che sia risolvibile (tieni la lista dello
 script allineata a quella C++).
@@ -262,8 +285,8 @@ script allineata a quella C++).
   se uguali restano su. Le coppie sbagliate contano come errori.
 - **Bolle / Raccogli i frutti** (`bubbles`, `harvest`) - bersagli che si
   muovono (Timer per-oggetto, caduta lenta ~1.2-2.6 px/tick); i frutti sono
-  emoji su un disco colorato (`Theme.playColors`). Toccane abbastanza per
-  vincere, nessun errore possibile (sempre 3 faccine). La velocità di caduta
+  icone su un disco chiaro bordato di colore (`Theme.playColors`). Toccane abbastanza per
+  vincere, nessun errore possibile (sempre 3 stelle). La velocità di caduta
   è `speed: 1.2 + index * 0.35` in `HarvestGame.qml`.
 - **Unisci i puntini** (`games/dots/DotsGame.qml`) - 5 puntini da toccare in
   ordine 1->5, la linea si disegna man mano. 6 disposizioni.
@@ -331,7 +354,7 @@ script allineata a quella C++).
   tenendola lì, il liquido si travasa piano piano (livello che sale/scende
   con un rivolo colorato fra i due). Ogni livello ha un liquido diverso
   (acqua, succo d'arancia, succo d'uva, limonata). Nessuna risposta
-  sbagliata possibile (sempre 3 faccine), solo la coordinazione occhio-mano.
+  sbagliata possibile (sempre 3 stelle), solo la coordinazione occhio-mano.
   4 livelli. La bottiglia si inclina verso il bicchiere, il getto cade sul
   pelo del liquido con schizzi; un tocco la fa dondolare.
 - **Il trenino** (`games/train/TrainGame.qml`) - prima si costruisce, poi si
@@ -366,4 +389,4 @@ script allineata a quella C++).
 4. In `qml/Main.qml`: un `Component { id: xC; XGame { onExitRequested: ... } }`
    e una voce nella mappa di `openGame()`.
 5. In `qml/Launcher.qml`: una riga nella lista `games` (`id`, `title`, `age`,
-   `c` colore, `e` emoji).
+   `c` colore, `img` nome dell'icona).

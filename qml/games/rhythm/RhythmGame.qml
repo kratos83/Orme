@@ -7,6 +7,7 @@ import Orme
 GameScaffold {
     id: scaffold
     title: qsTr("Il ritmo")
+    scenery: "tramonto"
     age: qsTr("3-5 anni")
     showNext: won
 
@@ -84,6 +85,7 @@ GameScaffold {
     Component.onCompleted: load(0)
 
     component Dot: Rectangle {
+        Candy {}
         property int colorIndex: 0
         radius: width / 2
         color: Theme.playColors[colorIndex]
@@ -119,6 +121,7 @@ GameScaffold {
 
                     // ultima cella: il "?" da indovinare
                     Rectangle {
+                        Candy {}
                         anchors.fill: parent
                         visible: index === scaffold.visibleLen
                         radius: width / 2
@@ -126,11 +129,11 @@ GameScaffold {
                         border.color: Theme.boardLine
                         border.width: scaffold.answered ? 0 : 4
 
-                        Text {
+                        AppIcon {
                             anchors.centerIn: parent
                             visible: !scaffold.answered
-                            text: "❓"
-                            font.pixelSize: parent.width * 0.55
+                            name: "question"
+                            size: parent.width * 0.63
                         }
                     }
                 }
@@ -155,6 +158,7 @@ GameScaffold {
 
                 Rectangle {
                     id: opt
+                    Candy {}
                     width: 128; height: 128
                     radius: 28
                     color: Theme.panel

@@ -35,6 +35,22 @@ target_compile_definitions(Orme-app PRIVATE ORME_VERSION="${PROJECT_VERSION}")
 set_source_files_properties(qml/Theme.qml   PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 set_source_files_properties(qml/Catalog.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
+# Icone dell'app (scaricate con scripts/fetch_icons.py): tutte le PNG
+# presenti finiscono nelle risorse del programma.
+file(GLOB ORME_ICONS
+    RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+    CONFIGURE_DEPENDS
+    assets/icons/*.png
+    assets/icons/ui/*.png
+    assets/icons/LICENSE-MIT.txt
+)
+# Illustrazioni originali (scripts/make_art.py)
+file(GLOB ORME_ART
+    RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+    CONFIGURE_DEPENDS
+    assets/art/*.png
+)
+
 qt_add_qml_module(Orme-app
     URI Orme
     VERSION 1.0
@@ -54,6 +70,13 @@ qt_add_qml_module(Orme-app
         qml/InfoPage.qml
         qml/GameTile.qml
         qml/CategoryPicker.qml
+        qml/common/AppIcon.qml
+        qml/common/Candy.qml
+        qml/common/CandyButton.qml
+        qml/common/CircleButton.qml
+        qml/common/ProgressStar.qml
+        qml/common/Scenery.qml
+        qml/common/TitlePill.qml
         qml/common/SoundBank.qml
         qml/common/ScoreBar.qml
         qml/common/NamePrompt.qml
@@ -100,6 +123,8 @@ qt_add_qml_module(Orme-app
         qml/games/tower/TowerGame.qml
         qml/games/beans/BeansGame.qml
         qml/games/train/TrainGame.qml
+        qml/games/line20/Line20Game.qml
+        qml/games/line20/KeyLine.qml
         qml/games/arithmetic/ArithmeticGame.qml
         qml/games/fractions/FractionsGame.qml
         qml/games/tables/TablesGame.qml
@@ -120,9 +145,11 @@ qt_add_qml_module(Orme-app
         assets/sounds/step.wav
         assets/sounds/win.wav
         assets/sounds/bump.wav
-        assets/fonts/NotoColorEmoji.ttf
-        images/exit.png
-        images/annulla.png
+        ${ORME_ICONS}
+        ${ORME_ART}
+        assets/fonts/Fredoka-500.ttf
+        assets/fonts/Fredoka-700.ttf
+        assets/fonts/OFL-Fredoka.txt
 )
 
 target_include_directories(Orme-app PRIVATE src)

@@ -11,6 +11,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Il percorso delle forme")
+    scenery: "cameretta"
     age: qsTr("3-5 anni")
     levelCount: 8
 
@@ -87,60 +88,81 @@ MiniGame {
 
     // ---------- contenuto ----------
     Item {
+        id: room
         anchors.fill: parent
+
+        // schermi larghi: la regola sta a sinistra e le file usano tutta l'altezza
+        readonly property bool wide: width > height * 1.1
 
         // ===== la regola di oggi: una forma o un colore da cercare =====
         Rectangle {
             id: ruleCard
-            anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 6 }
-            width: 130; height: 130; radius: 26
+            width: room.wide ? Math.max(120, Math.min(210, (room.width - field.width) / 2 - 24))
+                             : Math.min(130, room.height * 0.18)
+            height: width; radius: width * 0.2
+            x: room.wide ? Math.max(8, (field.x - width) / 2) : (room.width - width) / 2
+            y: room.wide ? (room.height - height) / 2 - 20 : 4
             color: Theme.panel
-            border.color: Theme.boardLine
-            border.width: 3
+            border.color: "#FFCA28"
+            border.width: 6
+            Candy {}
 
             ShapeIcon {
                 anchors.centerIn: parent
-                width: 84; height: 84
+                width: parent.width * 0.66; height: width
                 visible: g.ruleType === "shape"
                 kind: g.shapeKinds[g.ruleShape]
                 color: Theme.text
             }
             ShapeIcon {
                 anchors.centerIn: parent
-                width: 84; height: 84
+                width: parent.width * 0.66; height: width
                 visible: g.ruleType === "color"
                 kind: "circle"
                 color: Theme.playColors[g.ruleColor]
             }
         }
 
+        // tappeto sotto le file di sagome
+        Rectangle {
+            anchors { fill: field; leftMargin: -8; rightMargin: -8 }
+            radius: 36
+            color: "#99FFFFFF"
+            border.color: "#FFCA28"
+            border.width: 4
+        }
+
         // ===== il campo con le file di sagome =====
         Item {
             id: field
-            anchors { top: ruleCard.bottom; left: parent.left; right: parent.right; bottom: parent.bottom; margins: 8 }
+            y: room.wide ? 4 : ruleCard.y + ruleCard.height + 14
+            height: room.height - y - 4
+            width: room.wide ? Math.min(room.width - 360, laneH * g.colCount * 1.5) : room.width - 32
+            x: (room.width - width) / 2
 
-            readonly property real laneH: height / (g.rowCount + 2)
+            // file di sagome piu' due mezze file per partenza e traguardo
+            readonly property real laneH: height / (g.rowCount + 1.4)
             readonly property real slotW: width / g.colCount
 
             function slotCenterX(c) { return field.slotW * c + field.slotW / 2 }
-            function rowCenterY(r)  { return field.height - field.laneH * (r + 1.5) }
-            readonly property real startCenterY: field.height - field.laneH * 0.5
-            readonly property real goalCenterY: field.laneH * 0.5
+            function rowCenterY(r)  { return field.height - field.laneH * (r + 1.2) }
+            readonly property real startCenterY: field.height - field.laneH * 0.35
+            readonly property real goalCenterY: field.laneH * 0.35
 
             // traguardo, in alto
-            Text {
+            AppIcon {
                 x: field.width / 2 - width / 2
                 y: field.goalCenterY - height / 2
-                text: "🏁"
-                font.pixelSize: field.laneH * 0.7
+                name: "flag-finish"
+                size: field.laneH * 0.68
             }
 
             // partenza, in basso
-            Text {
+            AppIcon {
                 x: field.width / 2 - width / 2
                 y: field.startCenterY - height / 2
-                text: "👣"
-                font.pixelSize: field.laneH * 0.55
+                name: "footprints"
+                size: field.laneH * 0.58
                 opacity: 0.6
             }
 
@@ -169,15 +191,16 @@ MiniGame {
 
                         Rectangle {
                             id: pad
+                            Candy {}
                             required property var modelData
                             required property int index
 
                             readonly property bool isActive: rowItem.index === g.current + 1
                             readonly property bool isDone: rowItem.index <= g.current
 
-                            width: Math.min(field.laneH, field.slotW) * 0.86
+                            width: Math.min(field.laneH * 0.92, field.slotW * 0.86)
                             height: width
-                            radius: 18
+                            radius: width * 0.22
                             x: field.slotCenterX(index) - width / 2
                             y: field.rowCenterY(rowItem.index) - height / 2
                             color: Theme.panel

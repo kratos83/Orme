@@ -15,19 +15,19 @@ GameScaffold {
     onWinFinished: goNext()
 
     readonly property var sequences: [
-        ["🌰", "🌱", "🌳"],
-        ["🥚", "🐣", "🐥"],
-        ["👶", "🧒", "🧓"],
-        ["🌑", "🌓", "🌕"],
-        ["☁️", "🌧️", "🌈"],
-        ["🧱", "🏗️", "🏠"],
-        ["😴", "🌞", "🎒", "🏫"],
-        ["🥣", "🍳", "🍽️", "😋"]
+        ["chestnut", "seedling", "tree"],
+        ["egg", "chick-hatching", "chick-front"],
+        ["baby", "child", "elder"],
+        ["moon-new", "moon-half", "moon-full"],
+        ["cloud", "rain", "rainbow"],
+        ["brick", "construction", "house"],
+        ["face-sleeping", "sun-face", "backpack", "school"],
+        ["bowl", "cooking", "plate", "face-yum"]
     ]
 
     property int  levelIndex: 0
-    property var  correct: ["🌰", "🌱", "🌳"]
-    property var  shuffled: ["🌱", "🌳", "🌰"]
+    property var  correct: ["chestnut", "seedling", "tree"]
+    property var  shuffled: ["seedling", "tree", "chestnut"]
     property var  placed: []
     property bool won: false
     property int  mistakes: 0
@@ -93,6 +93,7 @@ GameScaffold {
 
                 Rectangle {
                     id: pick
+                    Candy {}
                     width: 140; height: 140
                     radius: 26
                     color: Theme.panel
@@ -100,10 +101,10 @@ GameScaffold {
                     border.width: 3
                     opacity: scaffold.used(modelData) ? 0.18 : 1
 
-                    Text {
+                    AppIcon {
                         anchors.centerIn: parent
-                        text: modelData
-                        font.pixelSize: 84
+                        name: modelData
+                        size: 97
                         visible: !scaffold.used(modelData)
                     }
 
@@ -136,12 +137,11 @@ GameScaffold {
         }
 
         // freccia "in ordine"
-        Text {
+        AppIcon {
             anchors.horizontalCenter: parent.horizontalCenter
             y: parent.height * 0.44
-            text: "▼"
-            font.pixelSize: 40
-            color: Theme.text
+            name: "ui/down"
+            size: 48
             opacity: 0.5
         }
 
@@ -155,6 +155,7 @@ GameScaffold {
                 model: scaffold.correct.length
 
                 Rectangle {
+                    Candy {}
                     width: 150; height: 150
                     radius: 26
                     color: Theme.boardFill

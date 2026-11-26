@@ -13,6 +13,7 @@ QtObject {
     readonly property color accentDark: "#3B8B3E"
     readonly property color danger:     "#EF5350"  // rosso "cestino"
     readonly property color text:       "#5D4037"
+    readonly property color title:      "#6B3FA0"  // viola dei titoli
 
     // un colore per ogni direzione (Su, Giu, Sinistra, Destra)
     readonly property color dirUp:    "#42A5F5"

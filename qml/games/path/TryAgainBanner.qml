@@ -15,26 +15,28 @@ Item {
         hideTimer.restart()
     }
 
-    Rectangle { anchors.fill: parent; color: "#000000"; opacity: 0.06 }
+    Rectangle { anchors.fill: parent; color: "#664A2C7A" }
 
     Rectangle {
         id: card
         anchors.centerIn: parent
         width: Math.min(root.width * 0.72, 560)
         height: 200
-        radius: 32
-        color: Theme.panel
+        radius: 48
+        color: "white"
         border.color: Theme.danger
-        border.width: 5
+        border.width: 8
         scale: 0
+
+        Candy { depth: 10 }
 
         Row {
             anchors.centerIn: parent
             spacing: 24
 
-            Text {
-                text: "🙈"
-                font.pixelSize: 84
+            AppIcon {
+                name: "monkey-see-no-evil"
+                size: 97
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text {

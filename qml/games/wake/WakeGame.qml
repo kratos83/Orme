@@ -3,18 +3,19 @@
 import QtQuick
 import Orme
 
-// "Sveglia gli animali" - ogni animale dorme (💤). Toccandolo si sveglia e
+// "Sveglia gli animali" - ogni animale dorme (zzz). Toccandolo si sveglia e
 // fa un saltino. Quando sono tutti svegli, hai vinto.
 MiniGame {
     id: g
     title: qsTr("Sveglia gli animali")
+    scenery: "tramonto"
     age: qsTr("3-4 anni")
     levelCount: 3
 
     readonly property var sets: [
-        ["🐶", "🐱", "🐰", "🐻", "🦊", "🐸"],
-        ["🐷", "🐮", "🐔", "🐴", "🐑", "🐹"],
-        ["🦁", "🐨", "🐼", "🐵", "🐯", "🦉"]
+        ["dog", "cat", "rabbit", "bear", "fox", "frog"],
+        ["pig", "cow", "chicken", "horse", "ewe", "hamster"],
+        ["lion", "koala", "panda", "monkey", "tiger", "owl"]
     ]
 
     property var awake: [false, false, false, false, false, false]
@@ -53,18 +54,18 @@ MiniGame {
                 required property var modelData
                 width: 190; height: 190
 
-                Text {
+                AppIcon {
                     id: animal
                     anchors.centerIn: parent
-                    text: pen.modelData
-                    font.pixelSize: 110
+                    name: pen.modelData
+                    size: 126
                     opacity: g.awake[pen.index] ? 1 : 0.5
                 }
-                Text {
+                AppIcon {
                     visible: !g.awake[pen.index]
                     anchors { right: parent.right; top: parent.top }
-                    text: "💤"
-                    font.pixelSize: 44
+                    name: "zzz"
+                    size: 51
                 }
 
                 SequentialAnimation {

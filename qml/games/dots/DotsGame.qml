@@ -9,6 +9,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Unisci i puntini")
+    scenery: "mare"
     age: qsTr("4-5 anni")
     levelCount: 6
 
@@ -102,6 +103,7 @@ MiniGame {
             model: 5
             Rectangle {
                 id: dot
+                Candy {}
                 required property int index
                 readonly property var d: g.layouts[g.levelIndex][index]
                 readonly property real cx: g.cxFor(d.x)

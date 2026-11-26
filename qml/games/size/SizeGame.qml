@@ -11,10 +11,10 @@ MiniGame {
     age: qsTr("3-4 anni")
     levelCount: 12
 
-    readonly property var pool: ["🐘", "🐻", "🐰", "🐤", "🌳", "🍎", "⭐", "🚗", "🎈", "🐟"]
+    readonly property var pool: ["elephant", "bear", "rabbit", "chick", "tree", "apple", "star", "car", "balloon", "fish"]
 
     property var  sizes: [90, 150, 60]
-    property string critter: "🐰"
+    property string critter: "rabbit"
     property int  bigIndex: 1
     property bool answered: false
 
@@ -61,10 +61,10 @@ MiniGame {
                 required property int index
                 required property var modelData
                 width: 210; height: 210
-                Text {
+                AppIcon {
                     anchors.centerIn: parent
-                    text: g.critter
-                    font.pixelSize: parent.modelData
+                    name: g.critter
+                    size: (parent.modelData) * 1.15
                     opacity: g.answered ? 0.4 : 1
                 }
                 MouseArea {

@@ -7,6 +7,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Costruisci la torre")
+    scenery: "cameretta"
     age: qsTr("3-4 anni")
     levelCount: 6
 
@@ -77,6 +78,7 @@ MiniGame {
         // ===== modellino di riferimento =====
         Rectangle {
             id: modelFrame
+            Candy {}
             anchors { left: parent.left; top: parent.top; margins: 14 }
             width: 60; height: 210
             radius: 14
@@ -111,6 +113,7 @@ MiniGame {
                 model: g.blockCount
                 Rectangle {
                     id: slotRect
+                    Candy {}
                     required property int index
                     readonly property int slotIndex: g.blockCount - 1 - index
                     readonly property bool full: g.filled[slotIndex] === true
@@ -137,6 +140,7 @@ MiniGame {
 
             Rectangle {
                 id: piece
+                Candy {}
                 required property int index
                 required property var modelData
 

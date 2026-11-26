@@ -9,10 +9,11 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Le emozioni")
+    scenery: "cameretta"
     age: qsTr("3-4 anni")
     levelCount: 12
 
-    readonly property var emotions: ["😀", "😢", "😠", "😲", "😨", "😴"]
+    readonly property var emotions: ["face-grinning", "face-crying", "face-angry", "face-astonished", "face-fearful", "face-sleeping"]
 
     property int  target: 0
     property var  choices: [0, 1, 2, 3]
@@ -55,15 +56,16 @@ MiniGame {
         anchors.fill: parent
 
         Rectangle {   // emozione da cercare
+            Candy {}
             anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 24 }
             width: 150; height: 150; radius: 32
             color: Theme.panel
             border.color: Theme.boardLine
             border.width: 4
-            Text {
+            AppIcon {
                 anchors.centerIn: parent
-                text: g.emotions[g.target]
-                font.pixelSize: 92
+                name: g.emotions[g.target]
+                size: 106
             }
         }
 
@@ -76,6 +78,7 @@ MiniGame {
             Repeater {
                 model: g.choices
                 Rectangle {
+                    Candy {}
                     required property var modelData
                     width: 150; height: 150; radius: 75
                     color: Theme.panel
@@ -84,10 +87,10 @@ MiniGame {
                     opacity: g.answered ? 0.4 : 1
                     scale: cma.pressed && !g.answered ? 0.92 : 1
                     Behavior on scale { NumberAnimation { duration: 80 } }
-                    Text {
+                    AppIcon {
                         anchors.centerIn: parent
-                        text: g.emotions[parent.modelData]
-                        font.pixelSize: 80
+                        name: g.emotions[parent.modelData]
+                        size: 92
                     }
                     MouseArea {
                         id: cma

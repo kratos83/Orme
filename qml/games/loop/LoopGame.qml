@@ -88,6 +88,7 @@ GameScaffold {
 
     // ---------- pezzi riutilizzabili ----------
     component StepBtn: Rectangle {
+        Candy {}
         property alias glyph: sb.text
         signal clicked()
         width: 88; height: 88; radius: 20
@@ -116,6 +117,7 @@ GameScaffold {
             Repeater {
                 model: track.slotsCount
                 Rectangle {
+                    Candy {}
                     width: track.slotW * 0.8
                     height: width
                     radius: width / 2
@@ -125,19 +127,19 @@ GameScaffold {
                     x: track.cx(index) - width / 2
                     y: track.height / 2 - height / 2
 
-                    Text {
+                    AppIcon {
                         anchors.centerIn: parent
                         visible: index === scaffold.target
-                        text: "🥕"
-                        font.pixelSize: parent.width * 0.6
+                        name: "carrot"
+                        size: parent.width * 0.69
                     }
                 }
             }
 
-            Text {
+            AppIcon {
                 id: bunny
-                text: "🐰"
-                font.pixelSize: track.slotW * 0.7
+                name: "rabbit"
+                size: track.slotW * 0.80
                 x: track.cx(scaffold.pos) - width / 2
                 y: track.height / 2 - height / 2
                 Behavior on x { NumberAnimation { duration: 380; easing.type: Easing.OutQuad } }
@@ -158,10 +160,11 @@ GameScaffold {
 
             // carta azione: cosa viene ripetuto (il salto)
             Rectangle {
+                Candy {}
                 width: 120; height: 120; radius: 24
                 color: Theme.dirDown
                 anchors.verticalCenter: parent.verticalCenter
-                Text { anchors.centerIn: parent; text: "🦘"; font.pixelSize: 64 }
+                AppIcon { anchors.centerIn: parent; name: "kangaroo"; size: 74 }
             }
 
             Text {
@@ -179,6 +182,7 @@ GameScaffold {
             }
 
             Rectangle {
+                Candy {}
                 width: 100; height: 88; radius: 20
                 color: Theme.panel
                 border.color: Theme.boardLine; border.width: 3
@@ -201,13 +205,14 @@ GameScaffold {
 
             // vai
             Rectangle {
+                Candy {}
                 width: 120; height: 120; radius: 24
                 anchors.verticalCenter: parent.verticalCenter
                 color: Theme.accent
                 opacity: (scaffold.hopping || scaffold.won) ? 0.3 : 1
                 scale: goma.pressed && !scaffold.hopping && !scaffold.won ? 0.92 : 1
                 Behavior on scale { NumberAnimation { duration: 80 } }
-                Text { anchors.centerIn: parent; text: "▶"; font.pixelSize: 60; color: "white" }
+                AppIcon { anchors.centerIn: parent; name: "ui/play"; size: 70 }
                 MouseArea {
                     id: goma
                     anchors.fill: parent

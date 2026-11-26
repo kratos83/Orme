@@ -8,14 +8,15 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Scopri chi è")
+    scenery: "tramonto"
     age: qsTr("3-4 anni")
     levelCount: 8
 
-    readonly property var animalsList: ["🐶", "🐱", "🐰", "🦊", "🐻", "🐸", "🐵", "🦁", "🐼", "🐷"]
+    readonly property var animalsList: ["dog", "cat", "rabbit", "fox", "bear", "frog", "monkey", "lion", "panda", "pig"]
     readonly property int cols: 4
     readonly property int rows: 3
 
-    property string animal: "🐶"
+    property string animal: "dog"
     property var gone: []
 
     SoundBank { id: snd }
@@ -53,10 +54,10 @@ MiniGame {
             height: width * g.rows / g.cols
             color: "transparent"
 
-            Text {
+            AppIcon {
                 anchors.centerIn: parent
-                text: g.animal
-                font.pixelSize: pane.height * 0.7
+                name: g.animal
+                size: pane.height * 0.80
             }
 
             Grid {
@@ -69,6 +70,7 @@ MiniGame {
                         width: pane.width / g.cols
                         height: pane.height / g.rows
                         Rectangle {
+                            Candy {}
                             anchors.fill: parent
                             anchors.margins: 4
                             radius: 12

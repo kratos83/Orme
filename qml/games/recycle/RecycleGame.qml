@@ -27,16 +27,16 @@ GameScaffold {
     // reali della raccolta differenziata: plastica/giallo, carta/blu, vetro/verde,
     // umido/arancione); icon = simbolo mostrato sul bidone per riconoscere la categoria
     readonly property var bins: [
-        { key: "plastica", colorIndex: 2, icon: "🧴" },
-        { key: "carta",    colorIndex: 1, icon: "📄" },
-        { key: "vetro",    colorIndex: 3, icon: "🍾" },
-        { key: "umido",    colorIndex: 5, icon: "🍂" }
+        { key: "plastica", colorIndex: 2, icon: "lotion" },
+        { key: "carta",    colorIndex: 1, icon: "page" },
+        { key: "vetro",    colorIndex: 3, icon: "bottle" },
+        { key: "umido",    colorIndex: 5, icon: "leaf-fallen" }
     ]
     readonly property var itemsByKey: ({
-        plastica: ["🧴", "🥤", "🍼"],
-        carta:    ["📰", "📦", "📚"],
-        vetro:    ["🍾", "🫙", "🥛"],
-        umido:    ["🍌", "🍎", "🥕"]
+        plastica: ["lotion", "cup-straw", "baby-bottle"],
+        carta:    ["newspaper", "package", "books"],
+        vetro:    ["bottle", "jar", "milk"],
+        umido:    ["banana", "apple", "carrot"]
     })
 
     property int  done: 0
@@ -60,7 +60,7 @@ GameScaffold {
         var b = scaffold.bins[Math.floor(Math.random() * scaffold.bins.length)]
         var list = scaffold.itemsByKey[b.key]
         spawned += 1
-        return { emoji: list[Math.floor(Math.random() * list.length)], key: b.key }
+        return { icon: list[Math.floor(Math.random() * list.length)], key: b.key }
     }
 
     function load() {
@@ -123,9 +123,8 @@ GameScaffold {
             spacing: 10
             Repeater {
                 model: scaffold.perRound
-                Rectangle {
-                    width: 16; height: 16; radius: 8
-                    color: index < scaffold.done ? Theme.accent : Theme.boardLine
+                ProgressStar {
+                    filled: index < scaffold.done
                 }
             }
         }
@@ -182,12 +181,12 @@ GameScaffold {
                     Behavior on opacity { NumberAnimation { duration: 120 } }
                 }
 
-                Text {
+                AppIcon {
                     id: face
                     anchors.centerIn: parent
                     anchors.verticalCenterOffset: card.lifted ? -14 : 0
-                    text: card.itm ? card.itm.emoji : ""
-                    font.pixelSize: 96
+                    name: card.itm ? card.itm.icon : ""
+                    size: 110
                     scale: card.lifted ? 1.25 : 1
                     Behavior on scale { NumberAnimation { duration: 120; easing.type: Easing.OutBack } }
                     Behavior on anchors.verticalCenterOffset { NumberAnimation { duration: 120 } }
@@ -286,6 +285,7 @@ GameScaffold {
 
                 Rectangle {
                     id: binRect
+                    Candy {}
                     width: 200; height: 200
                     radius: 28
                     color: Theme.playColors[modelData.colorIndex]
@@ -297,7 +297,7 @@ GameScaffold {
                     readonly property bool open: scaffold.hoverBin === index
                     property int myCount: scaffold.binCounts[index] || 0
 
-                    opacity: open ? 1.0 : 0.78
+                    opacity: open ? 1.0 : 0.94
                     scale: open ? 1.07 : 1.0
                     Behavior on opacity { NumberAnimation { duration: 120 } }
                     Behavior on scale { NumberAnimation { duration: 140; easing.type: Easing.OutBack } }
@@ -343,28 +343,29 @@ GameScaffold {
 
                     Rectangle {   // pallina del colore del bidone, con l'icona della categoria
                         id: badge
+                        Candy {}
                         anchors.centerIn: parent
                         anchors.verticalCenterOffset: -20
-                        width: 84; height: 84; radius: 42
-                        color: Theme.playColors[binRect.modelData.colorIndex]
+                        width: 92; height: 92; radius: 46
+                        color: "#FFFFFF"   // fondo chiaro: l'icona risalta
                         border.color: "white"
                         border.width: 3
 
-                        Text {
+                        AppIcon {
                             anchors.centerIn: parent
-                            text: binRect.modelData.icon
-                            font.pixelSize: 46
+                            name: binRect.modelData.icon
+                            size: 66
                         }
                     }
 
                     // pioggia di scintille quando l'oggetto e' nel bidone giusto
                     Repeater {
                         model: 7
-                        Text {
+                        AppIcon {
                             id: spark
                             required property int index
-                            text: index % 2 ? "⭐" : "✨"
-                            font.pixelSize: 26
+                            name: index % 2 ? "star" : "sparkles"
+                            size: 30
                             x: binRect.width / 2 - width / 2
                             y: binRect.height / 2 - height / 2
                             opacity: 0

@@ -15,7 +15,7 @@ Window {
 
     onClosing: function(close) {
         close.accepted = false
-        view.sourceComponent = esciComponent
+        quitDialog.active = true
     }
     // Loader che ospita a turno il menu o un gioco. Ogni gioco emette
     // exitRequested per tornare al menu; uscendo viene distrutto, quindi
@@ -32,6 +32,16 @@ Window {
         anchors { top: parent.top; left: parent.left; right: parent.right }
     }
 
+    // Conferma di uscita: sta sopra a tutto, cosi' annullando si ritrova la
+    // schermata (o la partita) com'era.
+    Loader {
+        id: quitDialog
+        anchors.fill: parent
+        z: 2000
+        active: false
+        sourceComponent: Component { Esci { onExitRequested: quitDialog.active = false } }
+    }
+
     // Controllo silenzioso all'avvio: fallisce senza avvisi se non c'è rete.
     Timer { interval: 2000; running: true; onTriggered: Updater.checkForUpdates() }
 
@@ -46,7 +56,7 @@ Window {
             "puzzle": puzzleC, "harvest": harvestC, "balloons": balloonsC, "reveal": revealC,
             "emotions": emotionsC, "recycle": recycleC, "shapes": shapesC, "snake": snakeC,
             "stopgo": stopgoC, "poses": posesC, "kitchen": kitchenC, "tower": towerC, "beans": beansC, "train": trainC,
-            "add": addC, "sub": subC, "mul": mulC, "div": divC,
+            "line20": line20C, "add": addC, "sub": subC, "mul": mulC, "div": divC,
             "fractions": fractionsC, "tables": tablesC, "numberline": numberlineC,
             "regions": regionsC,
             "syllables": syllablesC, "doubles": doublesC, "spelling": spellingC,
@@ -59,6 +69,7 @@ Window {
     Component {
         id: categoryComponent
         CategoryPicker {
+            onQuitRequested: quitDialog.active = true
             onCategorySelected: (cat) => {
                 root.currentCategory = cat
                 view.sourceComponent = launcherComponent
@@ -70,6 +81,7 @@ Window {
         id: launcherComponent
         Launcher {
             category: root.currentCategory
+            onQuitRequested: quitDialog.active = true
             onGameSelected: (game) => root.openGame(game)
             onInfoRequested: view.sourceComponent = infoComponent
             onBackRequested: view.sourceComponent = categoryComponent
@@ -83,8 +95,6 @@ Window {
             onGameSelected: (id) => root.openGame(id)
         }
     }
-
-    Component { id: esciComponent; Esci { onExitRequested: view.sourceComponent = launcherComponent } }
 
     Component { id: pathC;     PathGame     { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: loopC;     LoopGame     { onExitRequested: view.sourceComponent = launcherComponent } }
@@ -117,6 +127,7 @@ Window {
     Component { id: beansC;    BeansGame    { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: trainC;    TrainGame    { onExitRequested: view.sourceComponent = launcherComponent } }
 
+    Component { id: line20C;     Line20Game     { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: addC;        ArithmeticGame { opMode: "add"; onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: subC;        ArithmeticGame { opMode: "sub"; onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: mulC;        ArithmeticGame { opMode: "mul"; onExitRequested: view.sourceComponent = launcherComponent } }

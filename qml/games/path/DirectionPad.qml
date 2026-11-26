@@ -15,6 +15,7 @@ Item {
 
     component PadButton: Rectangle {
         id: pb
+        Candy {}
         property int dir: 0
         width: root.btn
         height: root.btn

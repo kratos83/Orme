@@ -17,36 +17,48 @@ Item {
         root.visible = false
     }
 
-    Rectangle { anchors.fill: parent; color: Theme.background }
+    Scenery { theme: "prato" }
     MouseArea { anchors.fill: parent }   // assorbe i tocchi sotto
 
     Column {
         anchors.centerIn: parent
-        spacing: 28
+        spacing: 26
         width: Math.min(root.width * 0.8, 620)
 
-        Text {
+        AppIcon {
+            id: mascot
             anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr("Come ti chiami?")
-            font.pixelSize: 42
-            font.bold: true
-            color: Theme.text
+            name: "teddy"
+            size: Math.min(150, root.height * 0.2)
+            SequentialAnimation on rotation {
+                running: root.visible
+                loops: Animation.Infinite
+                NumberAnimation { from: -8; to: 8; duration: 900; easing.type: Easing.InOutSine }
+                NumberAnimation { from: 8; to: -8; duration: 900; easing.type: Easing.InOutSine }
+            }
+        }
+
+        TitlePill {
+            anchors.horizontalCenter: parent.horizontalCenter
+            title: qsTr("Come ti chiami?")
+            titleSize: 42
         }
 
         Rectangle {
             width: parent.width
             height: 96
-            radius: 24
-            color: Theme.panel
-            border.color: input.activeFocus ? Theme.accent : Theme.boardLine
-            border.width: 4
+            radius: 48
+            color: "white"
+            border.color: input.activeFocus ? Theme.accent : "#FFD54F"
+            border.width: 5
 
+            Candy {}
             Text {
                 anchors.centerIn: parent
                 visible: input.text.length === 0
                 text: qsTr("(scrivi qui il nome)")
                 font.pixelSize: 28
-                color: Theme.boardLine
+                color: "#BCAAA4"
             }
             TextInput {
                 id: input
@@ -67,29 +79,19 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 24
 
-            Rectangle {
-                width: 210; height: 96; radius: 24
-                color: Theme.accent
-                scale: playMa.pressed ? 0.94 : 1
-                Behavior on scale { NumberAnimation { duration: 80 } }
-                Row {
-                    anchors.centerIn: parent
-                    spacing: 12
-                    Text { text: qsTr("Gioca"); font.pixelSize: 34; font.bold: true; color: "white" }
-                    Text { text: "▶"; font.pixelSize: 34; color: "white" }
-                }
-                MouseArea { id: playMa; anchors.fill: parent; onClicked: root.commit(input.text.trim()) }
+            CandyButton {
+                width: 230; height: 96
+                text: qsTr("Gioca")
+                icon: "ui/play"
+                textSize: 36
+                onClicked: root.commit(input.text.trim())
             }
-
-            Rectangle {
-                width: 150; height: 96; radius: 24
-                color: Theme.panel
-                border.color: Theme.boardLine
-                border.width: 3
-                scale: skipMa.pressed ? 0.94 : 1
-                Behavior on scale { NumberAnimation { duration: 80 } }
-                Text { anchors.centerIn: parent; text: qsTr("Salta"); font.pixelSize: 28; color: Theme.text }
-                MouseArea { id: skipMa; anchors.fill: parent; onClicked: root.commit("") }
+            CandyButton {
+                width: 160; height: 96
+                text: qsTr("Salta")
+                color: Theme.dirLeft
+                textSize: 30
+                onClicked: root.commit("")
             }
         }
     }

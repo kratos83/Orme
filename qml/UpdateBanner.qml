@@ -51,7 +51,7 @@ Item {
         spacing: 10
 
         Rectangle {
-            width: actionText.implicitWidth + 32; height: 48; radius: 14
+            width: actionText.implicitWidth + 32; height: 48; radius: 24
             color: Theme.accent
             opacity: Updater.downloading ? 0.6 : 1
             scale: actionMa.pressed ? 0.95 : 1
@@ -85,7 +85,7 @@ Item {
         color: Theme.background
         border.color: Theme.boardLine
         border.width: 2
-        Text { anchors.centerIn: parent; text: "✕"; font.pixelSize: 18; color: Theme.text }
+        AppIcon { anchors.centerIn: parent; name: "ui/close"; size: 22 }
         MouseArea { anchors.fill: parent; onClicked: root.dismissed = true }
     }
 }

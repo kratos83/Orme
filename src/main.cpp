@@ -8,21 +8,18 @@
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 
-
-static void installEmojiFontFallback()
+// Fredoka: font tondo e leggibile, incluso nel programma (assets/fonts/,
+// licenza OFL). Se non si carica resta il font di sistema.
+static void installAppFont()
 {
-#if defined(Q_OS_WINDOWS)
-    // Niente di custom su Windows: Segoe UI Emoji e' gia' installato di
-    // serie su ogni Windows 10/11, e' un font a colori in formato COLR
-    // (supportato nativamente da DirectWrite) e Qt lo usa gia' in automatico
-    // come fallback per i codepoint emoji quando il font di default non li
-    // copre. NotoColorEmoji.ttf (usato sulle altre piattaforme) e' invece
-    // in formato bitmap CBDT/CBLC, che DirectWrite non sa renderizzare
-    // affatto.
-    return;
-#else
-    const int id = QFontDatabase::addApplicationFont(
-        QStringLiteral(":/qt/qml/Orme/assets/fonts/NotoColorEmoji.ttf"));
+    int id = -1;
+    for (const char *weight : {"500", "700"}) {
+        const int added = QFontDatabase::addApplicationFont(
+            QStringLiteral(":/qt/qml/Orme/assets/fonts/Fredoka-%1.ttf")
+                .arg(QLatin1String(weight)));
+        if (added >= 0)
+            id = added;
+    }
     if (id < 0)
         return;
     const QStringList families = QFontDatabase::applicationFontFamilies(id);
@@ -30,32 +27,29 @@ static void installEmojiFontFallback()
         return;
 
     QFont font = QGuiApplication::font();
-    QStringList chain = font.families();
-    if (chain.isEmpty() && !font.family().isEmpty())
-        chain << font.family();
-    chain << families.first();
-    font.setFamilies(chain);
+    font.setFamilies(families);
     QGuiApplication::setFont(font);
-#endif
 }
 
 int main(int argc, char *argv[])
 {
+#if defined(Q_OS_HAIKU)
+    // Su Haiku/Vitruvian il backend OpenGL di Qt Quick abortisce all'avvio:
+    // il plugin di piattaforma, creando la superficie offscreen, rielabora in
+    // modo annidato l'evento di esposizione e Qt Quick chiama qFatal. Il
+    // renderer software non usa quella superficie. Si puo' ancora forzare un
+    // altro backend con QT_QUICK_BACKEND o QSG_RHI_BACKEND.
+    if (!qEnvironmentVariableIsSet("QT_QUICK_BACKEND")
+        && !qEnvironmentVariableIsSet("QSG_RHI_BACKEND"))
+        QQuickWindow::setSceneGraphBackend(QStringLiteral("software"));
+#endif
+
     QGuiApplication app(argc, argv);
     app.setApplicationName(QStringLiteral("Orme"));
     app.setOrganizationName(QStringLiteral("Orme"));
     app.setApplicationVersion(QStringLiteral(ORME_VERSION));
 
-    installEmojiFontFallback();
-
-    // Il renderer di testo di default di QtQuick (GPU, cache glyph a
-    // distance-field) non disegna in modo affidabile i glyph a colori
-    // (l'emoji font appena impostato come fallback) su tutti i backend
-    // grafici: su Windows (Direct3D/ANGLE) le emoji restano invisibili,
-    // anche se il glyph esiste ed e' quello giusto. NativeRendering usa
-    // invece QPainter/FreeType direttamente, che gestisce i glyph a colori
-    // in modo corretto e uniforme su ogni piattaforma.
-    QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
+    installAppFont();
 
     QQmlApplicationEngine engine;
     QObject::connect(

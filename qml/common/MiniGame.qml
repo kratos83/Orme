@@ -5,7 +5,7 @@ import Orme
 
 // Estende GameScaffold con il "giro" standard di un mini-gioco:
 //   - livello corrente (levelIndex) su un totale (levelCount)
-//   - conteggio errori (mistakes) -> faccine 1..3
+//   - conteggio errori (mistakes) -> stelle 1..3
 //   - vittoria con festa + messaggio + passaggio automatico al livello dopo
 //
 // Un gioco su MiniGame deve solo:

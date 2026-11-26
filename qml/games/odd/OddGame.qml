@@ -11,9 +11,9 @@ MiniGame {
     age: qsTr("3-5 anni")
     levelCount: 12
 
-    readonly property var pool: ["🍎", "🍌", "🐶", "🐱", "⭐", "🌸", "🚗", "🐟", "🎈", "🍄"]
+    readonly property var pool: ["apple", "banana", "dog", "cat", "star", "cherry-blossom", "car", "fish", "balloon", "mushroom"]
 
-    property var  cards: ["🍎", "🍎", "🍌", "🍎"]
+    property var  cards: ["apple", "apple", "banana", "apple"]
     property int  oddIndex: 2
     property bool answered: false
 
@@ -58,6 +58,7 @@ MiniGame {
             model: g.cards
             Rectangle {
                 id: card
+                Candy {}
                 required property int index
                 required property var modelData
                 width: 190; height: 190; radius: 28
@@ -68,7 +69,7 @@ MiniGame {
                 scale: oma.pressed && !g.answered ? 0.93 : 1
                 Behavior on scale { NumberAnimation { duration: 80 } }
 
-                Text { anchors.centerIn: parent; text: card.modelData; font.pixelSize: 110 }
+                AppIcon { anchors.centerIn: parent; name: card.modelData; size: 126 }
 
                 SequentialAnimation {
                     id: nono

@@ -93,16 +93,17 @@ GameScaffold {
         // ===== semaforo =====
         Rectangle {
             id: light
+            Candy {}
             anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 6 }
             width: 84; height: 84; radius: 42
             color: scaffold.green ? Theme.accent : Theme.danger
             border.color: Theme.boardLine
             border.width: 4
 
-            Text {
+            AppIcon {
                 anchors.centerIn: parent
-                text: scaffold.green ? "🟢" : "🔴"
-                font.pixelSize: 46
+                name: scaffold.green ? "circle-green" : "circle-red"
+                size: 53
             }
         }
 
@@ -120,6 +121,7 @@ GameScaffold {
             Repeater {
                 model: track.slotsCount
                 Rectangle {
+                    Candy {}
                     width: track.slotW * 0.8
                     height: width
                     radius: width / 2
@@ -129,19 +131,19 @@ GameScaffold {
                     x: track.cx(index) - width / 2
                     y: track.height / 2 - height / 2
 
-                    Text {
+                    AppIcon {
                         anchors.centerIn: parent
                         visible: index === scaffold.target
-                        text: "⭐"
-                        font.pixelSize: parent.width * 0.6
+                        name: "star"
+                        size: parent.width * 0.69
                     }
                 }
             }
 
-            Text {
+            AppIcon {
                 id: walker
-                text: "🚶"
-                font.pixelSize: track.slotW * 0.7
+                name: "walker"
+                size: track.slotW * 0.80
                 x: track.cx(scaffold.pos) - width / 2
                 y: track.height / 2 - height / 2
                 Behavior on x { NumberAnimation { duration: 320; easing.type: Easing.OutQuad } }
@@ -150,13 +152,14 @@ GameScaffold {
 
         // ===== pulsante "Cammina" =====
         Rectangle {
+            Candy {}
             anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 24 }
             width: 160; height: 120; radius: 24
             color: Theme.accent
             opacity: (scaffold.won || scaffold.caught) ? 0.4 : 1
             scale: goma.pressed && !scaffold.won && !scaffold.caught ? 0.92 : 1
             Behavior on scale { NumberAnimation { duration: 80 } }
-            Text { anchors.centerIn: parent; text: "👣"; font.pixelSize: 60 }
+            AppIcon { anchors.centerIn: parent; name: "footprints"; size: 69 }
             MouseArea {
                 id: goma
                 anchors.fill: parent

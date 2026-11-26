@@ -8,6 +8,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Soggetto e predicato")
+    scenery: "scuola"
     age: qsTr("8-9 anni")
     levelCount: 10
 
@@ -78,6 +79,7 @@ MiniGame {
 
                 Rectangle {
                     id: subjChunk
+                    Candy {}
                     width: Math.max(150, subjText.implicitWidth + 40); height: 96; radius: 20
                     color: Theme.dirUp
                     opacity: g.answered && g.asking !== "subj" ? 0.4 : 1
@@ -89,6 +91,7 @@ MiniGame {
 
                 Rectangle {
                     id: predChunk
+                    Candy {}
                     width: Math.max(150, predText.implicitWidth + 40); height: 96; radius: 20
                     color: Theme.dirDown
                     opacity: g.answered && g.asking !== "pred" ? 0.4 : 1

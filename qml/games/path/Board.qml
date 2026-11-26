@@ -16,10 +16,10 @@ Item {
         width: root.cell * root.cols
         height: root.cell * root.rowsN
         anchors.centerIn: parent
-        color: Theme.boardFill
+        color: "#E4F6C4"          // prato
         radius: 24
-        border.color: Theme.boardLine
-        border.width: 4
+        border.color: "#8BC34A"
+        border.width: 5
         clip: true
 
         // linee verticali
@@ -29,7 +29,7 @@ Item {
                 Rectangle {
                     width: root.cell; height: field.height
                     color: "transparent"
-                    border.color: Theme.boardLine
+                    border.color: "#C5E39A"
                     border.width: 1
                 }
             }
@@ -41,7 +41,7 @@ Item {
                 Rectangle {
                     width: field.width; height: root.cell
                     color: "transparent"
-                    border.color: Theme.boardLine
+                    border.color: "#C5E39A"
                     border.width: 1
                 }
             }
@@ -60,7 +60,7 @@ Item {
 
         // traguardo (oggetto diverso a ogni livello)
         Goal {
-            kind: root.engine ? root.engine.goalKind : "🍎"
+            kind: root.engine ? root.engine.goalKind : "apple"
             width: root.cell
             height: root.cell
             x: (root.engine ? root.engine.goalColumn : 0) * root.cell

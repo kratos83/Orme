@@ -8,6 +8,7 @@ import Orme
 MiniGame {
     id: g
     title: qsTr("Conta le lettere")
+    scenery: "scuola"
     age: qsTr("6-7 anni")
     levelCount: 10
 
@@ -73,6 +74,7 @@ MiniGame {
             }
 
             Rectangle {
+                Candy {}
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: wordText.implicitWidth + 48
                 height: 100
@@ -84,6 +86,7 @@ MiniGame {
             }
 
             Rectangle {
+                Candy {}
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 110; height: 76; radius: 16
                 color: Theme.panel

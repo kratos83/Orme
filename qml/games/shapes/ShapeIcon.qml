@@ -1,4 +1,5 @@
 import QtQuick
+import Orme
 import QtQuick.Shapes
 
 // Una forma piena: cerchio, quadrato, triangolo o stella.
@@ -8,6 +9,7 @@ Item {
     property color  color: "white"
 
     Rectangle {
+        Candy { depth: 4 }
         anchors.fill: parent
         visible: root.kind === "circle"
         radius: width / 2
@@ -15,6 +17,7 @@ Item {
     }
 
     Rectangle {
+        Candy { depth: 4 }
         anchors.fill: parent
         visible: root.kind === "square"
         radius: width * 0.12
