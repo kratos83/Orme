@@ -53,9 +53,10 @@ Window {
             "sequence": sequenceC, "draw": drawC, "catch": catchC, "count": countC,
             "color": colorC, "odd": oddC, "pairs": pairsC, "size": sizeC,
             "bubbles": bubblesC, "dots": dotsC, "wake": wakeC, "cups": cupsC,
-            "puzzle": puzzleC, "harvest": harvestC, "balloons": balloonsC, "reveal": revealC,
+            "puzzle": puzzleC, "trainpuzzle": trainPuzzleC, "harvest": harvestC, "balloons": balloonsC, "reveal": revealC,
             "emotions": emotionsC, "recycle": recycleC, "shapes": shapesC, "snake": snakeC,
             "stopgo": stopgoC, "poses": posesC, "kitchen": kitchenC, "tower": towerC, "beans": beansC, "train": trainC,
+            "voweltrain": vowelTrainC, "numbertrain": numberTrainC,
             "line20": line20C, "add": addC, "sub": subC, "mul": mulC, "div": divC,
             "fractions": fractionsC, "tables": tablesC, "numberline": numberlineC,
             "regions": regionsC,
@@ -113,6 +114,7 @@ Window {
     Component { id: wakeC;     WakeGame     { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: cupsC;     CupsGame     { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: puzzleC;   PuzzleGame   { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: trainPuzzleC; JigsawGame   { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: harvestC;  HarvestGame  { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: balloonsC; BalloonsGame { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: revealC;   RevealGame   { onExitRequested: view.sourceComponent = launcherComponent } }
@@ -126,6 +128,8 @@ Window {
     Component { id: towerC;    TowerGame    { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: beansC;    BeansGame    { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: trainC;    TrainGame    { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: vowelTrainC;  VowelTrainGame  { onExitRequested: view.sourceComponent = launcherComponent } }
+    Component { id: numberTrainC; NumberTrainGame { onExitRequested: view.sourceComponent = launcherComponent } }
 
     Component { id: line20C;     Line20Game     { onExitRequested: view.sourceComponent = launcherComponent } }
     Component { id: addC;        ArithmeticGame { opMode: "add"; onExitRequested: view.sourceComponent = launcherComponent } }

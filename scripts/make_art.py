@@ -7,8 +7,8 @@ converte in PNG in assets/art/. Richiede rsvg-convert.
     python3 scripts/make_art.py
 
 Contiene: treno (locomotiva, vagoni, ruote, sbuffo), scenario del trenino
-(stazione, case, alberi), bottiglia con i suoi liquidi e le conchiglie delle
-tabelline. Le figure sono PNG piccole: costano poca RAM.
+(stazione, case, alberi), segnali (semaforo, stop, divieto di accesso),
+bottiglia con i suoi liquidi e le conchiglie delle tabelline. Le figure sono PNG piccole: costano poca RAM.
 """
 import pathlib
 import subprocess
@@ -289,6 +289,71 @@ def station():
     save("station", (-4, -4, 528, 330), 528, defs, b)
 
 
+# ====================== SEGNALI ======================
+# Disegnati su 120 x 300, palo compreso: le misure usate da RoadSign.qml (centri
+# delle luci e del cartello) devono coincidere con quelle qui sotto.
+def _pole(top):
+    return [rect(53, top, 14, 288 - top, 5, "url(#pole)", "#37474F", 2.5),
+            rect(34, 282, 52, 16, 6, "#78909C", "#37474F", 3)]
+
+
+def _sign_defs():
+    return (lg("pole", ("0", "#ECEFF1"), ("0.5", "#B0BEC5"), ("1", "#607D8B"), h=True)
+            + lg("red", ("0", "#FF5A52"), ("1", "#C4161C"))
+            + lg("blue", ("0", "#3D9BF0"), ("1", "#0D55B0"))
+            + lg("box", ("0", "#5B6B75"), ("0.5", "#37474F"), ("1", "#1F2D34"), h=True))
+
+
+def sign_light():
+    """Semaforo con le tre luci spente (quella accesa la disegna il QML):
+    centri in (60, 42), (60, 96) e (60, 150), raggio 21."""
+    b = _pole(170)
+    b.append(rect(20, 8, 80, 170, 26, "url(#box)", "#17232A", 4))
+    for y, off in ((42, "#5D2A2A"), (96, "#5C5226"), (150, "#24482C")):
+        b.append(circle(60, y, 25, "#17232A"))
+        b.append(circle(60, y, 21, off))
+        b.append(path("M %d %d Q 60 %d %d %d" % (31, y - 14, y - 42, 89, y - 14),
+                      "none", "#17232A", 6))   # visiera
+    save("sign-light", (0, 0, 120, 300), 192, _sign_defs(), b)
+
+
+def sign_stop():
+    """Ottagono rosso; la scritta STOP la mette il QML al centro (60, 66)."""
+    def octagon(r):
+        import math
+        pts = ["%.1f %.1f" % (60 + r * math.cos(math.radians(22.5 + 45 * k)),
+                              66 + r * math.sin(math.radians(22.5 + 45 * k))) for k in range(8)]
+        return "M " + " L ".join(pts) + " Z"
+    b = _pole(110)
+    b.append(path(octagon(60), "#FFFFFF", "#8E1F1C", 3))
+    b.append(path(octagon(52), "url(#red)"))
+    save("sign-stop", (0, 0, 120, 300), 192, _sign_defs(), b)
+
+
+def sign_noentry():
+    b = _pole(110)
+    b.append(circle(60, 66, 57, "#FFFFFF", "#8E1F1C", 3))
+    b.append(circle(60, 66, 51, "url(#red)"))
+    b.append(rect(24, 55, 72, 22, 5, "#FFFFFF"))
+    save("sign-noentry", (0, 0, 120, 300), 192, _sign_defs(), b)
+
+
+def sign_straight():
+    """Cartello blu "direzione obbligatoria": di qui si puo' passare."""
+    b = _pole(110)
+    b.append(circle(60, 66, 57, "#FFFFFF", "#0D4580", 3))
+    b.append(circle(60, 66, 51, "url(#blue)"))
+    b.append(path("M 60 28 L 86 58 H 70 V 104 H 50 V 58 H 34 Z", "#FFFFFF"))
+    save("sign-straight", (0, 0, 120, 300), 192, _sign_defs(), b)
+
+
+def signs():
+    sign_light()
+    sign_stop()
+    sign_noentry()
+    sign_straight()
+
+
 # ====================== BOTTIGLIA ======================
 # Disegnata su 130 x 194, la stessa proporzione dell'elemento nel QML.
 BOTTLE_OUT = ("M 49 14 H 81 V 44 Q 82 54 94 62 Q 113 74 113 96 V 168 "
@@ -352,6 +417,7 @@ def main():
     tree_round("tree-1", "#B8F07A", "#5CBF4A", "#2E7D32")
     tree_pine("tree-2")
     station()
+    signs()
     bottle()
     # stesso ordine di BeansGame.liquids: acqua, aranciata, uva, limonata
     liquid("water", "#9BD8FF", "#42A5F5", "#1B6FC2")

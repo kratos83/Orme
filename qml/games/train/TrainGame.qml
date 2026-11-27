@@ -6,9 +6,12 @@ import Orme
 // "Il trenino" - prima si costruisce il treno, poi lo si fa partire.
 // Sul binario ci sono le caselle vuote; i vagoni (e la locomotiva) stanno nel
 // vassoio in basso e si trascinano al loro posto: la locomotiva davanti (a
-// destra, il treno va verso destra), i vagoni dietro. Dai livelli 3 in poi
-// in alto c'e' il modellino da copiare, colore per colore. Quando tutte le
-// caselle sono piene compare il pulsante START: si tocca e il treno parte,
+// destra, il treno va verso destra), i vagoni dietro, nell'ordine che il
+// bambino preferisce. Prima della partenza i vagoni agganciati si possono
+// spostare, scambiare o rimettere nel vassoio. Dai livelli 3 in poi in alto
+// c'e' il modellino: copiarlo e' una sfida in piu', non un obbligo (se i
+// colori coincidono spunta una stella). Quando tutte le caselle sono piene
+// compare il pulsante START: si tocca e il treno parte,
 // fa fumo e viaggia verso la prossima stazione: lo scenario scorre, il
 // bambino tocca il treno per farlo correre piu' forte (ciuf! e fischio) e
 // il treno frena da solo arrivando in stazione, dove aspettano i passeggeri.
@@ -22,11 +25,14 @@ MiniGame {
     readonly property var counts: [3, 3, 4, 4, 5, 5]   // locomotiva compresa
 
     property int  carCount: 3
-    property bool matchModel: false     // true: i vagoni devono avere i colori del modellino
-    property var  order: []             // colore atteso per casella (la locomotiva e' l'ultima)
-    property var  filled: []            // bool per casella
-    property var  placedColor: []       // colore messo in ogni casella
-    property var  trayCars: []          // { uid, loco, color } ancora nel vassoio
+    property bool showModel: false      // true: in alto c'e' il modellino
+    property var  order: []             // colori del modellino (la locomotiva e' l'ultima)
+    property var  slots: []             // per casella: { uid, loco, color } oppure null
+    property var  trayCars: []          // pezzi ancora nel vassoio
+    property int  dragFrom: -1          // casella del vagone che si sta spostando
+    readonly property var filled: slots.map((c) => c !== null)
+    readonly property bool likeModel: showModel && slots.length === order.length
+        && slots.every((c, i) => c !== null && Qt.colorEqual(c.color, order[i]))
     property string phase: "build"      // build | ready | running | arrived
     property real  scroll: 0            // strada percorsa (px di scenario scorso)
     property real  boost: 0             // spinta extra data dai tocchi, decade da sola
@@ -63,14 +69,14 @@ MiniGame {
         scroll = 0
         boost = 0
         carCount = counts[i % counts.length]
-        matchModel = i >= 2
+        showModel = i >= 2
+        dragFrom = -1
 
         var wagons = shuffle(Theme.playColors.slice(1)).slice(0, carCount - 1)
         order = wagons.concat([locoColor])
-        var f = [], pc = []
-        for (var k = 0; k < carCount; k++) { f.push(false); pc.push(locoColor) }
-        filled = f
-        placedColor = pc
+        var empty = []
+        for (var k = 0; k < carCount; k++) empty.push(null)
+        slots = empty
 
         var tray = [{ uid: 0, loco: true, color: locoColor }]
         for (var w = 0; w < wagons.length; w++)
@@ -78,22 +84,54 @@ MiniGame {
         trayCars = shuffle(tray)
     }
 
-    // slot < 0: pezzo rilasciato fuori dalle caselle. true = agganciato.
+    readonly property bool building: phase === "build" || phase === "ready"
+
+    function refreshPhase() { phase = trayCars.length === 0 ? "ready" : "build" }
+
+    // Un pezzo del vassoio lasciato sulla casella "slot" (< 0: fuori dalle
+    // caselle). Davanti va solo la locomotiva, dietro un vagone qualsiasi; se
+    // la casella e' occupata, il vagone che c'era torna nel vassoio.
+    // true = agganciato.
     function drop(car, slot) {
-        if (slot < 0 || phase !== "build" || filled[slot]) return false
-        var isLocoSlot = slot === carCount - 1
-        var ok = car.loco === isLocoSlot
-        if (ok && !car.loco && matchModel) ok = order[slot] === car.color
-        if (!ok) {
+        if (slot < 0 || !building) return false
+        if (car.loco !== (slot === carCount - 1)) {
             g.wrong()
             snd.nope()
             return false
         }
-        var f = filled.slice(); f[slot] = true; filled = f
-        var pc = placedColor.slice(); pc[slot] = car.color; placedColor = pc
-        trayCars = trayCars.filter(function (c) { return c.uid !== car.uid })
+        var s = slots.slice()
+        var old = s[slot]
+        s[slot] = car
+        var tray = trayCars.filter(function (c) { return c.uid !== car.uid })
+        if (old !== null) tray.push(old)
+        slots = s
+        trayCars = tray
         snd.ok()
-        if (trayCars.length === 0) phase = "ready"
+        refreshPhase()
+        return true
+    }
+
+    // Un vagone gia' agganciato spostato dalla casella "from": su un'altra
+    // casella ci va (scambiandosi con quello che c'e'), con to = -2 torna nel
+    // vassoio, altrimenti resta dov'era.
+    function move(from, to) {
+        if (!building || slots[from] === null || slots[from].loco) return false
+        var s = slots.slice()
+        if (to === -2) {
+            var back = s[from]
+            s[from] = null
+            slots = s
+            trayCars = trayCars.concat([back])
+        } else {
+            if (to < 0 || to === from) return false
+            if (to === carCount - 1) { snd.nope(); return false }   // li' va la locomotiva
+            var other = s[to]
+            s[to] = s[from]
+            s[from] = other
+            slots = s
+        }
+        snd.ok()
+        refreshPhase()
         return true
     }
 
@@ -133,109 +171,8 @@ MiniGame {
     // chi viaggia sul treno
     readonly property var riders: ["rabbit", "cat", "dog", "panda", "frog", "fox", "koala", "pig"]
 
-    // ---------- il vagone ----------
-    // Il disegno e' largo 200 unita' e alto 140 (u = una unita' in px), con un
-    // margine attorno per tetto, ciminiera e ganci. Le ruote sono a parte
-    // perche' girano. Lo stesso componente serve per il treno, il vassoio e il
-    // modellino in miniatura.
-    component Car: Item {
-        id: car
-        property bool loco: false
-        property color body: "red"
-        property real spin: 0
-        property bool smoking: false
-        property string art: ""
-        property string rider: ""       // animale al primo finestrino
-        property string rider2: ""      // animale al secondo finestrino
-        height: width * 0.7
-
-        readonly property real u: width / 200
-        readonly property string paint: {
-            var names = ["red", "blue", "yellow", "green", "purple", "orange"]
-            for (var i = 0; i < names.length; i++)
-                if (Qt.colorEqual(car.body, Theme.playColors[i])) return names[i]
-            return "grey"
-        }
-
-        Image {   // carrozzeria
-            x: -12 * car.u; y: -30 * car.u
-            width: 224 * car.u; height: 172 * car.u
-            source: car.art + (car.loco ? "loco" : "wagon-" + car.paint) + ".png"
-            mipmap: car.width < 90
-        }
-
-        // chi si affaccia: il macchinista orsetto o i due passeggeri
-        AppIcon {
-            visible: car.loco
-            name: "bear"
-            size: 40 * car.u
-            x: 37 * car.u - width / 2; y: 45 * car.u - height / 2
-        }
-        AppIcon {
-            visible: !car.loco && car.rider !== ""
-            name: car.rider
-            size: 46 * car.u
-            x: 53 * car.u - width / 2; y: 53 * car.u - height / 2
-        }
-        AppIcon {
-            visible: !car.loco && car.rider2 !== ""
-            name: car.rider2
-            size: 46 * car.u
-            x: 145 * car.u - width / 2; y: 53 * car.u - height / 2
-        }
-
-        Repeater {   // ruote: [centro x, diametro], poggiano sul fondo
-            model: car.loco ? [[34, 52], [88, 40], [131, 40], [167, 28]]
-                            : [[30, 36], [64, 36], [134, 36], [168, 36]]
-            Image {
-                required property var modelData
-                width: modelData[1] * car.u; height: width
-                x: modelData[0] * car.u - width / 2
-                y: car.height - height
-                source: car.art + "wheel.png"
-                rotation: car.spin
-                mipmap: true
-            }
-        }
-
-        // biella dorata della locomotiva: va su e giu' mentre le ruote girano
-        Rectangle {
-            visible: car.loco
-            x: 34 * car.u + Math.cos(car.spin * Math.PI / 180) * 8 * car.u
-            y: 117 * car.u + Math.sin(car.spin * Math.PI / 180) * 8 * car.u
-            width: 97 * car.u; height: Math.max(2, 8 * car.u); radius: height / 2
-            color: "#FFCA28"
-            border.color: "#8D5F00"; border.width: Math.max(0.5, car.u)
-        }
-
-        // sbuffi di fumo dalla ciminiera
-        Repeater {
-            model: car.loco ? 4 : 0
-            Image {
-                id: puff
-                required property int index
-                width: 46 * car.u; height: width
-                x: 153 * car.u - width / 2
-                y: -34 * car.u
-                source: car.art + "puff.png"
-                opacity: 0
-                SequentialAnimation {
-                    running: car.smoking
-                    loops: Animation.Infinite
-                    PauseAnimation { duration: puff.index * 260 }
-                    ParallelAnimation {
-                        NumberAnimation { target: puff; property: "y"; from: -34 * car.u; to: -150 * car.u; duration: 1040 }
-                        NumberAnimation { target: puff; property: "x"; from: 153 * car.u - puff.width / 2; to: 153 * car.u - puff.width / 2 - 70 * car.u; duration: 1040 }
-                        NumberAnimation { target: puff; property: "scale"; from: 0.5; to: 2.0; duration: 1040 }
-                        SequentialAnimation {
-                            NumberAnimation { target: puff; property: "opacity"; to: 0.95; duration: 150 }
-                            NumberAnimation { target: puff; property: "opacity"; to: 0; duration: 890 }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    // il vagone (e la locomotiva) e' il disegno comune ai giochi col treno
+    component Car: TrainCar {}
 
     // ---------- un passeggero che scende e cammina saltellando ----------
     component Person: Item {
@@ -457,6 +394,17 @@ MiniGame {
         anchors.fill: parent
         clip: true
 
+        // la casella del binario sotto il punto (x, y), -1 se nessuna
+        function slotAt(x, y) {
+            for (var v = 0; v < g.carCount; v++) {
+                var sl = slotRep.itemAt(v)
+                if (!sl) continue
+                var p = sl.mapFromItem(area, x, y)
+                if (p.x >= 0 && p.x <= sl.width && p.y >= 0 && p.y <= sl.height) return v
+            }
+            return -1
+        }
+
         // ===== scenario: cielo, colline, case, alberi, prato =====
         Item {
             id: scene
@@ -617,7 +565,7 @@ MiniGame {
 
         // ===== modellino da copiare (dai livelli 3 in poi) =====
         Rectangle {
-            visible: g.matchModel
+            visible: g.showModel
             x: 8; y: 8
             width: modelRow.width + 20; height: modelRow.height + 14
             radius: 14
@@ -625,7 +573,7 @@ MiniGame {
         }
         Row {
             id: modelRow
-            visible: g.matchModel
+            visible: g.showModel
             x: 18; y: 15
             spacing: 4
             Repeater {
@@ -638,6 +586,16 @@ MiniGame {
                     body: g.order[index] || "#bbbbbb"
                 }
             }
+        }
+
+        AppIcon {   // stella: il treno e' proprio come il modellino
+            x: modelRow.x + modelRow.width - 6
+            y: modelRow.y + modelRow.height - 12
+            name: "star-glowing"
+            size: 44
+            scale: g.likeModel ? 1 : 0
+            visible: scale > 0
+            Behavior on scale { NumberAnimation { duration: 260; easing.type: Easing.OutBack } }
         }
 
         // ===== binario: massicciata, traversine e due rotaie =====
@@ -686,7 +644,7 @@ MiniGame {
                 color: "#59FFFFFF"
                 border.color: "white"
                 border.width: 4
-                visible: !g.filled[index] && g.phase === "build"
+                visible: g.building && (!g.filled[index] || g.dragFrom === index)
                 Image {
                     readonly property real u: parent.width / 224
                     x: 0; y: parent.height - height
@@ -703,6 +661,7 @@ MiniGame {
             x: g.trainX
             y: g.trackY + bob
             width: g.trainW; height: g.ch
+            z: g.dragFrom >= 0 ? 20 : 0     // il vagone spostato passa sopra al resto
 
             // sobbalzi mentre viaggia
             property real bob: 0
@@ -728,18 +687,26 @@ MiniGame {
                 Car {
                     id: placed
                     required property int index
-                    readonly property bool full: g.filled[index] === true
-                    x: index * (g.cw + g.gap)
+                    readonly property var car: g.slots[index] || null
+                    readonly property bool full: car !== null
+                    readonly property int uid: car ? car.uid : 0
+                    readonly property bool held: grip.drag.active
+                    // al suo posto, tranne mentre lo si trascina
+                    Binding on x { when: !placed.held; value: placed.index * (g.cw + g.gap); restoreMode: Binding.RestoreNone }
+                    Binding on y { when: !placed.held; value: 0; restoreMode: Binding.RestoreNone }
+                    z: held ? 10 : 0
                     art: g.art
                     width: g.cw
                     visible: full
                     // all'arrivo il primo passeggero scende dal vagone
-                    rider: g.phase === "arrived" ? "" : g.riders[index % g.riders.length]
-                    rider2: g.riders[(index + 4) % g.riders.length]
+                    // i passeggeri viaggiano col loro vagone, anche se cambia posto
+                    rider: g.phase === "arrived" || !uid ? "" : g.riders[(uid - 1) % g.riders.length]
+                    rider2: uid ? g.riders[(uid + 3) % g.riders.length] : ""
                     loco: index === g.carCount - 1
-                    body: g.placedColor[index] || "#bbbbbb"
+                    body: car ? car.color : "#bbbbbb"
                     spin: g.wheelAngle
                     smoking: g.phase === "running" && loco
+                    onUidChanged: if (full) hop.restart()
                     onFullChanged: if (full) hop.restart()
                     transformOrigin: Item.Bottom
                     SequentialAnimation {
@@ -752,6 +719,30 @@ MiniGame {
                         anchors.fill: parent
                         enabled: placed.loco && placed.full
                         onClicked: snd.win()
+                    }
+                    // prima della partenza i vagoni si spostano col dito
+                    MouseArea {
+                        id: grip
+                        anchors.fill: parent
+                        enabled: g.building && placed.full && !placed.loco
+                        drag.target: placed
+                        drag.minimumX: -train.x
+                        drag.maximumX: area.width - train.x - placed.width
+                        drag.minimumY: -train.y
+                        drag.maximumY: area.height - train.y - placed.height
+                        drag.onActiveChanged: if (drag.active) g.dragFrom = placed.index
+                        onPressed: snd.tap()
+                        onReleased: {
+                            if (g.dragFrom !== placed.index) return
+                            var c = placed.mapToItem(area, placed.width / 2, placed.height / 2)
+                            var to = area.slotAt(c.x, c.y)
+                            // lasciato in basso, verso il vassoio: si toglie dal treno
+                            if (to < 0 && c.y > g.trackY + g.ch * 1.6) to = -2
+                            // dopo il rilascio: cosi' il vagone torna da solo al suo posto
+                            var from = placed.index
+                            Qt.callLater(() => { g.move(from, to); g.dragFrom = -1 })
+                        }
+                        onCanceled: g.dragFrom = -1
                     }
                 }
             }
@@ -803,7 +794,7 @@ MiniGame {
             id: journey
             visible: g.phase === "running" || g.phase === "arrived"
             // al centro, ma sempre a destra del modellino da copiare
-            x: Math.max(g.matchModel ? modelRow.x + modelRow.width + 18 : 12, (parent.width - width) / 2)
+            x: Math.max(g.showModel ? modelRow.x + modelRow.width + 18 : 12, (parent.width - width) / 2)
             y: 10
             width: 280; height: 44
             Rectangle {
@@ -862,7 +853,9 @@ MiniGame {
                 x: startX; y: doorY
                 opacity: 0
                 z: 8
-                animal: g.riders[index % g.riders.length]
+                // il passeggero del vagone che si trova in questa casella
+                readonly property int uid: g.slots[index] && g.slots[index].uid ? g.slots[index].uid : 1
+                animal: g.riders[(uid - 1) % g.riders.length]
                 walking: g.phase === "arrived"
 
                 SequentialAnimation {
@@ -955,7 +948,7 @@ MiniGame {
                 MouseArea {
                     id: dragArea
                     anchors.fill: parent
-                    enabled: g.phase === "build"
+                    enabled: g.building
                     drag.target: piece
                     drag.minimumX: 0
                     drag.maximumX: area.width - piece.width
@@ -964,18 +957,8 @@ MiniGame {
 
                     onPressed: snd.tap()
                     onReleased: {
-                        var cx = piece.x + piece.width / 2
-                        var cy = piece.y + piece.height / 2
-                        var hit = -1
-                        for (var v = 0; v < g.carCount; v++) {
-                            var sl = slotRep.itemAt(v)
-                            if (!sl) continue
-                            var p = sl.mapFromItem(area, cx, cy)
-                            if (p.x >= 0 && p.x <= sl.width && p.y >= 0 && p.y <= sl.height) {
-                                hit = v
-                                break
-                            }
-                        }
+                        var hit = area.slotAt(piece.x + piece.width / 2,
+                                              piece.y + piece.height / 2)
                         if (!g.drop(piece.modelData, hit))
                             piece.goHome()
                     }

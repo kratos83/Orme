@@ -5,7 +5,8 @@ import Orme
 
 // La "linea dei tasti" fino a 20: due decine divise in cinquine, come quattro
 // mani. Un tasto alzato mostra la sua pallina, cosi' la quantita' si legge a
-// colpo d'occhio, senza contare uno per uno.
+// colpo d'occhio, senza contare uno per uno. Sotto ogni cinquina c'e' una
+// mano: ogni dito si accende insieme al suo tasto.
 //
 // Su schermi stretti le due decine vanno una sotto l'altra. La linea non
 // decide nulla: dice al gioco quale tasto si sta toccando (touched / released)
@@ -29,8 +30,73 @@ Item {
 
     function shake() { shakeAnim.restart() }
 
+    // Una mano vista dal dorso, appoggiata come sulla tastiera: i pollici
+    // stanno verso il centro. "fingers" dice quali dita sono accese, da
+    // sinistra a destra; "dots" il colore della pallina di ciascuna.
+    // Disegnata su 300 x 205 unita' (v = una unita' in px), col pollice a
+    // sinistra; "leftHand" la specchia.
+    component Hand: Item {
+        id: hand
+        property bool leftHand: false
+        property var fingers: [false, false, false, false, false]
+        property var dots: []
+        readonly property real v: width / 300
+        readonly property bool full: fingers.indexOf(false) < 0
+        height: 205 * v
+
+        Repeater {
+            // [centro x, cima, lunghezza, larghezza, inclinazione]: pollice,
+            // indice, medio, anulare, mignolo
+            model: [[58, 70, 106, 48, -48], [108, 26, 120, 44, -5], [156, 6, 138, 45, 0],
+                    [204, 22, 122, 44, 5], [249, 58, 92, 39, 11]]
+
+            Rectangle {
+                id: finger
+                required property var modelData
+                required property int index
+                // nella mano sinistra il disegno e' specchiato: il pollice,
+                // che e' a destra, e' l'ultimo da sinistra
+                readonly property int place: hand.leftHand ? 4 - index : index
+                readonly property bool lit: hand.fingers[place] === true
+                objectName: "finger" + place
+
+                width: modelData[3] * hand.v
+                height: modelData[2] * hand.v
+                x: (hand.leftHand ? 300 - modelData[0] : modelData[0]) * hand.v - width / 2
+                y: modelData[1] * hand.v
+                rotation: hand.leftHand ? -modelData[4] : modelData[4]
+                radius: width / 2
+                color: lit ? "#FFC83D" : "#FFF6E6"
+                border.color: lit ? "#B86E00" : "#D9B98F"
+                border.width: Math.max(1, 5 * hand.v)
+                Behavior on color { ColorAnimation { duration: 140 } }
+
+                Rectangle {   // sul polpastrello la pallina del tasto
+                    visible: finger.lit
+                    width: parent.width * 0.62; height: width; radius: width / 2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y: parent.width * 0.19
+                    color: hand.dots[finger.place] || "#EF5350"
+                    border.color: Qt.darker(color, 1.25)
+                    border.width: Math.max(1, 3 * hand.v)
+                }
+            }
+        }
+
+        Rectangle {   // il palmo, davanti all'attacco delle dita
+            x: (hand.leftHand ? 300 - 272 : 80) * hand.v
+            y: 108 * hand.v
+            width: 192 * hand.v; height: 94 * hand.v
+            radius: 42 * hand.v
+            color: hand.full ? "#FFC83D" : "#FFE0A8"
+            border.color: hand.full ? "#B86E00" : "#C9924E"
+            border.width: Math.max(1, 5 * hand.v)
+            Behavior on color { ColorAnimation { duration: 140 } }
+        }
+    }
+
     // ---------- misure: tutto in "u", la larghezza di un tasto ----------
-    readonly property real rowUnits: 3.75      // tasto + alzata + manina
+    readonly property real rowUnits: 4.65      // tasto + alzata + mano
     readonly property real uOne: Math.min(width / 24.0, height / (rowUnits + 0.5), 90)
     readonly property real uTwo: Math.min(width / 11.85, height / (rowUnits * 2 + 0.5), 90)
     readonly property bool twoRows: uTwo > uOne * 1.25
@@ -153,20 +219,20 @@ Item {
             }
         }
 
-        // una manina sotto ogni cinquina, accesa quando la cinquina e' completa
+        // una mano sotto ogni cinquina: si accendono le dita dei tasti alzati
         Repeater {
             model: 4
-            AppIcon {
+            Hand {
                 required property int index
                 readonly property int first: index * 5 + 1
-                readonly property bool full: line.litFrom <= first && line.litTo >= first + 4
-                name: "hand"
-                size: line.u * 1.05
+                objectName: "hand" + index
+                leftHand: index % 2 === 0
+                fingers: [0, 1, 2, 3, 4].map((k) => first + k >= line.litFrom && first + k <= line.litTo)
+                dots: [0, 1, 2, 3, 4].map((k) => first + k > line.splitAt ? "#FFB300" : "#EF5350")
+                width: line.u * 2.7
                 x: (line.offsetU((index * 5) % line.perRow) + 2.7) * line.u - width / 2
-                y: (2.72 + Math.floor(index * 5 / line.perRow) * line.rowUnits) * line.u
-                opacity: full ? 1 : 0.35
-                scale: full ? 1.12 : 1
-                mirror: index % 2 === 1
+                y: (2.76 + Math.floor(index * 5 / line.perRow) * line.rowUnits) * line.u
+                scale: full ? 1.06 : 1
                 Behavior on scale { NumberAnimation { duration: 160; easing.type: Easing.OutBack } }
             }
         }

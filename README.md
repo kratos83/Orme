@@ -1,7 +1,7 @@
 # Orme
 
-Raccolta di 48 giochi touch per bambini della scuola dell'infanzia (3-5 anni,
-30 giochi ispirati ai concetti del coding) e della scuola primaria (6-10 anni,
+Raccolta di 51 giochi touch per bambini della scuola dell'infanzia (3-5 anni,
+33 giochi ispirati ai concetti del coding) e della scuola primaria (6-10 anni,
 18 giochi di matematica, italiano e geografia). All'avvio si sceglie la
 categoria (Infanzia o Primaria) e si vede solo la griglia di quella categoria.
 
@@ -38,8 +38,8 @@ macOS: vedi [packaging/README.md](packaging/README.md).
 
 ## I giochi
 
-**48 giochi** in due categorie, scelte in una schermata iniziale
-(`CategoryPicker.qml`): **Infanzia** (30 giochi, 3-5 anni) e **Primaria**
+**51 giochi** in due categorie, scelte in una schermata iniziale
+(`CategoryPicker.qml`): **Infanzia** (33 giochi, 3-5 anni) e **Primaria**
 (18 giochi, 6-10 anni). Ogni categoria ha la sua griglia, che si adatta alla
 larghezza (3-6 riquadri per riga) e scorre in verticale; il titolo lungo va a
 capo. L'età consigliata è scritta su ogni riquadro e nell'intestazione del
@@ -64,7 +64,7 @@ qualsiasi `Rectangle`, `CircleButton`, `CandyButton`, `TitlePill` e
 [Fredoka](https://fonts.google.com/specimen/Fredoka) (`assets/fonts/`,
 licenza OFL), impostato in `src/main.cpp`.
 
-### Infanzia (30 giochi, 3-5 anni)
+### Infanzia (33 giochi, 3-5 anni)
 
 | # | Riquadro | Età | Cartella | Idea |
 |---|---|---|---|---|
@@ -97,7 +97,10 @@ licenza OFL), impostato in `src/main.cpp`.
 | 27 | **Cuciniamo insieme** | 3-4 | `games/kitchen/` | ruolo in cucina: tocca gli oggetti nell'ordine giusto per completare l'azione |
 | 28 | **Costruisci la torre** | 3-4 | `games/tower/` | trascina i blocchi colorati nella torre, dal basso verso l'alto, come il modellino |
 | 29 | **Travasi e infilo** | 3-4 | `games/beans/` | trascina la bottiglia sopra il bicchiere e travasa il liquido (acqua, succo, limonata...): coordinazione occhio-mano |
-| 30 | **Il trenino** | 3-4 | `games/train/` | prima si monta il treno trascinando locomotiva e vagoni sul binario (dal livello 3 copiando il modellino), poi si tocca START e si tocca il treno per farlo correre fino alla stazione |
+| 30 | **Il trenino** | 3-4 | `games/train/` | prima si monta il treno trascinando locomotiva e vagoni sul binario, nell'ordine che si vuole e spostandoli a piacere (dal livello 3 c'è un modellino: copiarlo è facoltativo), poi si tocca START e si tocca il treno per farlo correre fino alla stazione |
+| 49 | **Puzzle dei trenini** | 3-5 | `games/jigsaw/` | puzzle a incastro (4, 6, 9, 12 pezzi): trascina ogni pezzo sul disegno che si intravede; quattro disegni originali uno dopo l'altro: `scripts/make_scene.py`, pezzi tagliati da `scripts/make_puzzle.py` |
+| 50 | **Il treno delle vocali** | 4-5 | `games/railway/` | ogni passeggero sale sul vagone della vocale con cui comincia la sua parola; in viaggio semaforo, STOP e divieto di accesso |
+| 51 | **Il treno dei numeri** | 4-5 | `games/railway/` | gli animali scendono dai vagoni: contali e tocca il numero (fino a 9, anche lo zero); in viaggio semaforo, STOP e divieto di accesso |
 
 Regole comuni pensate per 3-5 anni: niente testo da leggere (icone + colore +
 suono), bersagli touch grandi, nessuna schermata di sconfitta, festa e "Ops!
@@ -135,7 +138,7 @@ Meccanica comune: tastierino numerico touch (`common/NumberPad.qml`) per le
 risposte numeriche, tocco su carte/riquadri per le scelte multiple; stessa
 cornice (`MiniGame`/`GameScaffold`) e stelle di punteggio dei giochi Infanzia.
 
-**Nome del bambino (in tutti i 48 giochi).** All'ingresso di ogni gioco compare
+**Nome del bambino (in tutti i 51 giochi).** All'ingresso di ogni gioco compare
 la schermata "Come ti chiami?" (`NamePrompt.qml`, dentro `GameScaffold` quindi
 ereditata anche da `MiniGame` e da tutti i giochi): campo di testo + "Gioca" o
 "Salta". Il nome resta scritto nell'intestazione e si può **cambiare in
@@ -145,7 +148,7 @@ bambino successivo.
 
 **Menu Info.** In alto a destra nel menu c'è il tasto **i**: apre `InfoPage.qml`
 con la presentazione del programma (scopo, versione, © e email) e **l'elenco di
-tutti i 48 giochi**, divisi per categoria, con concetto ed età; toccando una
+tutti i 51 giochi**, divisi per categoria, con concetto ed età; toccando una
 riga si apre quel gioco.
 L'elenco dei giochi (id, titolo, età, colore, icona, descrizione) è il singleton
 `Catalog.qml`, usato sia dal menu sia dalla pagina Info.
@@ -172,7 +175,7 @@ qml/
   Main.qml            finestra + Loader; sceglie CategoryPicker o Launcher,
                       mappa id-gioco -> Component (+ InfoPage)
   Theme.qml           singleton: colori e misure condivise
-  Catalog.qml         singleton: elenco dei 48 giochi (id/cat/titolo/età/colore/icona/desc)
+  Catalog.qml         singleton: elenco dei 51 giochi (id/cat/titolo/età/colore/icona/desc)
   CategoryPicker.qml  schermata iniziale: scegli Infanzia o Primaria
   Launcher.qml        menu scorrevole (griglia 3-6 col.), filtrato per categoria,
                       + tasto "◀" (torna alla scelta) e "i" -> Info
@@ -211,11 +214,15 @@ qml/
         spelling|lettercount|guessword|reorder|subjectverb|pronouns|alphabet/
                                              giochi Primaria 31-47 (radice MiniGame)
   games/line20/                             gioco 48: Line20Game + KeyLine (radice MiniGame)
+  games/jigsaw/                             gioco 49: Puzzle dei trenini (radice MiniGame)
+  games/railway/                             giochi 50 e 51: RailGame (il viaggio, base
+                                             MiniGame), VowelTrainGame, NumberTrainGame,
+                                             RoadSign e TrainCar (anche per il trenino)
 assets/sounds/         effetti WAV (rigenerabili con scripts/make_sounds.py)
 assets/icons/          icone PNG (rigenerabili con scripts/fetch_icons.py)
 assets/fonts/          font Fredoka (OFL)
-assets/art/            illustrazioni originali: treno, scenario, bottiglia,
-                       conchiglie (rigenerabili con scripts/make_art.py)
+assets/art/            illustrazioni originali: treno, scenario, segnali,
+                       bottiglia, conchiglie (rigenerabili con scripts/make_art.py)
 scripts/               make_sounds.py, fetch_icons.py, make_art.py,
                        check_levels.py, clean.sh
 ```
@@ -359,8 +366,10 @@ script allineata a quella C++).
   pelo del liquido con schizzi; un tocco la fa dondolare.
 - **Il trenino** (`games/train/TrainGame.qml`) - prima si costruisce, poi si
   parte: si trascinano la locomotiva (davanti, a destra) e i vagoni dal
-  vassoio nelle caselle del binario. Dal livello 3 in alto compare il
-  modellino e i vagoni vanno messi con i suoi colori. A treno completo
+  vassoio nelle caselle del binario. I vagoni vanno nell'ordine che si
+  vuole e si possono spostare, scambiare o togliere prima della partenza;
+  dal livello 3 in alto compare un modellino che si può copiare (spunta una
+  stella), senza obbligo. A treno completo
   compare il pulsante START: il treno parte con fumo e ruote che girano e
   viaggia verso la prossima stazione. Lo scenario (case, alberi, traversine)
   scorre e una barra in alto mostra la strada fatta; toccando il treno lo si
@@ -368,6 +377,17 @@ script allineata a quella C++).
   solo e si ferma in stazione: i passeggeri (omini interi, con gambe e braccia che camminano) scendono da ogni vagone sulla banchina e seguono la strada pedonale (strisce pedonali, marciapiede davanti alla facciata) fino alla porta della stazione, che sta in primo piano sotto i binari. Case, alberi e stazione sono interattivi: toccando una casa si accendono luci e porta e sale il fumo dal comignolo, l'albero si scuote e perde una foglia, la stazione suona la campanella (DING DONG!, cartello e porte si illuminano; suona anche all'arrivo). 6 livelli, da 3 a
   5 pezzi (locomotiva compresa), strada più lunga a ogni livello. Ogni vagone
   ha 4 ruote, la locomotiva 6.
+- **Il treno delle vocali** e **Il treno dei numeri** (`games/railway/`) -
+  stesso viaggio (`RailGame.qml`): tre stazioni per livello e, prima di
+  ognuna, un segnale in ordine casuale. Semaforo: col rosso STOP, si aspetta
+  il verde e poi VIA. Segnale di STOP: ci si ferma, si guarda, poi VIA.
+  Divieto di accesso: si sceglie il binario libero. Il treno rallenta e
+  aspetta da solo, senza limiti di tempo. Nelle vocali i vagoni hanno i
+  cartelli A E I O U e ogni passeggero (trascinato, o toccando il vagone)
+  sale su quello con la sua iniziale; dal livello 3 l'iniziale è nascosta,
+  negli ultimi due i vagoni cambiano posto. Nei numeri gli animali scendono
+  e si mettono in file da cinque: si contano (toccandoli compare il numero)
+  e si tocca la cifra fra tre, da 1-3 fino a 0-9. 6 livelli ciascuno.
 
 ## Aggiungere un nuovo gioco
 

@@ -50,6 +50,12 @@ file(GLOB ORME_ART
     CONFIGURE_DEPENDS
     assets/art/*.png
 )
+# Puzzle a incastro (scripts/make_puzzle.py)
+file(GLOB ORME_PUZZLE
+    RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+    CONFIGURE_DEPENDS
+    assets/puzzle/*/*.png
+)
 
 qt_add_qml_module(Orme-app
     URI Orme
@@ -109,6 +115,7 @@ qt_add_qml_module(Orme-app
         qml/games/wake/WakeGame.qml
         qml/games/cups/CupsGame.qml
         qml/games/puzzle/PuzzleGame.qml
+        qml/games/jigsaw/JigsawGame.qml
         qml/games/harvest/HarvestGame.qml
         qml/games/balloons/BalloonsGame.qml
         qml/games/reveal/RevealGame.qml
@@ -123,6 +130,11 @@ qt_add_qml_module(Orme-app
         qml/games/tower/TowerGame.qml
         qml/games/beans/BeansGame.qml
         qml/games/train/TrainGame.qml
+        qml/games/railway/TrainCar.qml
+        qml/games/railway/RoadSign.qml
+        qml/games/railway/RailGame.qml
+        qml/games/railway/VowelTrainGame.qml
+        qml/games/railway/NumberTrainGame.qml
         qml/games/line20/Line20Game.qml
         qml/games/line20/KeyLine.qml
         qml/games/arithmetic/ArithmeticGame.qml
@@ -147,6 +159,7 @@ qt_add_qml_module(Orme-app
         assets/sounds/bump.wav
         ${ORME_ICONS}
         ${ORME_ART}
+        ${ORME_PUZZLE}
         assets/fonts/Fredoka-500.ttf
         assets/fonts/Fredoka-700.ttf
         assets/fonts/OFL-Fredoka.txt

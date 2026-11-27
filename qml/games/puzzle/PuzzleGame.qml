@@ -29,6 +29,7 @@ MiniGame {
     onBuildLevel: (i) => load(i)
 
     function load(i) {
+        order = []          // via i pezzi di prima, anche se l'ordine si ripete
         levelIndex = i
         won = false
         mistakes = 0
@@ -105,13 +106,16 @@ MiniGame {
             }
         }
 
-        // pezzi da trascinare
+        // pezzi da trascinare. Il modello e' "order", che cambia a ogni livello:
+        // cosi' i pezzi vengono ricreati in basso e non restano dove sono stati
+        // lasciati, cioe' gia' sopra le caselle.
         Repeater {
-            model: 4
+            model: g.order
             Item {
                 id: piece
                 required property int index          // posizione in "order"
-                property int pid: g.order[index]     // quale pezzo è
+                required property int modelData
+                readonly property int pid: modelData  // quale pezzo è
                 width: 150; height: 150
                 visible: !g.placed[piece.pid]
 

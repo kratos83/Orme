@@ -28,6 +28,10 @@ SYSTEM_REPO = "microsoft/fluentui-system-icons"
 
 # nome nel QML -> nome della cartella in fluentui-emoji/assets
 FIGURE = {
+    # parole che cominciano per vocale (Il treno delle vocali)
+    "airplane": "Airplane", "pineapple": "Pineapple", "helicopter": "Helicopter",
+    "hippo": "Hippopotamus", "salad": "Green salad",
+    "umbrella": "Umbrella", "goose": "Goose", "unicorn": "Unicorn",
     # animali
     "bear": "Bear", "bee": "Honeybee", "bird": "Bird", "butterfly": "Butterfly",
     "cat": "Cat face", "chick": "Baby chick", "chick-front": "Front-facing baby chick",

@@ -4,7 +4,7 @@ import Orme
 
 // Orme - Copyright (c) 2026 Angelo Scarnà
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Elenco dei 48 giochi, usato dal menu (Launcher) e dalla pagina Info.
+// Elenco dei 51 giochi, usato dal menu (Launcher) e dalla pagina Info.
 // Campi: id, title, age, c (colore), img (nome dell'icona), desc; icon: "path"
 // fa disegnare le frecce nel menu al posto dell'icona.
 QtObject {
@@ -43,6 +43,8 @@ QtObject {
           desc: qsTr("Il coniglio si nasconde sotto un bicchiere; i bicchieri si mescolano, poi tocca quello giusto.") },
         { cat: "infanzia", id: "puzzle", title: qsTr("Puzzle"), age: qsTr("3-5 anni"), c: Theme.dirDown, img: "puzzle",
           desc: qsTr("Quattro pezzi da trascinare nella cornice 2x2; ogni casella mostra in trasparenza il pezzo che ci va.") },
+        { cat: "infanzia", id: "trainpuzzle", title: qsTr("Puzzle dei trenini"), age: qsTr("3-5 anni"), c: Theme.dirUp, img: "locomotive",
+          desc: qsTr("Puzzle a incastro con i trenini: trascina ogni pezzo al suo posto sul disegno che si intravede. Per ogni disegno quattro livelli (4, 6, 9 e 12 pezzi), poi ne arriva uno nuovo: sono quattro.") },
         { cat: "infanzia", id: "harvest", title: qsTr("Raccogli i frutti"), age: qsTr("3-5 anni"), c: Theme.dirRight, img: "apple",
           desc: qsTr("I frutti colorati scendono piano dall'alto: toccali per metterli nel cesto.") },
         { cat: "infanzia", id: "balloons", title: qsTr("Palloncini in fila"), age: qsTr("3-5 anni"), c: Theme.dirLeft, img: "balloon",
@@ -68,7 +70,11 @@ QtObject {
         { cat: "infanzia", id: "beans", title: qsTr("Travasi e infilo"), age: qsTr("3-4 anni"), c: Theme.accent, img: "juice-box",
           desc: qsTr("Trascina la bottiglia sopra il bicchiere vuoto e tienila li': si inclina e il liquido si travasa piano piano (acqua, succo, limonata...). La coordinazione occhio-mano.") },
         { cat: "infanzia", id: "train", title: qsTr("Il trenino"), age: qsTr("3-4 anni"), c: Theme.dirDown, img: "locomotive",
-          desc: qsTr("Prima costruisci il treno trascinando la locomotiva e i vagoni sul binario, poi tocca START e tocca il treno per farlo correre fino alla prossima stazione. Spazio e pazienza.") },
+          desc: qsTr("Prima costruisci il treno: la locomotiva davanti e i vagoni nell'ordine che vuoi, spostandoli quando cambi idea. Poi tocca START e tocca il treno per farlo correre fino alla prossima stazione. Spazio e pazienza.") },
+        { cat: "infanzia", id: "voweltrain", title: qsTr("Il treno delle vocali"), age: qsTr("4-5 anni"), c: Theme.dirUp, img: "letters-upper",
+          desc: qsTr("A ogni stazione sali sul vagone giusto: quello con la vocale con cui comincia la parola. In viaggio rispetta semaforo, STOP e divieto di accesso.") },
+        { cat: "infanzia", id: "numbertrain", title: qsTr("Il treno dei numeri"), age: qsTr("4-5 anni"), c: Theme.dirRight, img: "numbers",
+          desc: qsTr("Alla stazione gli animali scendono dai vagoni: contali e tocca il numero giusto, fino a 9. In viaggio rispetta semaforo, STOP e divieto di accesso.") },
 
         // --- Primaria ---
         { cat: "primaria", id: "line20", title: qsTr("I numeri fino a 20"), age: qsTr("6-7 anni"), c: Theme.dirRight, img: "hand",

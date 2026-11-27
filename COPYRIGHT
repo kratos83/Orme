@@ -23,9 +23,13 @@ PNG), Copyright Microsoft Corporation, distribuite sotto licenza MIT
 (testo completo in assets/icons/LICENSE-MIT.txt). Non sono opera derivata
 di quest'opera.
 
-Le illustrazioni in assets/art/ (treno, scenario, bottiglia, conchiglie) sono
-disegnate dallo script scripts/make_art.py e sono parte di quest'opera, sotto
+Le illustrazioni in assets/art/ (treno, scenario, segnali, bottiglia,
+conchiglie) sono disegnate dallo script scripts/make_art.py e sono parte di quest'opera, sotto
 la stessa licenza.
+
+I disegni del "Puzzle dei trenini" (assets/puzzle/) sono composti dallo script
+scripts/make_scene.py con le illustrazioni di assets/art/ e con figure Fluent
+Emoji (licenza MIT, vedi sopra).
 
 Il font in assets/fonts/ è "Fredoka", Copyright 2016 The Fredoka Project
 Authors, distribuito sotto SIL Open Font License 1.1 (testo completo in
