@@ -2,8 +2,8 @@
 
 Ad ogni tag `v*`, dopo che `linux-packages.yml` ha compilato i pacchetti,
 il job `publish-repo` genera un repository **apt** (Debian/Ubuntu) e tre
-repository **rpm** (Fedora, openSUSE, Mageia), li firma con la chiave GPG
-del progetto e li pubblica su GitHub Pages:
+repository **rpm** (Fedora, openSUSE, Mageia) e li firma con la chiave GPG
+del progetto; il job `deploy-repo` li pubblica su GitHub Pages:
 
 - apt: `https://kratos83.github.io/Orme/apt`
 - rpm: `https://kratos83.github.io/Orme/rpm/{fedora,opensuse,mageia}`

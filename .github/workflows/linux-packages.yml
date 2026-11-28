@@ -69,11 +69,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - uses: actions/checkout@v4
@@ -143,6 +138,22 @@ jobs:
         with:
           path: site
 
+  # La pubblicazione sta in un job a parte: nello stesso job del caricamento
+  # deploy-pages a volte non trova l'artefatto appena caricato ("No artifacts
+  # named github-pages"). Cosi', se fallisce, si rilancia solo questo job
+  # senza ricaricare l'artefatto (due con lo stesso nome danno errore).
+  deploy-repo:
+    needs: publish-repo
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
       - name: Pubblica su GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
